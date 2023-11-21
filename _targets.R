@@ -42,6 +42,11 @@ list(
     blots_clean,
     clean_blots(blots_raw)
   ),
+  tar_target(
+    blots_filtered,
+    filter_blots(blots_clean)
+  ),
+
 
   NULL
 )

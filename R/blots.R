@@ -35,3 +35,8 @@ clean_blots <- function(df) {
     dplyr::mutate(group = dplyr::cur_group_id()) |>
     dplyr::ungroup()
 }
+
+filter_blots <- function(df) {
+  df |>
+    dplyr::filter(!(.data$experiment == "ipf" & .data$batch == 2))
+}
