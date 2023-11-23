@@ -22,6 +22,13 @@ manuscript_path <- function(nm) {
 }
 
 
+# helpers -----------------------------------------------------------------
+
+"%nin%" <- function(x, table) {
+  match(x, table, nomatch = 0L) == 0L
+}
+
+
 # factors -----------------------------------------------------------------
 
 refactor <- function(df) {
@@ -34,6 +41,8 @@ refactor <- function(df) {
       "TGFβ" = "TGFβ",
       "IPF" = "ipf",
       "Bleo" = "bleo",
+      "Ctl-LF" = "nhlf",
+      "IPF-LF" = "ipf-lf",
       NULL
     )
     df <-
@@ -68,6 +77,7 @@ refactor <- function(df) {
       "siMCT1" = "siMCT1",
       "siMCT4" = "siMCT4",
       "siMCT1/4" = "siMCT1/4",
+      "Lac" = "lactate",
       NULL
     )
     df <-

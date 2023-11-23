@@ -1006,7 +1006,7 @@ bleo,1,3,bleo,VB124,,mct4,109180060,2256930
 bleo,1,4,bleo,VB124,,mct4,95606720,1546532
 lactate,1,1,control,vehicle,,sma,861596789,101691098
 lactate,1,1,control,lactate,,sma,774636946,93917086
-lactate,1,1,tgfb,vehicle,,sma,596871139,221781026
+lactate,1,1,tgfb,vehicle,,sma,596871139,403091063
 lactate,1,1,tgfb,lactate,,sma,678298644,501567900
 lactate,1,2,control,vehicle,,sma,425244690,74892611
 lactate,1,2,control,lactate,,sma,782971693,109180783
@@ -1043,7 +1043,7 @@ lactate,1,3,tgfb,lactate,,sma,784027926,329471472
 lactate,1,4,control,vehicle,,sma,851904012,154503876
 lactate,1,4,control,lactate,,sma,909860574,176922456
 lactate,1,4,tgfb,vehicle,,sma,836298916,294761268
-lactate,1,4,tgfb,lactate,,sma,839190391,185829438
+lactate,1,4,tgfb,lactate,,sma,839190391,362525160
 lactate,1,3,control,vehicle,,col1a1,863294161,200351616
 lactate,1,3,control,lactate,,col1a1,693118685,155530752
 lactate,1,3,tgfb,vehicle,,col1a1,652840031,260986752
