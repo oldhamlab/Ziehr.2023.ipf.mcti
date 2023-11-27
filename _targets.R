@@ -111,14 +111,36 @@ list(
       plot_blot(blot_norm, blot_stats, title = protein),
       format = "rds"
     ),
-    # tar_target(
-    #   blot_img,
-    #   write_plot(blot_plot, name, path = "analysis/figures/blots"),
-    #   format = "file"
-    # ),
     NULL
   ),
-
+  tar_target(
+    blots_phospho,
+    phospho_ratio(blots_filtered)
+  ),
+  tar_map(
+    values = tibble::tribble(
+      ~experiment,   ~protein,     ~name,              ~paired, ~comp,
+      "dual",        "AKT",        "dual_p_akt",       FALSE,    rlang::sym("comps_azd_2"),
+      "dual",        "AMPK",       "dual_p_ampk",      FALSE,    rlang::sym("comps_azd_2"),
+      "dual",        "ERK",        "dual_p_erk",       FALSE,    rlang::sym("comps_azd_2"),
+      "dual",        "Smad3",      "dual_p_smad3",     FALSE,    rlang::sym("comps_azd_2")
+    ),
+    names = name,
+    tar_target(
+      blot_norm,
+      norm_blot(blots_phospho, experiment, protein)
+    ),
+    tar_target(
+      blot_stats,
+      analyze_blot(blot_norm, paired, comp)
+    ),
+    tar_target(
+      blot_plot,
+      plot_blot(blot_norm, blot_stats, title = paste0("p", protein, " / ", protein)),
+      format = "rds"
+    ),
+    NULL
+  ),
 
   # analysis ----------------------------------------------------------------
 

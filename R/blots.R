@@ -39,10 +39,13 @@ clean_blots <- function(df) {
 }
 
 filter_blots <- function(df) {
+  prots <- c("AKT", "pAKT", "AMPK", "pAMPK", "ERK", "pERK")
   df |>
     dplyr::filter(!(.data$experiment == "ipf" & .data$batch == 2)) |>
     dplyr::filter(!(.data$experiment == "ipf-lf" & .data$batch %in% 1:2)) |>
-    dplyr::filter(!(.data$experiment == "dual" & protein == "Col1a1" & batch %in% 1:4))
+    dplyr::filter(!(.data$experiment == "dual" & protein == "Col1a1" & batch %in% 1:4)) |>
+    dplyr::filter(!(.data$experiment == "dual" & protein %in% prots & batch %in% 1:4)) |>
+    dplyr::filter(!(.data$experiment == "dual" & protein %in% c("pAKT", "AKT") & trial == 2))
 }
 
 index_blots <- function(df) {
@@ -97,11 +100,35 @@ analyze_blot <- function(df, paired, comp = NULL) {
   out
 }
 
-
 plot_blot <- function(df, stats = NULL, title = NULL) {
   if (length(unique(df$treatment)) == 1) {
     plot_one_factor(df, stats, "condition", "norm", title, "Fold change")
   } else {
     plot_two_factor(df, stats, "treatment", "norm", title, "Fold change")
   }
+}
+
+phospho_ratio <- function(df) {
+  prots <- c("AKT", "AMPK", "ERK", "Smad3")
+
+  df |>
+    dplyr::filter(
+      stringr::str_detect(.data$protein, paste(prots, collapse = "|"))
+    ) |>
+    dplyr::mutate(
+      phospho = ifelse(
+        stringr::str_detect(.data$protein, "^p\\D"),
+        "phospho",
+        "total"
+      ),
+      protein = stringr::str_replace(.data$protein, "^p", ""),
+      .after = "dose"
+    ) |>
+    dplyr::select("group", "experiment":"protein", "ratio") |>
+    tidyr::pivot_wider(
+      names_from = "phospho",
+      values_from = "ratio"
+    ) |>
+    dplyr::mutate(ratio = .data$phospho / .data$total) |>
+    dplyr::filter(!is.na(.data$ratio))
 }

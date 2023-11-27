@@ -61,6 +61,14 @@ tar_read(blot_plot_dual_pakt)
 ```
 
 ```{r}
+#| label: exp_dual_p_akt
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_p_akt)
+```
+
+```{r}
 #| label: exp_dual_ampk
 #| fig-width: 4
 #| fig-height: 2.5
@@ -74,6 +82,14 @@ tar_read(blot_plot_dual_ampk)
 #| fig-height: 2.5
 
 tar_read(blot_plot_dual_pampk)
+```
+
+```{r}
+#| label: exp_dual_p_ampk
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_p_ampk)
 ```
 
 ```{r}
@@ -114,6 +130,14 @@ tar_read(blot_plot_dual_erk)
 #| fig-height: 2.5
 
 tar_read(blot_plot_dual_perk)
+```
+
+```{r}
+#| label: exp_dual_p_erk
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_p_erk)
 ```
 
 ```{r}
@@ -162,6 +186,14 @@ tar_read(blot_plot_dual_smad3)
 #| fig-height: 2.5
 
 tar_read(blot_plot_dual_psmad3)
+```
+
+```{r}
+#| label: exp_dual_p_smad3
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_p_smad3)
 ```
 
 ```{r}
@@ -407,6 +439,14 @@ tar_read(blot_plot_dual_akt)
 tar_read(blot_plot_dual_pakt)
 ```
 
+```{r}
+#| label: prot_dual_p_akt
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_p_akt)
+```
+
 ### AMPK
 
 ```{r}
@@ -423,6 +463,14 @@ tar_read(blot_plot_dual_ampk)
 #| fig-height: 2.5
 
 tar_read(blot_plot_dual_pampk)
+```
+
+```{r}
+#| label: prot_dual_p_ampk
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_p_ampk)
 ```
 
 ### CNN1
@@ -495,6 +543,14 @@ tar_read(blot_plot_dual_erk)
 #| fig-height: 2.5
 
 tar_read(blot_plot_dual_perk)
+```
+
+```{r}
+#| label: prot_dual_p_erk
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_p_erk)
 ```
 
 ### FN1
@@ -675,6 +731,14 @@ tar_read(blot_plot_dual_smad3)
 #| fig-height: 2.5
 
 tar_read(blot_plot_dual_psmad3)
+```
+
+```{r}
+#| label: prot_dual_p_smad3
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_p_smad3)
 ```
 
 ### α-SMA
