@@ -79,9 +79,9 @@ list(
       "dual",        "α-SMA",      "dual_sma",         FALSE,    rlang::sym("comps_dual"),
       "ipf-lf",      "Col1a1",     "ipf_lf_col1a1",    FALSE,    rlang::sym("comps_azd_2"),
       "ipf-lf",      "α-SMA",      "ipf_lf_sma",       FALSE,    rlang::sym("comps_azd_2"),
-      "ipf",         "MCT1",       "ipf_mct1",         FALSE,     NULL,
-      "ipf",         "MCT4",       "ipf_mct4",         FALSE,     NULL,
-      "ipf",         "α-SMA",      "ipf_sma",          FALSE,     NULL,
+      "ipf",         "MCT1",       "ipf_mct1",         FALSE,    NULL,
+      "ipf",         "MCT4",       "ipf_mct4",         FALSE,    NULL,
+      "ipf",         "α-SMA",      "ipf_sma",          FALSE,    NULL,
       "lactate",     "Col1a1",     "lactate_col1a1",   FALSE,    rlang::sym("comps_lactate"),
       "lactate",     "FN1",        "lactate_fn1",      FALSE,    rlang::sym("comps_lactate"),
       "lactate",     "MCT1",       "lactate_mct1",     FALSE,    rlang::sym("comps_lactate"),
@@ -117,6 +117,14 @@ list(
     #   format = "file"
     # ),
     NULL
+  ),
+
+
+  # analysis ----------------------------------------------------------------
+
+  tar_quarto(
+    blots_analysis,
+    path = "analysis/blots.qmd"
   ),
 
   NULL

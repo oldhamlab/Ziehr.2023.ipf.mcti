@@ -5,6 +5,9 @@ format:
     embed-resources: true 
     echo: false
     warning: false
+    toc: true
+    toc-depth: 3
+    toc-location: left
 ---
 
 ```{r}
@@ -21,12 +24,737 @@ i_am("analysis/blots.qmd")
 tar_config_set(store = here("_targets"))
 ```
 
+## Experiment
+
+### Drugs in NHLF
+
 ```{r}
-#| label: test
+#| label: exp_ar_sma
+#| fig-width: 3.5
+#| fig-height: 2.5
+
+tar_read(blot_plot_ar_sma)
+```
+
+```{r}
+#| label: exp_diclofenac_sma
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_diclofenac_sma)
+```
+
+```{r}
+#| label: exp_dual_akt
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_akt)
+```
+
+```{r}
+#| label: exp_dual_pakt
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_pakt)
+```
+
+```{r}
+#| label: exp_dual_ampk
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_ampk)
+```
+
+```{r}
+#| label: exp_dual_pampk
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_pampk)
+```
+
+```{r}
+#| label: exp_dual_cnn1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_cnn1)
+```
+
+```{r}
+#| label: exp_dual_col1a1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_col1a1)
+```
+
+```{r}
+#| label: exp_dual_col3a1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_col3a1)
+```
+
+```{r}
+#| label: exp_dual_erk
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_erk)
+```
+
+```{r}
+#| label: exp_dual_perk
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_perk)
+```
+
+```{r}
+#| label: exp_dual_fn1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_fn1)
+```
+
+```{r}
+#| label: exp_dual_kla
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_kla)
+```
+
+```{r}
+#| label: exp_dual_mct1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_mct1)
+```
+
+```{r}
+#| label: exp_dual_mct4
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_mct4)
+```
+
+```{r}
+#| label: exp_dual_smad3
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_smad3)
+```
+
+```{r}
+#| label: exp_dual_psmad3
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_psmad3)
+```
+
+```{r}
+#| label: exp_dual_sma
+#| fig-width: 5
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_sma)
+```
+
+```{r}
+#| label: exp_six_hif1a
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_six_hif1a)
+```
+
+### siRNA in NHLF
+
+```{r}
+#| label: exp_sirna_mct1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_sirna_mct1)
+```
+
+```{r}
+#| label: exp_sirna_mct4
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_sirna_mct4)
+```
+
+```{r}
+#| label: exp_sirna_sma
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_sirna_sma)
+```
+
+### TGFβ
+
+```{r}
+#| label: exp_untreated_col1a1
 #| fig-width: 3
 #| fig-height: 2.5
 
-tar_read(blot_plot_dual_col1a1) + 
-  theme(legend.position = "bottom")
+tar_read(blot_plot_untreated_col1a1)
 ```
 
+```{r}
+#| label: exp_untreated_fn1
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_untreated_fn1)
+```
+
+```{r}
+#| label: exp_untreated_mct1
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_untreated_mct1)
+```
+
+```{r}
+#| label: exp_untreated_mct4
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_untreated_mct4)
+```
+
+```{r}
+#| label: exp_untreated_sma
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_untreated_sma)
+```
+
+### Lactate Treatment
+
+```{r}
+#| label: exp_lactate_col1a1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_lactate_col1a1)
+```
+
+```{r}
+#| label: exp_lactate_fn1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_lactate_fn1)
+```
+
+```{r}
+#| label: exp_lactate_mct1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_lactate_mct1)
+```
+
+```{r}
+#| label: exp_lactate_mct4
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_lactate_mct4)
+```
+
+```{r}
+#| label: exp_lactate_sma
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_lactate_sma)
+```
+
+
+### Drugs in Mice
+
+```{r}
+#| label: exp_bleo_mct1
+#| fig-width: 3.5
+#| fig-height: 2.5
+
+tar_read(blot_plot_bleo_mct1)
+```
+
+```{r}
+#| label: exp_bleo_mct4
+#| fig-width: 3.5
+#| fig-height: 2.5
+
+tar_read(blot_plot_bleo_mct4)
+```
+
+```{r}
+#| label: exp_bleo_sma
+#| fig-width: 3.5
+#| fig-height: 2.5
+
+tar_read(blot_plot_bleo_sma)
+```
+
+### IPF Lung Fibroblasts
+
+```{r}
+#| label: exp_comp_mct1
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_comp_mct1)
+```
+
+```{r}
+#| label: exp_comp_mct4
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_comp_mct4)
+```
+
+```{r}
+#| label: exp_comp_sma
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_comp_sma)
+```
+
+```{r}
+#| label: exp_ipf_lf_col1a1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_ipf_lf_col1a1)
+```
+
+```{r}
+#| label: exp_ipf_lf_sma
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_ipf_lf_sma)
+```
+
+### IPF Lungs
+
+```{r}
+#| label: exp_ipf_mct1
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_ipf_mct1)
+```
+
+```{r}
+#| label: exp_ipf_mct4
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_ipf_mct4)
+```
+
+```{r}
+#| label: exp_ipf_sma
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_ipf_sma)
+```
+
+
+
+## Protein
+
+### AKT
+
+```{r}
+#| label: prot_dual_akt
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_akt)
+```
+
+```{r}
+#| label: prot_dual_pakt
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_pakt)
+```
+
+### AMPK
+
+```{r}
+#| label: prot_dual_ampk
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_ampk)
+```
+
+```{r}
+#| label: prot_dual_pampk
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_pampk)
+```
+
+### CNN1
+
+```{r}
+#| label: prot_dual_cnn1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_cnn1)
+```
+
+### Col1a1
+
+```{r}
+#| label: prot_dual_col1a1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_col1a1)
+```
+
+```{r}
+#| label: prot_ipf_lf_col1a1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_ipf_lf_col1a1)
+```
+
+```{r}
+#| label: prot_lactate_col1a1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_lactate_col1a1)
+```
+
+```{r}
+#| label: prot_untreated_col1a1
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_untreated_col1a1)
+```
+
+### Col3a1
+
+```{r}
+#| label: prot_dual_col3a1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_col3a1)
+```
+
+### ERK
+
+```{r}
+#| label: prot_dual_erk
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_erk)
+```
+
+```{r}
+#| label: prot_dual_perk
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_perk)
+```
+
+### FN1
+
+```{r}
+#| label: prot_dual_fn1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_fn1)
+```
+
+```{r}
+#| label: prot_lactate_fn1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_lactate_fn1)
+```
+
+```{r}
+#| label: prot_untreated_fn1
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_untreated_fn1)
+```
+
+### HIF-1α
+
+```{r}
+#| label: prot_six_hif1a
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_six_hif1a)
+```
+
+### Kla
+
+```{r}
+#| label: prot_dual_kla
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_kla)
+```
+
+### MCT1
+
+```{r}
+#| label: prot_bleo_mct1
+#| fig-width: 3.5
+#| fig-height: 2.5
+
+tar_read(blot_plot_bleo_mct1)
+```
+
+```{r}
+#| label: prot_comp_mct1
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_comp_mct1)
+```
+
+```{r}
+#| label: prot_dual_mct1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_mct1)
+```
+
+```{r}
+#| label: prot_ipf_mct1
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_ipf_mct1)
+```
+
+```{r}
+#| label: prot_lactate_mct1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_lactate_mct1)
+```
+
+```{r}
+#| label: prot_sirna_mct1
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_sirna_mct1)
+```
+
+```{r}
+#| label: prot_untreated_mct1
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_untreated_mct1)
+```
+
+### MCT4
+
+```{r}
+#| label: prot_bleo_mct4
+#| fig-width: 3.5
+#| fig-height: 2.5
+
+tar_read(blot_plot_bleo_mct4)
+```
+
+```{r}
+#| label: prot_comp_mct4
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_comp_mct4)
+```
+
+```{r}
+#| label: prot_dual_mct4
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_mct4)
+```
+
+```{r}
+#| label: prot_ipf_mct4
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_ipf_mct4)
+```
+
+```{r}
+#| label: prot_lactate_mct4
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_lactate_mct4)
+```
+
+```{r}
+#| label: prot_sirna_mct4
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_sirna_mct4)
+```
+
+```{r}
+#| label: prot_untreated_mct4
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_untreated_mct4)
+```
+
+### Smad3
+
+```{r}
+#| label: prot_dual_smad3
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_smad3)
+```
+
+```{r}
+#| label: prot_dual_psmad3
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_psmad3)
+```
+
+### α-SMA
+
+```{r}
+#| label: prot_ar_sma
+#| fig-width: 3.5
+#| fig-height: 2.5
+
+tar_read(blot_plot_ar_sma)
+```
+
+```{r}
+#| label: prot_bleo_sma
+#| fig-width: 3.5
+#| fig-height: 2.5
+
+tar_read(blot_plot_bleo_sma)
+```
+
+```{r}
+#| label: prot_comp_sma
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_comp_sma)
+```
+
+```{r}
+#| label: prot_diclofenac_sma
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_diclofenac_sma)
+```
+
+```{r}
+#| label: prot_dual_sma
+#| fig-width: 5
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_sma)
+```
+
+```{r}
+#| label: prot_ipf_lf_sma
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_ipf_lf_sma)
+```
+
+```{r}
+#| label: prot_ipf_sma
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_ipf_sma)
+```
+
+```{r}
+#| label: prot_lactate_sma
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_lactate_sma)
+```
+
+```{r}
+#| label: prot_sirna_sma
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(blot_plot_sirna_sma)
+```
+
+```{r}
+#| label: prot_untreated_sma
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_untreated_sma)
+```

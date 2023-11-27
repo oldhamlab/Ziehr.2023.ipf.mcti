@@ -192,7 +192,9 @@ nice_limits <- function(x, n = 5) {
 
 clrs <- c(
   "Ctl"           = "#A0CBE8",
+  "Ctl-LF"        = "#A0CBE8",
   "IPF"           = "#4E79A7",
+  "IPF-LF"        = "#4E79A7",
   "Bleo"          = "#4E79A7",
   "TGFβ"          = "#4E79A7",
   "Veh"           = "#4E79A7",
@@ -309,13 +311,17 @@ plot_two_factor <- function(
       stat = "summary",
       fun = "mean",
       ggplot2::aes(fill = .data[["condition"]]),
-      position = ggplot2::position_dodge(width = dodge_width),
+      position = ggplot2::position_dodge(
+        width = dodge_width
+      ),
       width = 0.6,
       show.legend = TRUE
     ) +
     ggplot2::geom_errorbar(
       ggplot2::aes(group = .data[["condition"]]),
-      position = ggplot2::position_dodge(width = dodge_width),
+      position = ggplot2::position_dodge(
+        width = dodge_width
+      ),
       stat = "summary",
       fun.data = ggplot2::mean_se,
       width = 0.25,
