@@ -1,10 +1,10 @@
 # plots.R
 
 theme_plot <- function(
-    base_size = 7,
-    base_family = "Calibri",
-    base_line_size = base_size / 14,
-    base_rect_size = base_size / 14
+    base_size = 10,
+    base_family = "Arial",
+    base_line_size = base_size / 40,
+    base_rect_size = base_size / 40
 ) {
 
   # The half-line (base-fontsize / 2) sets up the basic vertical
@@ -22,14 +22,14 @@ theme_plot <- function(
   theme(
     # elements inherited by others
     line = element_line(
-      colour = "black",
+      colour = "grey30",
       linewidth = base_line_size,
       linetype = 1,
       lineend = "butt"
     ),
     rect = element_rect(
       fill = "white",
-      colour = "black",
+      colour = NA,
       linewidth = base_rect_size,
       linetype = 1
     ),
@@ -71,7 +71,7 @@ theme_plot <- function(
       hjust = 0
     ),
 
-    axis.ticks = element_line(colour = "grey20"),
+    axis.ticks = element_line(colour = "grey30"),
     axis.ticks.length = unit(half_line / 2, "pt"),
     axis.ticks.length.x = NULL,
     axis.ticks.length.x.top = NULL,
@@ -81,21 +81,21 @@ theme_plot <- function(
     axis.ticks.length.y.right = NULL,
 
     axis.title.x = element_text(
-      margin = margin(t = half_line / 2),
+      margin = margin(t = base_size),
       vjust = 1
     ),
     axis.title.x.top = element_text(
-      margin = margin(b = half_line / 2),
+      margin = margin(b = base_size),
       vjust = 0
     ),
     axis.title.y = element_text(
       angle = 90,
-      margin = margin(r = half_line / 2),
+      margin = margin(r = base_size),
       vjust = 1
     ),
     axis.title.y.right = element_text(
       angle = -90,
-      margin = margin(l = half_line / 2),
+      margin = margin(l = base_size),
       vjust = 0
     ),
 
@@ -103,9 +103,14 @@ theme_plot <- function(
     legend.spacing = unit(2 * half_line, "pt"),
     legend.spacing.x = NULL,
     legend.spacing.y = NULL,
-    legend.margin = margin(half_line, half_line, half_line, half_line),
-    legend.key = element_rect(fill = "grey95", colour = NA),
-    legend.key.size = unit(1.2, "lines"),
+    legend.margin = margin(
+      half_line,
+      half_line,
+      half_line,
+      half_line
+    ),
+    legend.key = element_rect(fill = "white", colour = NA),
+    legend.key.size = unit(0.8, "lines"),
     legend.key.height = NULL,
     legend.key.width = NULL,
     legend.text = element_text(size = rel(0.8)),
@@ -120,21 +125,26 @@ theme_plot <- function(
     legend.box.background = element_blank(),
     legend.box.spacing = unit(2 * half_line, "pt"),
 
-    panel.background = element_rect(fill = "grey92", colour = NA),
-    panel.border = element_blank(),
-    panel.grid = element_line(colour = "white"),
+    panel.background = element_rect(fill = "white", colour = NA),
+    panel.border = element_rect(fill = NA, color = "grey30"),
+    panel.grid = element_blank(),
     panel.grid.minor = element_line(linewidth = rel(0.5)),
     panel.spacing = unit(half_line, "pt"),
     panel.spacing.x = NULL,
     panel.spacing.y = NULL,
     panel.ontop    = FALSE,
 
-    strip.background = element_rect(fill = "grey85", colour = NA),
+    strip.background = element_rect(fill = "white", colour = NA),
     strip.clip = "inherit",
     strip.text = element_text(
       colour = "grey10",
       size = rel(0.8),
-      margin = margin(0.8 * half_line, 0.8 * half_line, 0.8 * half_line, 0.8 * half_line)
+      margin = margin(
+        0.8 * half_line,
+        0.8 * half_line,
+        0.8 * half_line,
+        0.8 * half_line
+      )
     ),
     strip.text.x = NULL,
     strip.text.y = element_text(angle = -90),
@@ -148,7 +158,8 @@ theme_plot <- function(
     plot.background = element_rect(colour = "white"),
     plot.title = element_text( # font size "large"
       size = rel(1.2),
-      hjust = 0, vjust = 1,
+      hjust = 0.5,
+      vjust = 1,
       margin = margin(b = half_line)
     ),
     plot.title.position = "panel",
@@ -220,21 +231,22 @@ plot_one_factor <- function(
       stat = "summary",
       fun = "mean",
       ggplot2::aes(fill = .data[[x]]),
-      width = 0.9,
+      width = 0.6,
       show.legend = FALSE
     ) +
     ggplot2::geom_errorbar(
       stat = "summary",
       fun.data = ggplot2::mean_se,
       width = 0.25,
-      linewidth = 0.25
+      linewidth = 0.4,
+      show.legend = FALSE
     ) +
     ggbeeswarm::geom_quasirandom(
       pch = 1,
       color = "black",
       width = 0.05,
-      size = 0.5,
-      stroke = 0.25,
+      size = 0.75,
+      stroke = 0.3,
       show.legend = FALSE
     ) +
     ggplot2::labs(
@@ -267,6 +279,8 @@ plot_one_factor <- function(
           vjust = .data[["vjust"]],
           label = .data[["label"]]
         ),
+        size = 12 / ggplot2::.pt,
+        color = "black",
         show.legend = FALSE
       )
   }
@@ -283,6 +297,7 @@ plot_two_factor <- function(
     ytitle,
     wrap = NULL
 ) {
+  dodge_width <- 0.7
 
   p <-
     ggplot2::ggplot(df) +
@@ -294,27 +309,27 @@ plot_two_factor <- function(
       stat = "summary",
       fun = "mean",
       ggplot2::aes(fill = .data[["condition"]]),
-      position = ggplot2::position_dodge(width = 0.55),
-      width = 0.5,
+      position = ggplot2::position_dodge(width = dodge_width),
+      width = 0.6,
       show.legend = TRUE
     ) +
     ggplot2::geom_errorbar(
       ggplot2::aes(group = .data[["condition"]]),
-      position = ggplot2::position_dodge(width = 0.55),
+      position = ggplot2::position_dodge(width = dodge_width),
       stat = "summary",
       fun.data = ggplot2::mean_se,
       width = 0.25,
-      linewidth = 0.25,
+      linewidth = 0.4,
       show.legend = FALSE
     ) +
     ggbeeswarm::geom_quasirandom(
       ggplot2::aes(group = .data[["condition"]]),
-      dodge.width = 0.55,
+      dodge.width = dodge_width,
       pch = 1,
       color = "black",
       width = 0.05,
-      size = 0.5,
-      stroke = 0.25,
+      size = 0.75,
+      stroke = 0.3,
       show.legend = FALSE
     ) +
     ggplot2::labs(
@@ -347,6 +362,7 @@ plot_two_factor <- function(
           label = .data[["label"]],
           vjust = .data[["vjust"]]
         ),
+        size = 12 / ggplot2::.pt,
         color = "black",
         show.legend = FALSE
       ) +
@@ -358,7 +374,8 @@ plot_two_factor <- function(
           vjust = .data[["vjust"]],
           color = .data[["condition"]]
         ),
-        position = ggplot2::position_dodge(width = 0.55),
+        size = 12 / ggplot2::.pt,
+        position = ggplot2::position_dodge(width = dodge_width),
         show.legend = FALSE
       )
   }

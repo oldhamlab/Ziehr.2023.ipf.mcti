@@ -41,7 +41,8 @@ clean_blots <- function(df) {
 filter_blots <- function(df) {
   df |>
     dplyr::filter(!(.data$experiment == "ipf" & .data$batch == 2)) |>
-    dplyr::filter(!(.data$experiment == "ipf-lf" & .data$batch %in% 1:2))
+    dplyr::filter(!(.data$experiment == "ipf-lf" & .data$batch %in% 1:2)) |>
+    dplyr::filter(!(.data$experiment == "dual" & protein == "Col1a1" & batch %in% 1:4))
 }
 
 index_blots <- function(df) {

@@ -1,0 +1,32 @@
+---
+title: "Protein Expression"
+format: 
+  html:
+    embed-resources: true 
+    echo: false
+    warning: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(here)
+library(targets)
+library(tidyverse)
+devtools::load_all()
+
+i_am("analysis/blots.qmd")
+
+tar_config_set(store = here("_targets"))
+```
+
+```{r}
+#| label: test
+#| fig-width: 3
+#| fig-height: 2.5
+
+tar_read(blot_plot_dual_col1a1) + 
+  theme(legend.position = "bottom")
+```
+

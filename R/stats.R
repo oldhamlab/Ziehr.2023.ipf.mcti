@@ -13,7 +13,7 @@ annot_stats <- function(stats) {
   stats |>
     dplyr::mutate(
       y = Inf,
-      vjust = 1.2,
+      vjust = 1.5,
       label = annot_p(.data[[col]])
     )
 }
