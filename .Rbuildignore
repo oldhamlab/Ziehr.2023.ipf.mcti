@@ -2,3 +2,6 @@
 ^renv\.lock$
 ^Ziehr\.2023\.ipf\.mcti\.Rproj$
 ^\.Rproj\.user$
+^_targets
+^data-raw/blots
+^LICENSE\.md$
