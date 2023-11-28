@@ -181,6 +181,53 @@ list(
     format = "rds"
   ),
 
+  # plates ------------------------------------------------------------------
+
+  tar_map(
+    values = list(
+      x = c("picogreen", "lactate", "nad_protein", "nad_nad", "glucose"),
+      cf = c(5129, 20000, 300, 900, 1110000),
+      bywell = c(TRUE, TRUE, FALSE, FALSE, TRUE)
+    ),
+    names = x,
+    tar_target(
+      plates_file,
+      raw_data_path(stringr::str_c(x, ".csv")),
+      format = "file_fast"
+    ),
+    tar_target(
+      plates_raw,
+      readr::read_csv(plates_file, show_col_types = FALSE)
+    ),
+    tar_target(
+      plates_clean,
+      clean_plates(plates_raw)
+    ),
+    tar_target(
+      plates_std_curves,
+      make_std_curves(plates_clean),
+      format = "rds"
+    ),
+    tar_target(
+      plates_std_plots,
+      write_plot_list(
+        plates_std_curves$plots,
+        plates_std_curves$title,
+        stringr::str_c(x, "_std_curves")
+      ),
+      format = "file_fast"
+    ),
+    tar_target(
+      plates_interp,
+      interp_data(plates_clean, plates_std_curves)
+    ),
+    tar_target(
+      plates_conc,
+      clean_data(plates_interp, cf)
+    ),
+    NULL
+  ),
+
   # analysis ----------------------------------------------------------------
 
   tar_quarto(

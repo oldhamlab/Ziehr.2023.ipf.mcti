@@ -21,6 +21,13 @@ manuscript_path <- function(nm) {
   list_files(nm = nm, path = "manuscript")
 }
 
+plot_path <- function(nm) {
+  path <- stringr::str_c("analysis/figures/", nm)
+  if (dir.exists(path)) unlink(path, recursive = TRUE)
+  if (!dir.exists(path)) dir.create(path = path, recursive = TRUE)
+  path
+}
+
 
 # helpers -----------------------------------------------------------------
 
@@ -140,4 +147,106 @@ refactor <- function(df) {
       )
   }
   df
+}
+
+
+# interpolation -----------------------------------------------------------
+
+make_std_curves <- function(df, fo = NULL) {
+  if (is.null(fo)){
+    fo <- \(x) stats::lm(value ~ conc, data = x, na.action = modelr::na.warn)
+  }
+
+  df |>
+    dplyr::filter(!is.na(.data$conc)) |>
+    dplyr::select(!tidyselect::where(\(x) all(is.na(x)))) |>
+    dplyr::group_by(dplyr::across(-c("conc", "value"))) |>
+    tidyr::nest() |>
+    {\(x) dplyr::mutate(
+      x,
+      title = stringr::str_c(!!!rlang::syms(dplyr::groups(x)), sep = "_")
+    )}() |>
+    dplyr::ungroup() |>
+    dplyr::mutate(
+      model = furrr::future_map(.data$data, fo),
+      summary = furrr::future_map(.data$model, \(x) broom::glance(x)),
+      plots = furrr::future_map2(.data$data, .data$title, make_std_plots)
+    ) |>
+    dplyr::group_by(
+      dplyr::across(
+        -c("data", "title", "model", "summary", "plots")
+      )
+    )
+}
+
+make_std_plots <- function(df, title = NULL) {
+  ggplot2::ggplot(df) +
+    ggplot2::aes(
+      x = .data$conc,
+      y = .data$value
+    ) +
+    ggplot2::geom_smooth(
+      method = stats::lm,
+      formula = y ~ x,
+      color = "gray20",
+      se = FALSE
+    ) +
+    ggplot2::geom_point(
+      size = 3,
+      color = "darkblue"
+    ) +
+    ggplot2::stat_summary(
+      fun = "mean",
+      size = 4,
+      geom = "point",
+      alpha = 0.8,
+      color = "darkblue"
+    ) +
+    ggplot2::labs(
+      x = "Concentration",
+      y = "Value",
+      title = title
+    )
+}
+
+write_plot <- function(p, nm, path, width = 15, height = 20, units = "in", ...) {
+  nm <- stringr::str_c(nm, ".png")
+  ggplot2::ggsave(
+    plot = p,
+    filename = nm,
+    path = path,
+    device = ragg::agg_png,
+    res = 300,
+    ...
+  )
+  invisible(stringr::str_c(path, "/", nm))
+}
+
+write_plot_list <- function(p_list, nm_list, path, ...) {
+  path <- plot_path(path)
+  furrr::future_walk2(
+    p_list,
+    nm_list,
+    \(x, y) write_plot(x, y, path)
+  )
+  invisible(path)
+}
+
+interp_data <- function(df, std) {
+  df |>
+    dplyr::filter(is.na(.data$conc)) |>
+    dplyr::select(-"conc") |>
+    dplyr::group_by(dplyr::across(dplyr::group_vars(std))) |>
+    tidyr::nest() |>
+
+    ### PROBLEMS WITH LEFT JOIN HERE ###
+    dplyr::left_join(dplyr::select(std, "model")) |>
+    dplyr::mutate(
+      conc = purrr::map2(
+        .data$data,
+        .data$model, wmo::interpolate
+      )
+    ) |>
+    tidyr::unnest(c("data", "conc")) |>
+    dplyr::select(-c("model", "value"))
 }

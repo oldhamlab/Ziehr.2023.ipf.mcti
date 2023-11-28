@@ -5,3 +5,6 @@
 .DS_Store
 .quarto
 *.scn
+analysis/figures
+data-raw/glucose
+data-raw/lactate
