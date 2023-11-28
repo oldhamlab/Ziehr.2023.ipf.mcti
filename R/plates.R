@@ -27,7 +27,6 @@ clean_plates_interp <- function(df, cf) {
   dplyr::mutate(df, conc = .data$conc * cf)
 }
 
-
 norm_plates <- function(df, cf) {
   dplyr::left_join(
     df,

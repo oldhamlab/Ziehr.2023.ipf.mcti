@@ -372,16 +372,76 @@ list(
     )
   ),
 
-  # analysis ----------------------------------------------------------------
+  # nad ---------------------------------------------------------------------
 
-  tar_quarto(
-    blots_analysis,
-    path = "analysis/blots.qmd"
+  tar_target(
+    nad_clean,
+    clean_nad(plates_conc_nad_protein, plates_conc_nad_nad)
   ),
-  tar_quarto(
-    extracellular_analysis,
-    path = "analysis/extracellular.qmd"
+  tar_map(
+    values = list(
+      names = c(
+        "nad",
+        "nad_norm",
+        "nadh",
+        "nadh_norm",
+        "ratio"
+      ),
+      measure = c(
+        "NAD",
+        "NAD_norm",
+        "NADH",
+        "NADH_norm",
+        "Ratio"
+      ),
+      ytitle = c(
+        "NAD (pmol)",
+        "NAD (pmol / μg protein)",
+        "NADH (pmol)",
+        "NADH (pmol / μg protein)",
+        "NADH / NAD"
+      )
+    ),
+    names = names,
+    tar_target(
+      nad_filter,
+      dplyr::filter(nad_clean, measurement == measure)
+    ),
+    tar_target(
+      nad_stats,
+      twofactor(nad_filter, y = "value", comps = comps_azd_2, log = TRUE)
+    ),
+    tar_target(
+      nad_norm,
+      norm_nad(nad_filter)
+    ),
+    tar_target(
+      nad_plot,
+      plot_two_factor(
+        nad_norm,
+        nad_stats,
+        "treatment",
+        "value_corr",
+        ytitle = ytitle
+        ),
+      format = "rds"
+    )
   ),
 
-  NULL
+# analysis ----------------------------------------------------------------
+
+tar_quarto(
+  blots_analysis,
+  path = "analysis/blots.qmd"
+),
+tar_quarto(
+  extracellular_analysis,
+  path = "analysis/extracellular.qmd"
+),
+tar_quarto(
+  redox_analysis,
+  path = "analysis/redox.qmd"
+),
+
+NULL
 )

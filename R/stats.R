@@ -85,12 +85,16 @@ onefactor <- function(
 }
 
 
-twofactor <- function(df, y, mixed = TRUE, comps) {
+twofactor <- function(df, y, mixed = TRUE, comps, log = FALSE) {
   x <-
     df |>
     dplyr::mutate(
       dplyr::across(c("condition", "treatment"), forcats::fct_drop)
     )
+
+  if (log) {
+    y <- paste0("log(", y, ")")
+  }
 
   withCallingHandlers(
     message = \(cnd) rlang::warn(cnd$message),
@@ -122,4 +126,19 @@ twofactor <- function(df, y, mixed = TRUE, comps) {
     ) |>
     tidyr::complete(.data$condition, .data$treatment) |>
     annot_stats()
+}
+
+group_twofactor <- function(df, y, comps, ...) {
+  cols <- c("protein", "name", "rate", "stage", "stats", "measurement")
+  df |>
+    tidyr::nest() |>
+    dplyr::mutate(stats = purrr::map(
+      .data$data,
+      twofactor,
+      y = y,
+      comps = comps,
+      ...
+    )) |>
+    dplyr::select(tidyselect::any_of(cols)) |>
+    tidyr::unnest(c("stats"))
 }

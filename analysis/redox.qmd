@@ -1,0 +1,67 @@
+---
+title: "Redox Measurements"
+format: 
+  html:
+    embed-resources: true 
+    echo: false
+    warning: false
+    toc: true
+    toc-depth: 3
+    toc-location: left
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(here)
+library(targets)
+library(tidyverse)
+devtools::load_all()
+
+i_am("analysis/blots.qmd")
+
+tar_config_set(store = here("_targets"))
+```
+
+## NADH / NAD
+
+```{r}
+#| label: nad
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(nad_plot_nad)
+```
+
+```{r}
+#| label: nad_norm
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(nad_plot_nad_norm)
+```
+
+```{r}
+#| label: nadh
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(nad_plot_nadh)
+```
+
+```{r}
+#| label: nadh_norm
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(nad_plot_nadh_norm)
+```
+
+```{r}
+#| label: ratio
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(nad_plot_ratio)
+```
