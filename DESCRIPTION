@@ -9,3 +9,17 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Imports: 
+    broom,
+    dplyr,
+    emmeans,
+    forcats,
+    ggbeeswarm,
+    ggplot2,
+    lmerTest,
+    rlang,
+    scales,
+    stringr,
+    tidyr,
+    tidyselect,
+    wmo
