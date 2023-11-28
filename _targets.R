@@ -142,6 +142,45 @@ list(
     NULL
   ),
 
+  # contraction -------------------------------------------------------------
+
+  tar_target(
+    contraction_file,
+    raw_data_path("contraction.csv"),
+    format = "file_fast"
+  ),
+  tar_target(
+    contraction_raw,
+    readr::read_csv(contraction_file, show_col_types = FALSE)
+  ),
+  tar_target(
+    contraction_clean,
+    clean_contraction(contraction_raw)
+  ),
+  tar_target(
+    contraction_stats,
+    onefactor(contraction_clean, "frac_ctl", comps = comps_azd_1)
+  ),
+  tar_target(
+    contraction_plot,
+    plot_two_factor(
+      contraction_clean,
+      contraction_stats,
+      "treatment",
+      "frac_ctl",
+      ytitle = "Contracted area\n(TGFβ/Ctl)"
+    ) +
+      ggplot2::facet_wrap(
+        ggplot2::vars("experiment"),
+        strip.position = "top"
+      ) +
+      ggplot2::guides(fill = "none") +
+      ggplot2::theme(
+        strip.text = ggplot2::element_blank()
+      ),
+    format = "rds"
+  ),
+
   # analysis ----------------------------------------------------------------
 
   tar_quarto(

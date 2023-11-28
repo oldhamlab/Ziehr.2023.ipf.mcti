@@ -1,5 +1,5 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|6137f8f9b232d500|||||||||||||||
+.Random.seed|object|9fc0f7b206e2161f|||||||||||||||
 %nin%|function|b1eefa0a0b2c9c81|||||||||||||||
 analyze_blot|function|cd3292b392ee3d1a|||||||||||||||
 annot_p|function|852160e13df526b9|||||||||||||||
@@ -153,6 +153,7 @@ blots_index|stem|bdaec744187e04c6|d8d6daafd6186dd1|658ff7f0118fe5df|375003967||t
 blots_phospho|stem|51b9beeb72b65b4f|2f671b511b0638f1|7fb156f7277f2da5|53877993||t19688.9450606055s|9c2607ad1137822f|3242|qs|local|vector|||0.07||
 blots_raw|stem|c700748ffdf9395a|729fe59296e24a70|d029435fc723c5c3|-571032888||t19682.8647337963s|c4f982c3f7aafeb2|11096|qs|local|vector|||0.31||
 clean_blots|function|7bf36cf513a1f1bd|||||||||||||||
+clean_contraction|function|f2820e6dc95245f4|||||||||||||||
 clrs|object|57829e057cd065dd|||||||||||||||
 comps_ar|object|580a29fb040a7ad9|||||||||||||||
 comps_ar_1|object|623ebb49712b31f8|||||||||||||||
@@ -166,12 +167,18 @@ comps_dual|object|61797c6961ddf92a|||||||||||||||
 comps_lactate|object|c5917707240fe346|||||||||||||||
 comps_nsaid|object|553b152748dd6ca3|||||||||||||||
 comps_sirna|object|04d308bd45f3e713|||||||||||||||
+contraction_clean|stem|d6f271a1443da8de|a088b540445ffb2a|ecf9305c6f284d3a|-2055853099||t19689.5697831863s|a82fd942818cd8aa|726|qs|local|vector|||0.788||
+contraction_file|stem|ea218d6bbd754f4a|1d886836690123f1|c184935d19a91dfc|-1520709993|data-raw/contraction.csv|t19115.5267824074s|d274913b68209e1b|5837|file_fast|local|vector|||0.72||
+contraction_plot|stem|f11ae8c3115065ac|16decdd848c18b57|bad303d102ba9efc|899981993||t19689.5770957985s|55c93804dfa40fd8|1098214|rds|local|vector|||0.808||
+contraction_raw|stem|711ed38a6309ea98|e64d52da8662667c|f1897e2040f4694c|-702670701||t19689.5697677763s|c6ea7bcf94489da6|1910|qs|local|vector|||0.216||
+contraction_stats|stem|05871bec11aede77|eb450deb0a6d3cb1|37e556619dd95ac3|275662084||t19689.5746602942s|6e2ad1e2d4a7cab8|275|qs|local|vector|||2.04||
 filter_blots|function|fc26d1a90e2a4973|||||||||||||||
 index_blots|function|b7daf23ed900f1b5|||||||||||||||
 list_files|function|1f658e2880a545a6|||||||||||||||
 manuscript_path|function|cac801abb78f1249|||||||||||||||
 nice_limits|function|680621e928b6f397|||||||||||||||
 norm_blot|function|815e40213f455a17|||||||||||||||
+onefactor|function|bc659eae6762a37e|||||||||||||||
 phospho_ratio|function|5168745ac492c18f|||||||||||||||
 plot_blot|function|77258f763eba35b9|||||||||||||||
 plot_one_factor|function|43a4d9df8e490dcd|||||||||||||||

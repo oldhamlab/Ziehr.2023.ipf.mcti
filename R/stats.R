@@ -33,6 +33,58 @@ ratio_ttest <- function(df, y, paired){
 }
 
 
+onefactor <- function(
+    df,
+    y,
+    mixed = TRUE,
+    comps,
+    fo = NULL,
+    emm = NULL
+) {
+
+  x <-
+    df |>
+    dplyr::mutate(
+      dplyr::across(c("condition", "treatment"), forcats::fct_drop)
+    )
+
+  withCallingHandlers(
+    message = \(cnd) rlang::warn(cnd$message),
+    {
+      if (mixed) {
+        fo <- stats::formula(paste(y, " ~ treatment + (1 | group)"))
+        m <- lmerTest::lmer(fo, data = x)
+      } else {
+        fo <- stats::formula(paste(y, " ~ treatment"))
+        m <- stats::lm(fo, data = x)
+      }
+    }
+  )
+
+  if (is.null(emm)) {
+    emm = stats::formula("~ treatment")
+  }
+
+  m |>
+    emmeans::emmeans(emm) |>
+    emmeans::contrast(method = comps, adjust = "dunnettx") |>
+    broom::tidy() |>
+    dplyr::select("contrast", tidyselect::contains("p.value")) |>
+    tidyr::separate(
+      .data$contrast,
+      c("treatment", "condition"),
+      sep = "\\.",
+      fill = "right"
+    ) |>
+    dplyr::mutate(
+      treatment = factor(.data$treatment, levels = levels(x$treatment)),
+      condition = factor(.data$condition, levels = levels(x$condition))
+    ) |>
+    tidyr::complete(.data$treatment) |>
+    annot_stats()
+}
+
+
 twofactor <- function(df, y, mixed = TRUE, comps) {
   x <-
     df |>
