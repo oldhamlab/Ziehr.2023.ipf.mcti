@@ -1,0 +1,103 @@
+---
+title: "Extracellular Metabolites"
+format: 
+  html:
+    embed-resources: true 
+    echo: false
+    warning: false
+    toc: true
+    toc-depth: 3
+    toc-location: left
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(here)
+library(targets)
+library(tidyverse)
+devtools::load_all()
+
+i_am("analysis/blots.qmd")
+
+tar_config_set(store = here("_targets"))
+```
+
+## Lactate
+
+```{r}
+#| label: lactate_azd
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(plate_plot_lactate_azd)
+```
+
+```{r}
+#| label: lactate_ar
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(plate_plot_lactate_ar)
+```
+
+```{r}
+#| label: lactate_sirna
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(plate_plot_lactate_sirna)
+```
+
+```{r}
+#| label: lactate_nsaid
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(plate_plot_lactate_nsaid)
+```
+
+## Glucose
+
+```{r}
+#| label: glucose_azd
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(plate_plot_glucose_azd)
+```
+
+## Picogreen
+
+```{r}
+#| label: pg_sirna
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(pg_plot_sirna)
+```
+
+```{r}
+#| label: pg_azd
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(pg_plot_azd)
+```
+
+```{r}
+#| label: pg_ar
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(pg_plot_ar)
+```
+
+```{r}
+#| label: pg_nsaid
+#| fig-width: 4
+#| fig-height: 2.5
+
+tar_read(pg_plot_nsaid)
+```

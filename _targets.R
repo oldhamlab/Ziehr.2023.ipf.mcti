@@ -223,9 +223,153 @@ list(
     ),
     tar_target(
       plates_conc,
-      clean_data(plates_interp, cf)
+      clean_plates_interp(plates_interp, cf)
     ),
     NULL
+  ),
+
+  # extracellular -----------------------------------------------------------
+
+  tar_map(
+    values = list(
+      df = rlang::syms(c("plates_conc_lactate", "plates_conc_glucose")),
+      cf = rlang::syms(c("plates_conc_picogreen", "plates_conc_picogreen")),
+      names = c("lactate", "glucose")
+    ),
+    names = names,
+    tar_target(
+      plates_norm,
+      norm_plates(df, cf)
+    )
+  ),
+  tar_map(
+    values = list(
+      names = c(
+        "lactate_sirna",
+        "lactate_azd",
+        "lactate_ar",
+        "lactate_nsaid",
+        "glucose_azd"
+      ),
+      norm = rlang::syms(c(
+        "plates_norm_lactate",
+        "plates_norm_lactate",
+        "plates_norm_lactate",
+        "plates_norm_lactate",
+        "plates_norm_glucose"
+      )),
+      exp = list(
+        "sirna",
+        "dual",
+        c("dual", "ar"),
+        "diclofenac",
+        "dual"
+      ),
+      treat = list(
+        NULL,
+        c("Veh", "AZD", "VB", "AZD/VB"),
+        c("Veh", "AR", "VB", "AR/VB"),
+        NULL,
+        c("Veh", "AZD", "VB", "AZD/VB")
+      ),
+      comps = rlang::syms(c(
+        "comps_sirna",
+        "comps_azd_2",
+        "comps_ar_2",
+        "comps_nsaid",
+        "comps_azd_2"
+      )),
+      ytitle = c(
+        "Lactate (pmol/cell)",
+        "Lactate (pmol/cell)",
+        "Lactate (pmol/cell)",
+        "Lactate (pmol/cell)",
+        "Glucose (pmol/cell)"
+      )
+    ),
+    names = names,
+    tar_target(
+      plate_filter,
+      filter_plates(norm, exp = exp, treat = treat)
+    ),
+    tar_target(
+      plate_stats,
+      twofactor(plate_filter, "norm", comps = comps)
+    ),
+    tar_target(
+      plate_plot,
+      plot_two_factor(
+        plate_filter,
+        plate_stats,
+        "treatment",
+        "norm",
+        ytitle = ytitle
+      ),
+      format = "rds"
+    )
+  ),
+
+  # picogreen ---------------------------------------------------------------
+
+  tar_map(
+    values = list(
+      names = c(
+        "sirna",
+        "azd",
+        "ar",
+        "nsaid"
+      ),
+      exp = list(
+        "sirna",
+        "dual",
+        c("dual", "ar"),
+        "diclofenac"
+      ),
+      treat = list(
+        NULL,
+        c("Veh", "AZD", "VB", "AZD/VB"),
+        c("Veh", "AR", "VB", "AR/VB"),
+        NULL
+      ),
+      comps = rlang::syms(c(
+        "comps_sirna",
+        "comps_azd_2",
+        "comps_ar_2",
+        "comps_nsaid"
+      ))
+    ),
+    names = names,
+    tar_target(
+      pg_filter,
+      filter_plates(plates_conc_picogreen, exp = exp, treat = treat)
+    ),
+    tar_target(
+      pg_stats,
+      twofactor(pg_filter, "conc", comps = comps)
+    ),
+    tar_target(
+      pg_plot,
+      plot_two_factor(
+        pg_filter,
+        pg_stats,
+        "treatment",
+        "conc",
+        ytitle = "Cell number"
+      ) +
+        ggplot2::facet_wrap(
+          ggplot2::vars("experiment")
+        ) +
+        ggplot2::scale_y_continuous(
+          labels = scales::label_number(scale_cut = scales::cut_short_scale()),
+          breaks = scales::breaks_extended(n = 4, only.loose = TRUE),
+          expand = ggplot2::expansion(c(0, 0)),
+          limits = nice_limits
+        ) +
+        ggplot2::theme(
+          strip.text = ggplot2::element_blank()
+        ),
+      format = "rds"
+    )
   ),
 
   # analysis ----------------------------------------------------------------
@@ -233,6 +377,10 @@ list(
   tar_quarto(
     blots_analysis,
     path = "analysis/blots.qmd"
+  ),
+  tar_quarto(
+    extracellular_analysis,
+    path = "analysis/extracellular.qmd"
   ),
 
   NULL

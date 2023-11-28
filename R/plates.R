@@ -11,7 +11,7 @@ clean_plates <- function(df) {
     dplyr::ungroup()
 }
 
-clean_data <- function(df, cf) {
+clean_plates_interp <- function(df, cf) {
   if ("well" %in% names(df)) {
     df <-
       df |>
@@ -25,4 +25,39 @@ clean_data <- function(df, cf) {
       dplyr::arrange(.data$group)
   }
   dplyr::mutate(df, conc = .data$conc * cf)
+}
+
+
+norm_plates <- function(df, cf) {
+  dplyr::left_join(
+    df,
+    cf,
+    by = c("experiment", "batch", "trial", "condition", "treatment"),
+    suffix = c(".m", ".c")
+  ) |>
+    dplyr::select(-c(tidyselect::starts_with("assay"), "group.c")) |>
+    dplyr::rename(group = "group.m") |>
+    dplyr::mutate(norm = conc.m / conc.c)
+}
+
+filter_plates <- function(df, exp, treat = NULL, cond = NULL) {
+  if (is.null(treat)) {
+    treat <- unique(df$treatment)
+  }
+  if (is.null(cond)) {
+    cond <- unique(df$condition)
+  }
+
+  df |>
+    dplyr::filter(
+      .data$experiment %in% exp &
+        .data$treatment %in% treat &
+        .data$condition %in% cond
+    ) |>
+    dplyr::mutate(
+      dplyr::across(
+        c("treatment", "condition"),
+        \(x) forcats::fct_drop(x)
+      )
+    )
 }
