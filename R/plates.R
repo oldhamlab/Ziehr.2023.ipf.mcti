@@ -37,7 +37,7 @@ norm_plates <- function(df, cf) {
   ) |>
     dplyr::select(-c(tidyselect::starts_with("assay"), "group.c")) |>
     dplyr::rename(group = "group.m") |>
-    dplyr::mutate(norm = conc.m / conc.c)
+    dplyr::mutate(norm = .data$conc.m / .data$conc.c)
 }
 
 filter_plates <- function(df, exp, treat = NULL, cond = NULL) {
