@@ -4,4 +4,6 @@
 ^\.Rproj\.user$
 ^_targets
 ^data-raw/blots
+^data-raw/glucose
+^data-raw/lactate
 ^LICENSE\.md$
