@@ -43,9 +43,9 @@ filter_blots <- function(df) {
   df |>
     dplyr::filter(!(.data$experiment == "ipf" & .data$batch == 2)) |>
     dplyr::filter(!(.data$experiment == "ipf-lf" & .data$batch %in% 1:2)) |>
-    dplyr::filter(!(.data$experiment == "dual" & protein == "Col1a1" & batch %in% 1:4)) |>
-    dplyr::filter(!(.data$experiment == "dual" & protein %in% prots & batch %in% 1:4)) |>
-    dplyr::filter(!(.data$experiment == "dual" & protein %in% c("pAKT", "AKT") & trial == 2))
+    dplyr::filter(!(.data$experiment == "dual" & .data$protein == "Col1a1" & .data$batch %in% 1:4)) |>
+    dplyr::filter(!(.data$experiment == "dual" & .data$protein %in% prots & .data$batch %in% 1:4)) |>
+    dplyr::filter(!(.data$experiment == "dual" & .data$protein %in% c("pAKT", "AKT") & .data$trial == 2))
 }
 
 index_blots <- function(df) {
