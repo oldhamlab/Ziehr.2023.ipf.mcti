@@ -423,25 +423,94 @@ list(
         "treatment",
         "value_corr",
         ytitle = ytitle
-        ),
+      ),
       format = "rds"
     )
   ),
 
-# analysis ----------------------------------------------------------------
+  # seahorse ----------------------------------------------------------------
 
-tar_quarto(
-  blots_analysis,
-  path = "analysis/blots.qmd"
-),
-tar_quarto(
-  extracellular_analysis,
-  path = "analysis/extracellular.qmd"
-),
-tar_quarto(
-  redox_analysis,
-  path = "analysis/redox.qmd"
-),
+  tar_target(
+    seahorse_mcti_meta_file,
+    raw_data_path("seahorse_mcti.csv"),
+    format = "file_fast"
+  ),
+  tar_target(
+    seahorse_mcti_wells,
+    format_wells(seahorse_mcti_meta_file)
+  ),
+  tar_target(
+    seahorse_mcti_count_files,
+    raw_data_path("seahorse_\\d{4}-\\d{2}-\\d{2}_mcti_counts\\.csv"),
+    format = "file"
+  ),
+  tar_target(
+    seahorse_mcti_counts,
+    purrr::map(
+      seahorse_mcti_count_files,
+      seahorse::format_cells
+    )
+  ),
+  tar_target(
+    seahorse_mcti_data_files,
+    raw_data_path("seahorse_\\d{4}-\\d{2}-\\d{2}_mcti\\.xlsx"),
+    format = "file"
+  ),
+  tar_target(
+    seahorse_mcti_raw,
+    purrr::map2(
+      seahorse_mcti_data_files,
+      seahorse_mcti_counts,
+      \(x, y) seahorse::Seahorse(
+        path = x,
+        wells = seahorse_mcti_wells,
+        stages = seahorse::stages_mst,
+        cells = y,
+        bf = 2.4,
+        cf = 0.410
+      )
+    )
+  ),
+  tar_target(
+    seahorse_mcti_herd,
+    seahorse::Herd(seahorse_mcti_raw)
+  ),
+  tar_target(
+    seahorse_mcti_timeline_plot,
+    plot_seahorse_timelines(seahorse_mcti_herd),
+    format = "rds"
+  ),
+  tar_target(
+    seahorse_mcti_summary_data,
+    summarize_seahorse(seahorse_mcti_herd)
+  ),
+  tar_target(
+    seahorse_mcti_summary_stats,
+    seahorse_group_onefactor(seahorse_mcti_summary_data)
+  ),
+  tar_target(
+    seahorse_mcti_summary_plot,
+    plot_seahorse_summary(
+      seahorse_mcti_summary_data,
+      seahorse_mcti_summary_stats
+    ),
+    format = "rds"
+  ),
 
-NULL
+  # analysis ----------------------------------------------------------------
+
+  tar_quarto(
+    blots_analysis,
+    path = "analysis/blots.qmd"
+  ),
+  tar_quarto(
+    extracellular_analysis,
+    path = "analysis/extracellular.qmd"
+  ),
+  tar_quarto(
+    redox_analysis,
+    path = "analysis/redox.qmd"
+  ),
+
+  NULL
 )

@@ -35,7 +35,7 @@ ratio_ttest <- function(df, y, paired){
 
 onefactor <- function(
     df,
-    y,
+    y = NULL,
     mixed = TRUE,
     comps,
     fo = NULL,
@@ -48,15 +48,24 @@ onefactor <- function(
       dplyr::across(c("condition", "treatment"), forcats::fct_drop)
     )
 
+
   withCallingHandlers(
     message = \(cnd) rlang::warn(cnd$message),
     {
-      if (mixed) {
-        fo <- stats::formula(paste(y, " ~ treatment + (1 | group)"))
-        m <- lmerTest::lmer(fo, data = x)
+      if (is.null(fo)) {
+        if (mixed) {
+          fo <- stats::formula(paste(y, " ~ treatment + (1 | group)"))
+          m <- lmerTest::lmer(fo, data = x)
+        } else {
+          fo <- stats::formula(paste(y, " ~ treatment"))
+          m <- stats::lm(fo, data = x)
+        }
       } else {
-        fo <- stats::formula(paste(y, " ~ treatment"))
-        m <- stats::lm(fo, data = x)
+        if (mixed) {
+          m <- lmerTest::lmer(fo, data = x)
+        } else {
+          m <- stats::lm(fo, data = x)
+        }
       }
     }
   )
@@ -82,6 +91,19 @@ onefactor <- function(
     ) |>
     tidyr::complete(.data$treatment) |>
     annot_stats()
+}
+
+
+group_onefactor <- function(df, y, comps, ...) {
+  cols <- c("protein", "name", "rate", "stage", "stats")
+
+  df |>
+    tidyr::nest() |>
+    dplyr::mutate(
+      stats = purrr::map(.data$data, onefactor, y = y, comps = comps, ...)
+    ) |>
+    dplyr::select(tidyselect::any_of(cols)) |>
+    tidyr::unnest(c("stats"))
 }
 
 
