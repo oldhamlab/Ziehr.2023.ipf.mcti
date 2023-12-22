@@ -448,7 +448,8 @@ list(
     seahorse_mcti_counts,
     purrr::map(
       seahorse_mcti_count_files,
-      seahorse::format_cells
+      \(x) seahorse::format_cells(x) |>
+        dplyr::mutate(value = value / 1000)
     )
   ),
   tar_target(
@@ -493,6 +494,43 @@ list(
     plot_seahorse_summary(
       seahorse_mcti_summary_data,
       seahorse_mcti_summary_stats
+    ),
+    format = "rds"
+  ),
+  tar_target(
+    seahorse_mcti_atp_data,
+    summarize_seahorse_atp(seahorse_mcti_herd)
+  ),
+  tar_target(
+    seahorse_mcti_atp_stats,
+    seahorse_group_onefactor(seahorse_mcti_atp_data)
+  ),
+  tar_target(
+    seahorse_mcti_atp_bars,
+    plot_seahorse_atp_bars(
+      seahorse_mcti_atp_data,
+      seahorse_mcti_atp_stats
+    ),
+    format = "rds"
+  ),
+  tar_target(
+    seahorse_mcti_atp_pheno,
+    plot_seahorse_pheno(seahorse_mcti_atp_data),
+    format = "rds"
+  ),
+  tar_target(
+    seahorse_mcti_stress_data,
+    summarize_seahorse_stress(seahorse_mcti_herd)
+  ),
+  tar_target(
+    seahorse_mcti_stress_stats,
+    seahorse_group_onefactor(seahorse_mcti_stress_data)
+  ),
+  tar_target(
+    seahorse_mcti_stress_plot,
+    plot_seahorse_stress(
+      seahorse_mcti_stress_data,
+      seahorse_mcti_stress_stats
     ),
     format = "rds"
   ),

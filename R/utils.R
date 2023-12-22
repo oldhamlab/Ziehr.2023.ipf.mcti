@@ -250,3 +250,19 @@ interp_data <- function(df, std) {
     tidyr::unnest(c("data", "conc")) |>
     dplyr::select(-c("model", "value"))
 }
+
+
+# normalization -----------------------------------------------------------
+
+normalize <- function(x, value, experiment) {
+  x |>
+    dplyr::mutate(grand_mean = mean(.data[[value]])) |>
+    dplyr::group_by(dplyr::across(tidyselect::all_of(experiment)), .add = TRUE) |>
+    dplyr::mutate(
+      exp_mean = mean(.data[[value]]),
+      cf = .data$grand_mean - .data$exp_mean,
+      "{value}_corr" := .data[[value]] + .data$cf
+    ) |>
+    dplyr::select(-c("grand_mean", "exp_mean", "cf")) |>
+    dplyr::ungroup(tidyselect::all_of(experiment))
+}
