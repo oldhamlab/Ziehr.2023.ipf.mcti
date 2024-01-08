@@ -396,3 +396,11 @@ plot_two_factor <- function(
   }
   p
 }
+
+plot_table <- function(file, vjust = 0) {
+  patchwork::wrap_elements(
+    full = plot_image(file, vjust = vjust)
+  ) +
+    ggplot2::coord_fixed() +
+    theme_plot()
+}

@@ -21,11 +21,33 @@ manuscript_path <- function(nm) {
   list_files(nm = nm, path = "manuscript")
 }
 
+plot_image <- function(img, scale = 1, hjust = 0, vjust = 0) {
+  cowplot::ggdraw() +
+    cowplot::draw_image(
+      magick::image_read(img),
+      scale = scale,
+      hjust = hjust,
+      vjust = vjust
+    )  +
+    theme_plot() +
+    ggplot2::theme(
+      panel.border = ggplot2::element_blank(),
+      axis.line = ggplot2::element_blank()
+    )
+}
+
 plot_path <- function(nm) {
   path <- stringr::str_c("analysis/figures/", nm)
   if (dir.exists(path)) unlink(path, recursive = TRUE)
   if (!dir.exists(path)) dir.create(path = path, recursive = TRUE)
   path
+}
+
+write_table <- function(table, path, filename) {
+  if (!dir.exists(path)) dir.create(path = path, recursive = TRUE)
+  filename <- stringr::str_c(path, filename, ".png")
+  gt::gtsave(table, filename = filename)
+  filename
 }
 
 
