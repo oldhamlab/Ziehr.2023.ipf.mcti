@@ -534,6 +534,25 @@ list(
     ),
     format = "rds"
   ),
+  tar_target(
+    seahorse_mcti_time_data_files,
+    raw_data_path("mcti_timecourse\\.xlsx"),
+    format = "file"
+  ),
+  tar_target(
+    seahorse_mcti_time_raw,
+    seahorse::Seahorse(
+      path = seahorse_mcti_time_data_files,
+      wells = seahorse_mcti_wells,
+      bf = 2.4,
+      cf = 0.410
+    )
+  ),
+  tar_target(
+    seahorse_mcti_time_timeline_plot,
+    seahorse::plot(seahorse_mcti_time_raw, "rates"),
+    format = "rds"
+  ),
 
   # analysis ----------------------------------------------------------------
 
