@@ -692,6 +692,144 @@ list(
     format = "rds"
   ),
 
+  # metab bleo --------------------------------------------------------------
+
+  tar_target(
+    metab_bleo_lung_tar_file,
+    raw_data_path("bleo_lung_2022-11-22.xlsx"),
+    format = "file"
+  ),
+  tar_target(
+    metab_bleo_plasma_tar_file,
+    raw_data_path("bleo_plasma_2022-11-22.xlsx"),
+    format = "file"
+  ),
+  tar_target(
+    metab_bleo_tar_samples,
+    make_bleo_samples(mice_raw)
+  ),
+  tar_map(
+    values = list(
+      names = c("lung", "plasma"),
+      input = rlang::syms(c(
+        "metab_bleo_lung_tar_file",
+        "metab_bleo_plasma_tar_file"
+      ))
+    ),
+    names = names,
+    tar_target(
+      metab_bleo_tar_raw,
+      format_metab_targeted(input)
+    ),
+    tar_target(
+      metab_bleo_tar_se,
+      format_metab_bleo_tar(metab_bleo_tar_raw, metab_bleo_tar_samples)
+    ),
+    tar_target(
+      metab_bleo_tar_clean,
+      metab_bleo_tar_se |>
+        remove_missing_metab() |>
+        correct_drift() |>
+        quality_control() |>
+        impute_missing() |>
+        pqn() |>
+        annot_metabs()
+    ),
+    tar_target(
+      metab_bleo_tar_pca,
+      plot_pca_metab(metab_bleo_tar_clean, batch = FALSE, show_reps = FALSE),
+      format = "rds"
+    ),
+    tar_target(
+      metab_bleo_tar_limma,
+      fit_limma_metab(
+        metab_bleo_tar_clean,
+        batch = FALSE,
+        bleo = Bleo - Ctl,
+        azd = AZD - Bleo,
+        vb = VB - Bleo
+      )
+    ),
+    tar_map(
+      values = list(
+        comparison = c("bleo", "azd", "vb"),
+        fills = list(
+          c("Ctl", "Bleo"),
+          c("Bleo", "AZD"),
+          c("Bleo", "VB")
+        ),
+        title = c("Bleo", "AZD", "VB"),
+        filename = stringr::str_c("msea_", c("bleo", "bleo_azd", "bleo_vb"))
+      ),
+      names = comparison,
+      tar_target(
+        metab_bleo_tar_tt,
+        top_table_metab(
+          metab_bleo_tar_clean,
+          metab_bleo_tar_limma,
+          comparison
+        )
+      ),
+      tar_target(
+        metab_bleo_tar_vol,
+        plot_vol_metab(metab_bleo_tar_tt, fills, title),
+        format = "rds"
+      ),
+      tar_target(
+        metab_bleo_tar_msea,
+        run_msea(metab_bleo_tar_tt, metabolite_pathways)
+      ),
+      tar_target(
+        bleo_tar_msea_plot,
+        plot_msea(metab_bleo_tar_msea, colors = unname(fills), src = "KEGG"),
+        format = "rds"
+      ),
+      tar_target(
+        metab_bleo_tar_msea_table,
+        plot_msea_table(metab_bleo_tar_msea, title = title, clr = fills),
+        format = "rds"
+      ),
+      tar_target(
+        msea_table_file,
+        write_table(
+          metab_bleo_tar_msea_table,
+          path = "analysis/figures/msea/",
+          filename
+        ),
+        format = "file"
+      ),
+      tar_target(
+        msea_table_img,
+        plot_table(msea_table_file),
+        format = "rds"
+      ),
+      NULL
+    ),
+    NULL
+  ),
+  tar_target(
+    metab_bleo_lacate_plot,
+    plot_bleo_lactate(
+      list(
+        plasma = metab_bleo_tar_clean_plasma,
+        lung = metab_bleo_tar_clean_lung
+      )
+    ),
+    format = "rds"
+  ),
+
+  # mice --------------------------------------------------------------------
+
+  tar_target(
+    mice_file,
+    raw_data_path("mice.csv"),
+    format = "file"
+  ),
+  tar_target(
+    mice_raw,
+    readr::read_csv(mice_file, show_col_types = FALSE)
+  ),
+
   # analysis ----------------------------------------------------------------
 
   tar_quarto(

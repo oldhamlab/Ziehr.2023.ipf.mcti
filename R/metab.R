@@ -257,7 +257,7 @@ plot_pca_metab <- function(clean, batch = TRUE, show_reps = TRUE){
       color = group
     ) +
     ggforce::geom_mark_ellipse(
-      size = 0.25,
+      linewidth = 0.25,
       expand = ggplot2::unit(2, "mm"),
       label.fontsize = 5,
       label.fontface = "plain",
@@ -721,15 +721,18 @@ format_metab_targeted <- function(path) {
       rt = RT,
       area = `Peak Area`
     ) |>
+    dplyr::filter(!all(area == 0), .by = metabolite) |>
     dplyr::left_join(wmo::hmdb_mappings, by = "metabolite") |>
-    dplyr::mutate(metabolite = dplyr::case_when(
-      metabolite == "glyceraldehyde 3-phosphate" ~ "GAP",
-      metabolite == "glucose 1-phosphate" ~ "G1P",
-      metabolite == "glucose 6-phosphate" ~ "G6P",
-      metabolite == "sedoheptulose 7-phosphate" ~ "S7P",
-      metabolite == "glycerol 3-phosphate" ~ "G3P",
-      TRUE ~ metabolite
-    )) |>
+    dplyr::mutate(
+      metabolite = dplyr::case_when(
+        metabolite == "glyceraldehyde 3-phosphate" ~ "GAP",
+        metabolite == "glucose 1-phosphate" ~ "G1P",
+        metabolite == "glucose 6-phosphate" ~ "G6P",
+        metabolite == "sedoheptulose 7-phosphate" ~ "S7P",
+        metabolite == "glycerol 3-phosphate" ~ "G3P",
+        TRUE ~ metabolite
+      )
+    ) |>
     dplyr::filter(!is.na(hmdb)) |>
     dplyr::filter(!stringr::str_detect(hmdb, "ISTD")) |>
     dplyr::mutate(
