@@ -818,6 +818,192 @@ list(
     format = "rds"
   ),
 
+  # rnaseq ------------------------------------------------------------------
+
+  tar_target(
+    dds,
+    count_rnaseq()
+  ),
+  tar_target(
+    rnaseq_pca,
+    vst_rnaseq(dds)
+  ),
+  tar_target(
+    rnaseq_pca_plot,
+    plot_rnaseq_pca(rnaseq_pca),
+    format = "rds"
+  ),
+  tar_target(
+    gsea_pathways,
+    get_msigdb_pathways(category = "H")
+  ),
+  tar_target(
+    decoupler_matrix,
+    prep_counts(dds)
+  ),
+  tar_target(
+    progeny_network,
+    decoupleR::get_progeny(organism = "human")
+  ),
+  tar_target(
+    progeny_results,
+    decoupleR::run_mlm(
+      mat = decoupler_matrix,
+      net = progeny_network,
+      .mor = "weight"
+    )
+  ),
+  tar_target(
+    progeny_plot,
+    plot_progeny(progeny_results),
+    format = "rds"
+  ),
+  tar_target(
+    tf_network,
+    decoupleR::get_collectri(organism = "human")
+  ),
+  tar_target(
+    tf_results,
+    run_tfea(decoupler_matrix, tf_network)
+  ),
+  tar_target(
+    tf_plot,
+    plot_tf(tf_results),
+    format = "rds"
+  ),
+  tar_map(
+    values = list(
+      names = c(
+        "main_tgfb",
+        "main_azd",
+        "main_vb",
+        "main_dual",
+        "int_azd",
+        "int_vb",
+        "int_dual",
+        "tgfb_azd",
+        "tgfb_vb",
+        "tgfb_dual"
+      ),
+      con = list(
+        c("condition", "TGFβ", "Ctl"),
+        c("treatment", "AZD", "Veh"),
+        c("treatment", "VB", "Veh"),
+        c("treatment", "AZD/VB", "Veh"),
+        list("conditionTGFβ.treatmentAZD"),
+        list("conditionTGFβ.treatmentVB"),
+        list("conditionTGFβ.treatmentAZD.VB"),
+        list(c("treatment_AZD_vs_Veh", "conditionTGFβ.treatmentAZD")),
+        list(c("treatment_VB_vs_Veh", "conditionTGFβ.treatmentVB")),
+        list(c("treatment_AZD.VB_vs_Veh", "conditionTGFβ.treatmentAZD.VB"))
+      ),
+      title = c(
+        "TGFβ v. Ctl",
+        "AZD v. Veh",
+        "VB v. Veh",
+        "AZD/VB v. Veh",
+        "AZD × TGFβ",
+        "VB × TGFβ",
+        "AZD/VB × TGFβ",
+        "AZD v. Veh in TGFβ",
+        "VB v. Veh in TGFβ",
+        "AZD/VB v. Veh in TGFβ"
+      ),
+      bins = list(
+        c(30, 10),
+        c(20, 80),
+        c(45, 15),
+        c(45, 15),
+        c(75, 2000),
+        c(100, 60),
+        c(100, 60),
+        c(30, 110),
+        c(30, 15),
+        c(30, 10)
+      ),
+      fills = list(
+        c("Ctl", "TGFβ"),
+        c("Veh", "AZD"),
+        c("Veh", "VB"),
+        c("Veh", "AZD/VB"),
+        c("Veh", "AZD"),
+        c("Veh", "VB"),
+        c("Veh", "AZD/VB"),
+        c("Veh", "AZD"),
+        c("Veh", "VB"),
+        c("Veh", "AZD/VB")
+      )
+    ),
+    names = names,
+    tar_target(
+      deg,
+      rnaseq_results(dds, con = con)
+    ),
+    tar_target(
+      deg_vol,
+      plot_vol_rnaseq(deg, title = title, bins = bins),
+      format = "rds"
+    ),
+    tar_target(
+      gsea,
+      run_gsea(deg, gsea_pathways)
+    ),
+    tar_target(
+      gsea_table,
+      plot_gsea_table(gsea, "HALLMARK", title = title, clr = fills),
+      format = "rds"
+    ),
+    tar_target(
+      gsea_table_file,
+      write_table(
+        gsea_table,
+        path = "analysis/figures/gsea/",
+        stringr::str_c("gsea_", names)
+      ),
+      format = "file"
+    ),
+    tar_target(
+      gsea_table_img,
+      plot_table(gsea_table_file),
+      format = "rds"
+    ),
+    tar_target(
+      tfea,
+      score_tf(deg, tf_network)
+    ),
+    tar_target(
+      tfea_vol,
+      plot_vol_tfea(tfea, fills, title),
+      format = "rds"
+    ),
+    NULL
+  ),
+  tar_target(
+    gsea_dot_plot,
+    plot_gsea_dot(
+      list(
+        `TGFβ\n` = gsea_main_tgfb,
+        `TGFβ +\nAZD` = gsea_tgfb_azd,
+        `TGFβ +\nVB` = gsea_tgfb_vb,
+        `TGFβ +\nAZD/VB` = gsea_tgfb_dual
+      )
+    ),
+    format = "rds"
+  ),
+  tar_target(
+    edge_plot,
+    plot_edge(
+      list(
+        TGFβ = gsea_main_tgfb,
+        AZD = gsea_tgfb_azd,
+        VB = gsea_tgfb_vb,
+        `AZD/VB` = gsea_tgfb_dual
+      ),
+      dds
+    ),
+    format = "rds"
+  ),
+
   # mice --------------------------------------------------------------------
 
   tar_target(
