@@ -1,14 +1,22 @@
 # rnaseq.R
 
-count_rnaseq <- function() {
+count_rnaseq <- function(se) {
+  grps <- c("Ctl.Veh", "Ctl.AZD", "Ctl.VB", "Ctl.AZD.VB",
+            "TGFβ.Veh", "TGFβ.AZD", "TGFβ.VB", "TGFβ.AZD.VB")
+
+  se$group <-
+    stringr::str_c(se$condition, se$treatment, sep = ".") |>
+    stringr::str_replace_all("/", ".") |>
+    factor(levels = grps)
+
   dds <-
     DESeq2::DESeqDataSet(
-      rnaseq.lf.tgfb.mcti::se,
-      design = ~ replicate + condition * treatment
+      se,
+      design = ~ replicate + group
     ) |>
     DESeq2::DESeq()
   rownames(dds) <- stringr::str_replace_all(rownames(dds), "\\.\\d+", "")
-  keep <- rowSums(DESeq2::counts(dds, normalized = TRUE) >= 0.5) >= 4
+  keep <- rowSums(DESeq2::counts(dds) >= 10) >= 4
   dds[keep, ]
 }
 
@@ -123,7 +131,8 @@ rnaseq_results <- function(dds, con) {
   DESeq2::lfcShrink(
     dds,
     res = res,
-    type = "ashr"
+    type = "ashr",
+    lfcThreshold = log(fc, base = 2)
   ) |>
     tibble::as_tibble(rownames = "row") |>
     dplyr::mutate(stat = res$stat) |>
@@ -132,36 +141,26 @@ rnaseq_results <- function(dds, con) {
     dplyr::arrange(padj)
 }
 
-get_msigdb_pathways <- function(species = 'Homo sapiens', category = NULL, subcategory = NULL){
-  x <-
-    msigdbr::msigdbr(species = species, category = category, subcategory = subcategory) |>
-    dplyr::select(gs_name, ensembl_gene) |>
-    dplyr::group_by(gs_name) |>
-    dplyr::mutate(
-      gs_name = ifelse(
-        stringr::str_detect(gs_name, 'TARGET_GENES'),
-        stringr::str_c(
-          'GTRD_',
-          stringr::str_replace(gs_name, '_TARGET_GENES', '')
-        ),
-        gs_name
-      )
-    ) |>
-    tidyr::nest()
-
-  purrr::map(x$data, ~unlist(unname(as.list(.x)), recursive = FALSE)) |>
-    rlang::set_names(x$gs_name)
-}
-
-plot_vol_rnaseq <- function(
+plot_rnaseq_vol <- function(
     results,
+    fills = c("IPF", "Ctl"),
     gois = NULL,
-    title = NULL,
-    bins = c(100, 100)
+    title = NULL
 ) {
   x <-
-    dplyr::filter(results, !is.na(.data$padj)) |>
-    dplyr::filter(abs(log2FoldChange) < 10)
+    results |>
+    dplyr::arrange(abs(stat)) |>
+    dplyr::mutate(
+      color = dplyr::case_when(
+        padj < 0.05 & log2FoldChange > 0 ~ clrs[[fills[[1]]]],
+        padj < 0.05 & log2FoldChange < 0 ~ clrs[[fills[[2]]]],
+        .default = "#BAB0AC"
+      )
+    ) |>
+    dplyr::filter(!is.na(.data$padj)) |>
+    dplyr::filter(!is.na(.data$symbol)) |>
+    dplyr::filter(abs(log2FoldChange) < 10) |>
+    identity()
 
   left <-
     x |>
@@ -218,11 +217,13 @@ plot_vol_rnaseq <- function(
       segment.color = "black",
       show.legend = FALSE
     ) +
-    ggplot2::geom_hex(
-      bins = bins,
+    ggplot2::geom_point(
+      ggplot2::aes(fill = color),
+      pch = 21,
+      stroke = 0,
       show.legend = FALSE
     ) +
-    ggplot2::scale_fill_viridis_c(trans = "log10") +
+    ggplot2::scale_fill_identity() +
     ggplot2::scale_color_manual(values = c("black", "darkred")) +
     ggplot2::scale_y_continuous(
       trans = c("log10", "reverse"),
@@ -242,6 +243,27 @@ plot_vol_rnaseq <- function(
     ggplot2::coord_cartesian(clip = "off") +
     theme_plot() +
     NULL
+}
+
+get_msigdb_pathways <- function(species = 'Homo sapiens', category = NULL, subcategory = NULL){
+  x <-
+    msigdbr::msigdbr(species = species, category = category, subcategory = subcategory) |>
+    dplyr::select(gs_name, ensembl_gene) |>
+    dplyr::group_by(gs_name) |>
+    dplyr::mutate(
+      gs_name = ifelse(
+        stringr::str_detect(gs_name, 'TARGET_GENES'),
+        stringr::str_c(
+          'GTRD_',
+          stringr::str_replace(gs_name, '_TARGET_GENES', '')
+        ),
+        gs_name
+      )
+    ) |>
+    tidyr::nest()
+
+  purrr::map(x$data, ~unlist(unname(as.list(.x)), recursive = FALSE)) |>
+    rlang::set_names(x$gs_name)
 }
 
 run_gsea <- function(results, pathways) {
@@ -295,7 +317,7 @@ plot_gsea_table <- function(df, title, clr, filename) {
       fn = scales::col_numeric(
         palette =
           grDevices::colorRamp(
-            c(clr[1], "white", clr[2]),
+            c(clr[[2]], "white", clr[[1]]),
             interpolate = "linear"
           ),
         domain = c(-lim, lim)
@@ -591,200 +613,130 @@ prep_counts <- function(dds) {
     {\(x) magrittr::set_rownames(x, ids[rownames(x)])}()
 }
 
-plot_progeny <- function(df) {
-  palette_length <- 100
-
-  x <-
-    df |>
-    dplyr::mutate(
-      name = .data$condition,
-      condition = stringr::str_extract(.data$name, "(Ctl|TGFb)"),
-      condition = factor(condition, levels = c("Ctl", "TGFb")),
-      treatment = stringr::str_extract(.data$name, "(DMSO|AZD|VB|Dual)"),
-      treatment = factor(treatment, levels = c("DMSO", "AZD", "VB", "Dual"))
-    ) |>
-    dplyr::arrange(source, condition, treatment, name)
-
-  mat <-
-    x |>
-    tidyr::pivot_wider(
-      id_cols = "source",
-      names_from = "name",
-      values_from = "score"
-    ) |>
-    tibble::column_to_rownames("source") |>
-    as.matrix() |>
-    t() |>
-    scale() |>
-    t()
-
-  annotation_col <-
-    x |>
-    dplyr::select(name, condition, treatment) |>
-    dplyr::distinct() |>
-    refactor() |>
-    tibble::column_to_rownames("name")
-
-  annotation_colors <-
-    list(
-      condition = c(
-        Ctl = clrs[["Ctl"]],
-        TGFβ = clrs[["TGFβ"]]
-      ),
-      treatment = c(
-        Veh = clrs[["TGFβ\nVeh"]],
-        AZD = clrs[["TGFβ\nAZD"]],
-        VB = clrs[["TGFβ\nVB"]],
-        `AZD/VB` = clrs[["TGFβ\nAZD/VB"]]
-      )
-    )
-
-  pheatmap::pheatmap(
-    mat,
-    color = colorspace::diverging_hcl(100, "Blue-Red 3"),
-    breaks = seq(-3, 3, length.out = palette_length),
-    cluster_cols = FALSE,
-    border_color = NA,
-    cellwidth = 10,
-    cellheight = 10,
-    legend = TRUE,
-    annotation_col = annotation_col,
-    annotation_colors = annotation_colors,
-    show_colnames = FALSE
-  )
-}
-
-# run_tfea <- function(dds){
-#   # vst if using scale as method
-#   # dds <- DESeq2::vst(dds, blind = FALSE)
-#
-#   # remove duplicates
-#   ids <-
-#     SummarizedExperiment::rowData(dds) |>
-#     tibble::as_tibble() |>
-#     dplyr::filter(!(is.na(symbol) | symbol == "")) |>
-#     dplyr::group_by(symbol) |>
-#     dplyr::slice_max(baseMean) |>
-#     dplyr::select(gene_id, symbol) |>
-#     tibble::deframe()
-#
-#   # make matrix
-#   mat <-
-#     dds[rownames(dds) %in% names(ids), ] |>
-#     SummarizedExperiment::assay() |>
-#     {\(x) magrittr::set_rownames(x, ids[rownames(x)])}()
-#
-#   # run viper
-#   regulons <-
-#     dorothea::dorothea_hs |>
-#     dplyr::filter(confidence %in% c("A", "B"))
-#
-#   dorothea::run_viper(
-#     input = mat,
-#     regulons = regulons,
-#     options = list(
-#       method = "rank",
-#       minsize = 1,
-#       nes = TRUE,
-#       cores = 4,
-#       verbose = FALSE
-#     ),
-#     tidy = FALSE
-#   )
-# }
-
-run_tfea <- function(mat, net) {
-  decoupleR::decouple(mat, net) |>
-    dplyr::filter(statistic == "consensus")
-}
-
-plot_tf <- function(df) {
-  # prevent Rplots.pdf generation
-  if(!interactive()) pdf(NULL)
-
-  palette_length <- 100
-
-  x <-
-    df |>
-    dplyr::mutate(
-      name = .data$condition,
-      condition = stringr::str_extract(.data$name, "(Ctl|TGFb)"),
-      condition = factor(condition, levels = c("Ctl", "TGFb")),
-      treatment = stringr::str_extract(.data$name, "(DMSO|AZD|VB|Dual)"),
-      treatment = factor(treatment, levels = c("DMSO", "AZD", "VB", "Dual"))
-    ) |>
-    # dplyr::filter(condition != "Ctl") |>
-    dplyr::arrange(source, condition, treatment, name)
-
-  mat <-
-    x |>
-    tidyr::pivot_wider(
-      id_cols = "source",
-      names_from = "name",
-      values_from = "score"
-    ) |>
-    tibble::column_to_rownames("source") |>
-    as.matrix() |>
-    t() |>
-    scale() |>
-    t()
-
-  tfs <-
-    df |>
-    dplyr::summarise(std = sd(score), .by = "source") |>
-    dplyr::arrange(-abs(std)) |>
-    dplyr::slice_head(n = 25) |>
-    dplyr::pull(source)
-
-  annotation_col <-
-    x |>
-    dplyr::select(name, condition, treatment) |>
-    dplyr::distinct() |>
-    refactor() |>
-    tibble::column_to_rownames("name")
-
-  annotation_colors <-
-    list(
-      condition = c(
-        Ctl = clrs[["Ctl"]],
-        TGFβ = clrs[["TGFβ"]]
-      ),
-      treatment = c(
-        Veh = clrs[["TGFβ\nVeh"]],
-        AZD = clrs[["TGFβ\nAZD"]],
-        VB = clrs[["TGFβ\nVB"]],
-        `AZD/VB` = clrs[["TGFβ\nAZD/VB"]]
-      )
-    )
-
-  pheatmap::pheatmap(
-    mat[tfs, ],
-    color = colorspace::diverging_hcl(100, "Blue-Red 3"),
-    breaks = seq(-3.5, 3.5, length.out = palette_length),
-    border_color = NA,
-    cluster_cols = FALSE,
-    legend = TRUE,
-    annotation_col = annotation_col,
-    annotation_colors = annotation_colors,
-    show_colnames = FALSE
-  )
-}
-
-score_tf <- function(deg, net) {
-  mat <-
-    deg |>
-    dplyr::filter(!is.na(symbol)) |>
-    dplyr::select(symbol, stat) |>
+run_tfea <- function(dds){
+  # remove duplicates
+  ids <-
+    SummarizedExperiment::rowData(dds) |>
+    tibble::as_tibble(rownames = "row") |>
+    dplyr::filter(!(is.na(symbol) | symbol == "")) |>
     dplyr::group_by(symbol) |>
-    dplyr::slice_max(order_by = abs(stat), n = 1) |>
-    tibble::column_to_rownames("symbol")
+    dplyr::slice_max(baseMean) |>
+    dplyr::select(row, symbol) |>
+    tibble::deframe()
 
-  decoupleR::decouple(
+  # vst if using scale as method
+  # dds <- DESeq2::vst(dds, blind = FALSE)
+
+  # make matrix
+  mat <-
+    dds[rownames(dds) %in% names(ids), ] |>
+    DESeq2::counts(normalized = TRUE) |>
+    {\(x) magrittr::set_rownames(x, ids[rownames(x)])}()
+
+  # run viper
+  regulons <-
+    dorothea::dorothea_hs |>
+    dplyr::filter(confidence %in% c("A", "B")) |>
+    dplyr::rename(source = "tf")
+
+  decoupleR::run_viper(
     mat = mat,
-    network = net
+    network = regulons,
+    method = "mad",
+    minsize = 5,
+    nes = TRUE
+  )
+}
+
+summarize_tf <- function(df) {
+  scores <-
+    df |>
+    tidyr::pivot_wider(
+      id_cols = "source",
+      names_from = "condition",
+      values_from = "score"
+    ) |>
+    tibble::column_to_rownames("source")
+
+  pvals <-
+    df |>
+    tidyr::pivot_wider(
+      id_cols = "source",
+      names_from = "condition",
+      values_from = "p_value"
+    ) |>
+    tibble::column_to_rownames("source")
+
+  grps <- c("Ctl.DMSO", "Ctl.AZD", "Ctl.VB", "Ctl.Dual",
+            "TGFb.DMSO", "TGFb.AZD", "TGFb.VB", "TGFb.Dual")
+
+  pheno <-
+    df |>
+    dplyr::select(condition) |>
+    dplyr::distinct() |>
+    dplyr::mutate(
+      name = .data$condition,
+      experiment = stringr::str_extract(.data$name, "R\\d{1}"),
+      condition = stringr::str_extract(.data$name, "(Ctl|TGFb)"),
+      condition = factor(condition, levels = c("Ctl", "TGFb")),
+      treatment = stringr::str_extract(.data$name, "(DMSO|AZD|VB|Dual)"),
+      treatment = factor(treatment, levels = c("DMSO", "AZD", "VB", "Dual")),
+      group = stringr::str_c(condition, treatment, sep = "."),
+      group = factor(group, levels = grps)
+    ) |>
+    tibble::column_to_rownames("name")
+
+  SummarizedExperiment::SummarizedExperiment(
+    assays = list(scores = scores, pvals = pvals),
+    colData = pheno
+  )
+}
+
+fit_tfea <- function(se) {
+  design <-
+    model.matrix(~ 0 + group, data = SummarizedExperiment::colData(se))
+  colnames(design) <- stringr::str_extract(colnames(design), "(?<=group).*")
+
+  mat <- SummarizedExperiment::assay(se, "scores")
+
+  corfit <-
+    limma::duplicateCorrelation(
+      mat,
+      design,
+      block = se$experiment
+    )
+
+  cm <-
+    limma::makeContrasts(
+      tgfb = TGFb.DMSO - Ctl.DMSO,
+      azd = TGFb.AZD - TGFb.DMSO,
+      vb = TGFb.VB - TGFb.DMSO,
+      dual = TGFb.Dual - TGFb.DMSO,
+      levels = design
+    )
+
+  limma::lmFit(
+    mat,
+    design,
+    block = se$experiment,
+    correlation = corfit$consensus
   ) |>
-    dplyr::filter(statistic == "consensus") |>
-    dplyr::select(source, score, pval = p_value)
+    limma::contrasts.fit(cm) |>
+    limma::eBayes()
+}
+
+index_tfea <- function(tf_fit, comp){
+  limma::topTable(
+    tf_fit,
+    coef = comp,
+    number = Inf
+  ) |>
+    tibble::as_tibble(rownames = "tf") |>
+    dplyr::rename(
+      pval = "P.Value",
+      padj = "adj.P.Val",
+      stat = "B"
+    )
 }
 
 plot_vol_tfea <- function(
@@ -793,35 +745,50 @@ plot_vol_tfea <- function(
     title = NULL,
     mois = NULL
 ) {
-  left <-
+  x <-
     tfea |>
-    dplyr::filter(score < 0 & pval < 0.1) |>
-    dplyr::slice_min(score * -log10(pval), n = 10)
+    dplyr::arrange(abs(stat)) |>
+    dplyr::mutate(
+      color = dplyr::case_when(
+        padj < 0.05 & logFC > 0 ~ clrs[[fills[[1]]]],
+        padj < 0.05 & logFC < 0 ~ clrs[[fills[[2]]]],
+        .default = "#BAB0AC"
+      )
+    ) |>
+    # dplyr::filter(!is.na(.data$padj)) |>
+    # dplyr::filter(!is.na(.data$symbol)) |>
+    # dplyr::filter(abs(logFC) < 10) |>
+    identity()
+
+  left <-
+    x |>
+    dplyr::filter(logFC < 0 & pval < 0.1) |>
+    dplyr::slice_min(logFC * -log10(pval), n = 10)
 
   right <-
-    tfea |>
-    dplyr::filter(score > 0 & pval < 0.1) |>
-    dplyr::slice_max(score * -log10(pval), n = 10)
+    x |>
+    dplyr::filter(logFC > 0 & pval < 0.1) |>
+    dplyr::slice_max(logFC * -log10(pval), n = 10)
 
-  nudge <- max(0.2 * abs(c(min(tfea$score), max(tfea$score))))
-  left_nudge <- min(tfea$score) - nudge
-  right_nudge <- max(tfea$score) + nudge
+  nudge <- max(0.2 * abs(c(min(x$logFC), max(x$logFC))))
+  left_nudge <- min(x$logFC) - nudge
+  right_nudge <- max(x$logFC) + nudge
 
-  ggplot2::ggplot(tfea) +
+  ggplot2::ggplot(x) +
     ggplot2::aes(
-      x = .data$score,
+      x = .data$logFC,
       y = .data$pval
     ) +
     ggrepel::geom_text_repel(
       data = left,
       ggplot2::aes(
-        label = source,
-        color = source %in% mois
+        label = tf,
+        color = tf %in% mois
       ),
       size = 6/ggplot2::.pt,
       max.overlaps = 20,
       segment.size = 0.1,
-      nudge_x = left_nudge - left$score,
+      nudge_x = left_nudge - left$logFC,
       hjust = 0,
       segment.color = "black",
       direction = "y",
@@ -831,37 +798,26 @@ plot_vol_tfea <- function(
     ggrepel::geom_text_repel(
       data = right,
       ggplot2::aes(
-        label = source,
-        color = source %in% mois
+        label = tf,
+        color = tf %in% mois
       ),
       size = 6/ggplot2::.pt,
       max.overlaps = 20,
       segment.size = 0.1,
       segment.color = "black",
-      nudge_x = right_nudge - right$score,
+      nudge_x = right_nudge - right$logFC,
       hjust = 1,
       direction = "y",
       family = "Calibri",
       show.legend = FALSE
     ) +
     ggplot2::geom_point(
-      data = subset(tfea, pval > 0.1),
+      ggplot2::aes(fill = color),
       pch = 21,
-      color = "white",
-      fill = "grey80"
+      stroke = 0,
+      show.legend = FALSE
     ) +
-    ggplot2::geom_point(
-      data = subset(tfea, score > 0 & pval < 0.1),
-      pch = 21,
-      color = "white",
-      fill = clrs[[fills[[2]]]]
-    ) +
-    ggplot2::geom_point(
-      data = subset(tfea, score < 0 & pval < 0.1),
-      pch = 21,
-      color = "white",
-      fill = clrs[[fills[[1]]]]
-    ) +
+    ggplot2::scale_fill_identity() +
     ggplot2::scale_color_manual(values = c("black", "darkred")) +
     ggplot2::scale_y_continuous(
       trans = c("log10", "reverse"),
@@ -872,8 +828,8 @@ plot_vol_tfea <- function(
       breaks = scales::pretty_breaks(n = 7)
     ) +
     ggplot2::labs(
-      x = "Score",
-      y = "P value",
+      x = "Fold change",
+      y = "Adjusted P value",
       title = title
     ) +
     ggplot2::coord_cartesian(clip = "off") +
