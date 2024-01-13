@@ -190,56 +190,6 @@ run_gsea <- function(results, pathways) {
     tidyr::separate(pathway, c("source", "pathway"), "_", extra = "merge")
 }
 
-plot_gsea_table <- function(df, title, clr, filename) {
-  clr <- clrs[clr]
-  x <-
-    df |>
-    dplyr::select("pathway", "NES") |>
-    dplyr::mutate(pathway = stringr::str_replace(.data$pathway, " - Homo.*$", "")) |>
-    dplyr::mutate(
-      pathway = stringr::str_replace_all(pathway, "_", " "),
-      pathway = toupper(pathway)
-    )
-
-  y <-
-    range(x$NES) |>
-    abs() |>
-    max()
-  lim <- ceiling(y * 100) / 100
-
-  gt::gt(x) |>
-    gt::tab_header(
-      title = title
-    ) |>
-    gt::cols_label(
-      pathway = "PATHWAY"
-    ) |>
-    gt::fmt_scientific(
-      columns = c("NES")
-    ) |>
-    gt::data_color(
-      columns = .data$NES,
-      fn = scales::col_numeric(
-        palette =
-          grDevices::colorRamp(
-            c(clr[[2]], "white", clr[[1]]),
-            interpolate = "linear"
-          ),
-        domain = c(-lim, lim)
-      )
-    ) |>
-    gt::tab_style(
-      style = gt::cell_text(weight = "bold"),
-      locations = list(
-        gt::cells_title(),
-        gt::cells_column_labels()
-      )
-    ) |>
-    gt::cols_align("center", c(.data$NES)) |>
-    gtExtras::gt_theme_538() |>
-    gt::opt_table_font(font = "Calibri")
-}
-
 plot_gsea_dot <- function(x) {
   df <-
     dplyr::bind_rows(x, .id = "comparison") |>

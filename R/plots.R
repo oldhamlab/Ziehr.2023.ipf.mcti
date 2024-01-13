@@ -511,3 +511,64 @@ plot_volcano <- function(
     theme_plot() +
     NULL
 }
+
+plot_msea_table <- function(
+    df,
+    src = "KEGG",
+    fills = c("IPF", "Ctl"),
+    title = NULL
+) {
+  x <-
+    df |>
+    dplyr::filter(.data$source %in% src) |>
+    dplyr::select("pathway", "NES") |>
+    dplyr::mutate(
+      pathway = stringr::str_replace(.data$pathway, " - Homo.*$", ""),
+      pathway = stringr::str_replace(.data$pathway, "_", "")
+    )
+
+  y <-
+    range(x$NES) |>
+    abs() |>
+    max()
+  lim <- ceiling(y * 100) / 100
+
+  gt::gt(x) |>
+    gt::tab_header(
+      title = title
+    ) |>
+    gt::cols_label(
+      pathway = "PATHWAY"
+    ) |>
+    gt::fmt_scientific(
+      columns = c("NES")
+    ) |>
+    gt::data_color(
+      columns = .data$NES,
+      fn = scales::col_numeric(
+        palette =
+          grDevices::colorRamp(
+            c(clrs[[fills[[2]]]], "white", clrs[[fills[[1]]]]),
+            interpolate = "linear"
+          ),
+        domain = c(-lim, lim)
+      )
+    ) |>
+    gt::tab_style(
+      style = gt::cell_text(weight = "bold"),
+      locations = list(
+        gt::cells_title(),
+        gt::cells_column_labels()
+      )
+    ) |>
+    gt::tab_style(
+      style = gt::cell_borders(sides = "bottom"),
+      locations = list(
+        gt::cells_body(rows = x$NES == min(x$NES[x$NES > 0]))
+      )
+    ) |>
+    gt::cols_align("center", c(.data$NES)) |>
+    gtExtras::gt_theme_538() |>
+    gt::opt_table_font(font = "Calibri") |>
+    gt::tab_options(table_body.border.bottom.color = "black")
+}

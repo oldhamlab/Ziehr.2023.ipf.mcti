@@ -656,13 +656,8 @@ list(
       run_msea(metab_mcti_tar_tt, metabolite_pathways)
     ),
     tar_target(
-      metab_mcti_tar_msea_plot,
-      plot_msea(metab_mcti_tar_msea, title = title, colors = fills),
-      format = "rds"
-    ),
-    tar_target(
       metab_mcti_tar_msea_table,
-      plot_msea_table(metab_mcti_tar_msea, title = title, clr = fills),
+      plot_msea_table(metab_mcti_tar_msea, title = title, fills = fills),
       format = "rds"
     ),
     tar_target(
@@ -792,13 +787,8 @@ list(
         run_msea(metab_bleo_tar_tt, metabolite_pathways)
       ),
       tar_target(
-        bleo_tar_msea_plot,
-        plot_msea(metab_bleo_tar_msea, colors = unname(fills), src = "KEGG"),
-        format = "rds"
-      ),
-      tar_target(
         metab_bleo_tar_msea_table,
-        plot_msea_table(metab_bleo_tar_msea, title = title, clr = fills),
+        plot_msea_table(metab_bleo_tar_msea, title = title, fills = fills),
         format = "rds"
       ),
       tar_target(
@@ -910,7 +900,7 @@ list(
     ),
     tar_target(
       gsea_table,
-      plot_gsea_table(gsea, "HALLMARK", title = title, clr = fills),
+      plot_msea_table(gsea, src = "HALLMARK", title = title, fills = fills),
       format = "rds"
     ),
     tar_target(
