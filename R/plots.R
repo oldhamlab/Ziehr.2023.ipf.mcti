@@ -564,7 +564,7 @@ plot_msea_table <- function(
     gt::tab_style(
       style = gt::cell_borders(sides = "bottom"),
       locations = list(
-        gt::cells_body(rows = x$NES == min(x$NES[x$NES > 0]))
+        gt::cells_body(rows = which(diff(sign(x$NES)) != 0))
       )
     ) |>
     gt::cols_align("center", c(.data$NES)) |>
