@@ -404,3 +404,110 @@ plot_table <- function(file, vjust = 0) {
     ggplot2::coord_fixed() +
     theme_plot()
 }
+
+plot_volcano <- function(
+    df,
+    x,
+    x_level = 0,
+    y,
+    y_level = 0.05,
+    stat,
+    fills = c("IPF", "Ctl"),
+    nudge_factor = 1.2,
+    n_label = 15,
+    label,
+    title = NULL,
+    mois = NULL
+) {
+  z <-
+    df |>
+    dplyr::arrange(abs(.data[[stat]])) |>
+    dplyr::mutate(
+      color = dplyr::case_when(
+        .data[[y]] < y_level & .data[[x]] > x_level ~ clrs[[fills[[1]]]],
+        .data[[y]] < y_level & .data[[x]] < -x_level ~ clrs[[fills[[2]]]],
+        .default = "#BAB0AC"
+      )
+    )
+
+  left <-
+    z |>
+    dplyr::filter(.data[[x]] < -x_level & .data[[y]] < y_level) |>
+    dplyr::slice_min(.data[[stat]], n = n_label)
+
+  right <-
+    z |>
+    dplyr::filter(.data[[x]] > x_level & .data[[y]] < y_level) |>
+    dplyr::slice_max(.data[[stat]], n = n_label)
+
+  nudge <- max(nudge_factor * abs(c(min(z[[x]]), max(z[[x]]))))
+  left_nudge <- floor(min(z[[x]]) - nudge)
+  right_nudge <- ceiling(max(z[[x]]) + nudge)
+
+  ggplot2::ggplot(z) +
+    ggplot2::aes(
+      x = .data[[x]],
+      y = .data[[y]]
+    ) +
+    ggrepel::geom_text_repel(
+      data = left,
+      ggplot2::aes(
+        label = .data[[label]],
+        color = .data[[label]] %in% mois
+      ),
+      size = 5/ggplot2::.pt,
+      max.overlaps = 20,
+      segment.size = 0.1,
+      xlim = c(-Inf, Inf),
+      nudge_x = left_nudge - left[[x]],
+      hjust = 0,
+      direction = "y",
+      family = "Calibri",
+      segment.color = "black",
+      show.legend = FALSE
+    ) +
+    ggrepel::geom_text_repel(
+      data = right,
+      ggplot2::aes(
+        label = .data[[label]],
+        color = .data[[label]] %in% mois
+      ),
+      size = 5/ggplot2::.pt,
+      max.overlaps = 20,
+      segment.size = 0.1,
+      xlim = c(-Inf, Inf),
+      nudge_x = right_nudge - right[[x]],
+      hjust = 1,
+      direction = "y",
+      family = "Calibri",
+      segment.color = "black",
+      show.legend = FALSE
+    ) +
+    ggplot2::geom_point(
+      ggplot2::aes(fill = color),
+      pch = 21,
+      stroke = 0.05,
+      color = "white",
+      show.legend = FALSE
+    ) +
+    ggplot2::scale_fill_identity() +
+    ggplot2::scale_color_manual(values = c("black", "darkred")) +
+    ggplot2::scale_y_continuous(
+      trans = c("log10", "reverse"),
+      labels = scales::label_log(),
+      breaks = scales::breaks_log(4)
+    ) +
+    ggplot2::scale_x_continuous(
+      breaks = scales::pretty_breaks(n = 6),
+      expand = ggplot2::expansion(mult = 0.025),
+      labels = scales::label_math(2^.x)
+    ) +
+    ggplot2::labs(
+      x = "Fold change",
+      y = "Adjusted P value",
+      title = title
+    ) +
+    ggplot2::coord_cartesian(clip = "off") +
+    theme_plot() +
+    NULL
+}

@@ -624,10 +624,10 @@ list(
     values = list(
       comparison = c("tgfb_main", "azd_main", "vb_main", "dual_main"),
       fills = list(
-        c("Ctl", "TGFβ"),
-        c("Veh", "AZD"),
-        c("Veh", "VB"),
-        c("Veh", "AZD/VB")
+        c("TGFβ", "Ctl"),
+        c("AZD", "Veh"),
+        c("VB", "Veh"),
+        c("AZD/VB", "Veh")
       ),
       title = c("TGFβ", "AZD", "VB", "AZD/VB"),
       filename = stringr::str_c("msea_", c("tgfb", "azd", "vb", "dual")),
@@ -640,8 +640,12 @@ list(
     ),
     tar_target(
       metab_mcti_tar_vol,
-      plot_vol_metab(
+      plot_volcano(
         metab_mcti_tar_tt,
+        x = "logFC",
+        y = "adj.P.Val",
+        stat = "t",
+        label = "metabolite",
         fills = fills,
         title = title
       ),
@@ -754,9 +758,9 @@ list(
       values = list(
         comparison = c("bleo", "azd", "vb"),
         fills = list(
-          c("Ctl", "Bleo"),
-          c("Bleo", "AZD"),
-          c("Bleo", "VB")
+          c("Bleo", "Ctl"),
+          c("AZD", "Bleo"),
+          c("VB", "Bleo")
         ),
         title = c("Bleo", "AZD", "VB"),
         filename = stringr::str_c("msea_", c("bleo", "bleo_azd", "bleo_vb"))
@@ -772,7 +776,15 @@ list(
       ),
       tar_target(
         metab_bleo_tar_vol,
-        plot_vol_metab(metab_bleo_tar_tt, fills, title),
+        plot_volcano(
+          metab_bleo_tar_tt,
+          x = "logFC",
+          y = "adj.P.Val",
+          stat = "t",
+          label = "metabolite",
+          fills = fills,
+          title = title
+        ),
         format = "rds"
       ),
       tar_target(
@@ -880,7 +892,16 @@ list(
     ),
     tar_target(
       deg_vol,
-      plot_rnaseq_vol(deg, fills = fills, title = title),
+      plot_vol_rnaseq(
+        deg,
+        x = "log2FoldChange",
+        y = "padj",
+        stat = "stat",
+        label = "symbol",
+        nudge_factor = 0.5,
+        fills = fills,
+        title = title
+      ),
       format = "rds"
     ),
     tar_target(
@@ -912,7 +933,16 @@ list(
     ),
     tar_target(
       tfea_vol,
-      plot_vol_tfea(tfea, fills, title),
+      plot_volcano(
+        tfea,
+        x = "logFC",
+        y = "adj.P.Val",
+        stat = "t",
+        label = "tf",
+        nudge_factor = 0.2,
+        fills = fills,
+        title = title
+      ),
       format = "rds"
     ),
     NULL
