@@ -16,7 +16,7 @@ count_rnaseq <- function(se) {
     ) |>
     DESeq2::DESeq()
   rownames(dds) <- stringr::str_replace_all(rownames(dds), "\\.\\d+", "")
-  keep <- rowSums(DESeq2::counts(dds) >= 10) >= 4
+  keep <- rowSums(DESeq2::counts(dds, normalized = TRUE) >= 0.5) >= 4
   dds[keep, ]
 }
 
@@ -274,7 +274,7 @@ plot_edge <- function(x, dds) {
     dplyr::filter(n == 3) |>
     dplyr::pull(leadingEdge)
 
-  x <-
+  z <-
     dds[targets, ] |>
     DESeq2::counts(normalize = TRUE) |>
     tibble::as_tibble(rownames = "row") |>
@@ -298,9 +298,17 @@ plot_edge <- function(x, dds) {
     ) |>
     dplyr::mutate(group = stringr::str_c(condition, treatment, sep = "\n")) |>
     refactor() |>
-    dplyr::filter(group %in% c("Ctl\nVeh", "TGFβ\nVeh", "TGFβ\nAZD", "TGFβ\nVB"))
+    dplyr::filter(group %in% c(
+      "Ctl\nVeh",
+      "TGFβ\nVeh",
+      "TGFβ\nAZD",
+      "TGFβ\nVB"
+      # "TGFβ\nAZD/VB"
+    )) |>
+    dplyr::group_by(symbol) |>
+    normalize("count", "replicate")
 
-  ggplot2::ggplot(x) +
+  ggplot2::ggplot(z) +
     ggplot2::facet_wrap(
       ggplot2::vars(symbol),
       scales = "free_y",
@@ -322,7 +330,7 @@ plot_edge <- function(x, dds) {
         color = group
       ),
       stat = "summary",
-      fun.data = "mean_se",
+      fun.data = ggplot2::mean_se,
       width = 0.25,
       linewidth = 0.25,
       show.legend = FALSE
@@ -342,8 +350,7 @@ plot_edge <- function(x, dds) {
       aesthetics = c("color", "fill")
     ) +
     ggplot2::scale_y_continuous(
-      breaks = scales::breaks_extended(n = 5, only.loose = TRUE),
-      expand = ggplot2::expansion(c(0, 0)),
+      breaks = scales::breaks_extended(n = 7, only.loose = TRUE),
       labels = scales::label_number(scale_cut = c(0, K = 1000)),
       limits = nice_limits
     ) +
@@ -354,7 +361,7 @@ plot_edge <- function(x, dds) {
       color = NULL,
       fill = NULL
     ) +
-    ggplot2::guides(color = ggplot2::guide_legend(nrow = 2, byrow = TRUE)) +
+    ggplot2::guides(color = ggplot2::guide_legend(ncol = 1, byrow = TRUE)) +
     ggplot2::coord_cartesian(clip = "off") +
     theme_plot() +
     ggplot2::theme(

@@ -824,7 +824,8 @@ list(
 
   tar_target(
     dds,
-    count_rnaseq(rnaseq.lf.tgfb.mcti::se)
+    count_rnaseq(rnaseq.lf.tgfb.mcti::se),
+    format = "rds"
   ),
   tar_target(
     rnaseq_pca,
@@ -937,31 +938,31 @@ list(
     ),
     NULL
   ),
-  # tar_target(
-  #   gsea_dot_plot,
-  #   plot_gsea_dot(
-  #     list(
-  #       `TGFβ\n` = gsea_main_tgfb,
-  #       `TGFβ +\nAZD` = gsea_tgfb_azd,
-  #       `TGFβ +\nVB` = gsea_tgfb_vb,
-  #       `TGFβ +\nAZD/VB` = gsea_tgfb_dual
-  #     )
-  #   ),
-  #   format = "rds"
-  # ),
-  # tar_target(
-  #   edge_plot,
-  #   plot_edge(
-  #     list(
-  #       TGFβ = gsea_main_tgfb,
-  #       AZD = gsea_tgfb_azd,
-  #       VB = gsea_tgfb_vb,
-  #       `AZD/VB` = gsea_tgfb_dual
-  #     ),
-  #     dds
-  #   ),
-  #   format = "rds"
-  # ),
+  tar_target(
+    gsea_dot_plot,
+    plot_gsea_dot(
+      list(
+        `TGFβ\n` = gsea_tgfb,
+        `TGFβ +\nAZD` = gsea_azd,
+        `TGFβ +\nVB` = gsea_vb,
+        `TGFβ +\nAZD/VB` = gsea_dual
+      )
+    ),
+    format = "rds"
+  ),
+  tar_target(
+    edge_plot,
+    plot_edge(
+      list(
+        TGFβ = gsea_tgfb,
+        AZD = gsea_azd,
+        VB = gsea_vb,
+        `AZD/VB` = gsea_dual
+      ),
+      dds
+    ),
+    format = "rds"
+  ),
 
   # mice --------------------------------------------------------------------
 
