@@ -1006,6 +1006,81 @@ list(
     format = "rds"
   ),
 
+  # mice_vent ---------------------------------------------------------------
+
+  tar_target(
+    mice_vent,
+    format_vent(mice_raw)
+  ),
+  tar_target(
+    mice_vent_mcti_data,
+    mice_vent |>
+      dplyr::filter(
+        start_date %in% c("2021-12-01", "2021-07-29", "2021-05-31", "2022-04-01")
+      )
+  ),
+  tar_target(
+    mice_vent_mcti_stats,
+    stats_vent(mice_vent_mcti_data)
+  ),
+  tar_map(
+    values = list(
+      measure = c("cst", "prime3", "prime8"),
+      ytitle = list(
+        expression(paste("Compliance (mL/cm H" [2], "O)")),
+        expression(paste("Elastance (cm H" [2], "O/mL)")),
+        expression(paste("Elastance (cm H" [2], "O/mL)"))
+      )
+    ),
+    names = measure,
+    tar_target(
+      mice_vent_mcti_plot,
+      plot_mice(
+        mice_vent_mcti_data,
+        mice_vent_mcti_stats,
+        measure = measure,
+        ytitle = ytitle,
+        y = "value_corr"
+      ),
+      format = "rds"
+    )
+  ),
+
+  # mice histo --------------------------------------------------------------
+
+  tar_map(
+    values = list(
+      col = c("Ashcroft_avg", "OHP_total"),
+      names = c("ashcroft", "ohp"),
+      ytitle = c("Ashcroft score", "Hydroxyproline (μg/R lung)")
+    ),
+    names = names,
+    tar_target(
+      mice,
+      format_mice_col(mice_raw, col)
+    ),
+    tar_target(
+      mice_mcti,
+      dplyr::filter(mice, genotype == "WT")
+    ),
+    tar_target(
+      mice_mcti_stats,
+      stats_histo(mice_mcti, measure = names)
+    ),
+    tar_target(
+      mice_mcti_plot,
+      plot_mice(
+        mice_mcti,
+        mice_mcti_stats,
+        ytitle = ytitle,
+        measure = names,
+        y = "value"
+      ),
+      format = "rds"
+    ),
+    NULL
+  ),
+
   # analysis ----------------------------------------------------------------
 
   tar_quarto(

@@ -1,5 +1,5 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|a2242c17e9c093bd|||||||||||||||
+.Random.seed|object|21aea3c391180173|||||||||||||||
 %nin%|function|b1eefa0a0b2c9c81|||||||||||||||
 analyze_blot|function|f5488fb7835b8798|||||||||||||||
 annot_metabs|function|13e70fae89fa3165|||||||||||||||
@@ -198,6 +198,8 @@ fit_tfea|function|f5cb93684dd3a6a6|||||||||||||||
 format_metab_bleo_tar|function|5758fb0e229bf4a9|||||||||||||||
 format_metab_mcti_tar|function|46fed7005d1fad63|||||||||||||||
 format_metab_targeted|function|e140fab2e04f1537|||||||||||||||
+format_mice_col|function|4ae976db0f8ae085|||||||||||||||
+format_vent|function|8d8e6d9a4c451283|||||||||||||||
 format_wells|function|5f35e790b4128150|||||||||||||||
 format_wt|function|ccbbdfedf67f9d6c|||||||||||||||
 get_msigdb_pathways|function|058cff8bc86f890e|||||||||||||||
@@ -298,23 +300,37 @@ metab_mcti_tar_vol_tgfb|stem|f031929e9ba2c517|3bfa094877e330f5|bc19f79025975e36|
 metab_mcti_tar_vol_vb|stem|79ca53010847590c|acfa35dc8c7b4f41|5da19e0ac71cdefc|1668128189||t19735.7134953704s|46b3ced6fd6cffdd|1240136|rds|local|vector|||0.084||
 metabolite_pathways|stem|134db016131f98b6|1e5934d9aefc6c37|19b12b694ce854ee|1570105133||t19730.6550600144s|bf6bc232407f5d33|182744|qs|local|vector|||0.458||
 metabolite_pathways_file|stem|5d6d5ffe01e39138|c09cb2fd024d4015|c184935d19a91dfc|1706343739|data-raw/2023-08-03_CPDB_pathways_metabolites.tab|t19572.7393171296s|2260b9f85e998d7f|956990|file|local|vector|||0.68||
+mice_ashcroft|stem|862887a3c73eb7b2|fb387486696bf86a|079a67faecbf1317|569483756||t19738.622468575s|cf451525f5cb588d|543|qs|local|vector|||7.851|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment. Using an external vector in selections was deprecated in tidyselect 1.1.0.ℹ Please use all_of or any_of instead.   Was  data  selectx   Now  data  selectall_ofxSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.|
 mice_file|stem|0d709d634691cb57|8a7e007b19944d3e|c184935d19a91dfc|-224126372|data-raw/mice.csv|t19319.0941550926s|6eb6d09c01b5864b|23918|file|local|vector|||8.474|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+mice_mcti_ashcroft|stem|862887a3c73eb7b2|5a823d96ea6c79cb|85ad82eafce75da8|870693694||t19738.6306070568s|cf451525f5cb588d|543|qs|local|vector|||9.03|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+mice_mcti_ohp|stem|41f9f69299dd796d|e90dc7c9424f19d6|e0abd15a161abbe7|-901519154||t19738.6298006758s|64b4ef739ce53b18|563|qs|local|vector|||7.201|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+mice_mcti_plot_ashcroft|stem|03d52925b6918f65|10c8a71d07534d91|bf285c214d0f3098|-637225124||t19738.6306665139s|6332ba84785a3fd9|960710|rds|local|vector|||0.068||
+mice_mcti_plot_ohp|stem|e7dc4b1685cf13e1|ffc99fc09df520e4|aa9946d3a08c232d|527140429||t19738.6306437903s|653be0e70d066905|956790|rds|local|vector|||0.241||
+mice_mcti_stats_ashcroft|stem|fc8537ab52bd3bae|6511510bc32b8878|26c1b8aa4b046f06|-1227669506||t19738.6306444207s|4234d4d3d176dfdc|445|qs|local|vector|||0.305|Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.ℹ Please use contrast instead of .datacontrast|
+mice_mcti_stats_ohp|stem|f1d13f68d1e6b5c5|475fb0db89b689a7|ab22a0c6adbede43|710654740||t19738.6298101122s|31332efc7bb99c56|441|qs|local|vector|||0.244|Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.ℹ Please use contrast instead of .datacontrast|
+mice_ohp|stem|41f9f69299dd796d|1e88fdadebdc2fde|079a67faecbf1317|1493481127||t19738.6224717022s|64b4ef739ce53b18|563|qs|local|vector|||7.895|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment. Using an external vector in selections was deprecated in tidyselect 1.1.0.ℹ Please use all_of or any_of instead.   Was  data  selectx   Now  data  selectall_ofxSee httpstidyselect.rlib.orgreferencefaqexternalvector.html.|
 mice_raw|stem|f97a0de3ebac0969|b00ff444d615ebd3|861d4fb19b276686|-830744987||t19730.8287285894s|dfc93acc04164ffb|9254|qs|local|vector|||0.265||
+mice_vent|stem|c0487ca58c483f2f|100371bc684a96ac|150174baa1320231|2014373934||t19738.6114548257s|5db149cd8b50ccdc|3554|qs|local|vector|||7.93|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+mice_vent_mcti_data|stem|a91e405c8a4678d6|49f2df600b390ae6|7028f6817b124327|-1783388017||t19738.6160429755s|465011ee25fd249c|2927|qs|local|vector|||7.313|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+mice_vent_mcti_plot_cst|stem|8d2ef4c2b5f4a7e5|53adbd18e73dbcaa|84ce52b0b1b34f56|1488550890||t19738.6306259482s|a1beb9e60477c7e4|965331|rds|local|vector|||9.251|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+mice_vent_mcti_plot_prime3|stem|9bdce9092234949f|28259234e455d2ff|84ce52b0b1b34f56|-380255719||t19738.6306315164s|5667b9dad1c8036f|965440|rds|local|vector|||9.615|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+mice_vent_mcti_plot_prime8|stem|9da982889cc74eb2|a35f949905c17808|84ce52b0b1b34f56|-1878771695||t19738.6306375594s|7592e704db4cf925|965270|rds|local|vector|||9.603|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+mice_vent_mcti_stats|stem|1a83738c0549f670|fd8f846d5e5179f2|4a7daca016a26b96|-1443219612||t19738.6160621941s|590466207ef46414|766|qs|local|vector|||1.072||
 mice_wt_data|stem|bbb04927c0afe231|7dd23fd045f5f748|ece23be3c5e3532a|-1601581192||t19737.8194212963s|c229a95279fb4817|5230|qs|local|vector|||6.665|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 mice_wt_mcti_bin|stem|744df3a261eb7903|6e50e4afd3fe4a41|f5e1be3642a3eb3b|-1877405882||t19738.5623228985s|0543f51a08986872|1639|qs|local|vector|||11.243|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 mice_wt_mcti_bin_stat|stem|45e4dd19910870cc|3ae892f8ff54dc90|ab5c66b019e4c82c|-873819001||t19738.5965568219s|1a3e77433a71320b|598|qs|local|vector|||7.814|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 mice_wt_mcti_data|stem|9c66558ab26a9e2d|b6382407a5ce097d|02989fe9a46d1849|1122272822||t19737.8194328704s|6e25c6faaab0b512|3669|qs|local|vector|||0.002||
 mice_wt_mcti_plot|stem|ca172a373ce695d2|7113f75bbc6ab0a6|61766f272add04a0|-922775887||t19738.6024862153s|57dd13ba6d27d057|1049675|rds|local|vector|||15.18|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 msea_table_file_azd|stem|c09b897738b514a2|7ed817695918cb99|52b63384eddb08f5|-1635620234|analysis/figures/msea/msea_azd.png|t19735.7377893519s|5fa466f67117afe0|165275|file|local|vector|||0.907||
-msea_table_file_azd_lung|stem|a18fe9ce2ac6c0b2|8ac3585a64e360b6|8d22381567662487|-963608609|analysis/figures/msea/msea_bleo_azd.png|t19738.5624010586s|2249b242e670f562|56593|file|local|vector|||16.457|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
-msea_table_file_azd_plasma|stem|925166326739064b|4d75b0d1688ef312|d5bf80c8c07df308|-75061679|analysis/figures/msea/msea_bleo_azd.png|t19738.6025183303s|4295b1a873e7b759|70447|file|local|vector|||17.964|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
-msea_table_file_bleo_lung|stem|c8683b1e980368fe|1f0c9c2f38fce043|6e9a511e3dc8c438|1147614583|analysis/figures/msea/msea_bleo.png|t19738.5624006535s|62188041299adb7d|93633|file|local|vector|||16.794|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
-msea_table_file_bleo_plasma|stem|d8e82b6371b89749|83094b3aefa4775e|ae6b783f0e8de1b9|1909295116|analysis/figures/msea/msea_bleo.png|t19738.6025239703s|33a0093818ae0179|75484|file|local|vector|||17.698|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+msea_table_file_azd_lung|stem|a18fe9ce2ac6c0b2|8ac3585a64e360b6|8d22381567662487|-963608609|analysis/figures/msea/msea_bleo_azd.png|t19738.6286140259s|2249b242e670f562|56593|file|local|vector|||12.233|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+msea_table_file_azd_plasma|stem|925166326739064b|4d75b0d1688ef312|d5bf80c8c07df308|-75061679|analysis/figures/msea/msea_bleo_azd.png|t19738.6314823877s|4295b1a873e7b759|70447|file|local|vector|||10.747|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+msea_table_file_bleo_lung|stem|c8683b1e980368fe|1f0c9c2f38fce043|6e9a511e3dc8c438|1147614583|analysis/figures/msea/msea_bleo.png|t19738.6286184232s|62188041299adb7d|93633|file|local|vector|||12.603|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+msea_table_file_bleo_plasma|stem|d8e82b6371b89749|83094b3aefa4775e|ae6b783f0e8de1b9|1909295116|analysis/figures/msea/msea_bleo.png|t19738.6314821314s|33a0093818ae0179|75484|file|local|vector|||10.74|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 msea_table_file_dual|stem|9abced7a25b8835e|dacade63aba9b931|cc52502e5073ea3f|1604289065|analysis/figures/msea/msea_dual.png|t19735.7378356481s|39b897f45dce990e|195510|file|local|vector|||1.264||
 msea_table_file_tgfb|stem|61f4aacb66941eee|ac94242928aa05cb|a9ef38b8f6a21f18|-1923767885|analysis/figures/msea/msea_tgfb.png|t19735.7377662037s|420e91dda9e809e6|97326|file|local|vector|||0.897||
 msea_table_file_vb|stem|69d0b14b2d65d28c|11b244c33f9123d0|d3fcb880dc4a013d|73956969|analysis/figures/msea/msea_vb.png|t19735.7378356481s|7ee97fb49915dc84|178470|file|local|vector|||1.313||
-msea_table_file_vb_lung|stem|f927a087fdbf8892|8c0f1d1e2a3dacd1|6146d2abe81b24c9|715728899|analysis/figures/msea/msea_bleo_vb.png|t19738.6025130737s|4df55a61a16b52bf|109670|file|local|vector|||18.196|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
-msea_table_file_vb_plasma|stem|7aa8883b7b1108f3|e79c9aef57129b40|741eec21f2e4b5fe|-774647548|analysis/figures/msea/msea_bleo_vb.png|t19738.5624006305s|c29f699dc1e1ccba|68697|file|local|vector|||18.089|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+msea_table_file_vb_lung|stem|f927a087fdbf8892|8c0f1d1e2a3dacd1|6146d2abe81b24c9|715728899|analysis/figures/msea/msea_bleo_vb.png|t19738.631483006s|4df55a61a16b52bf|109670|file|local|vector|||10.823|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+msea_table_file_vb_plasma|stem|7aa8883b7b1108f3|e79c9aef57129b40|741eec21f2e4b5fe|-774647548|analysis/figures/msea/msea_bleo_vb.png|t19738.628618336s|c29f699dc1e1ccba|68697|file|local|vector|||12.309|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 msea_table_img_azd|stem|4696a2df79f7049e|31201d139ad88432|82d4edf6ec75780d|1359279662||t19735.7454398148s|0ab41f2c52770bff|1903510|rds|local|vector|||5.111|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 msea_table_img_azd_lung|stem|80a59a91360a782e|a843cf0bd351df00|3f42007175feaf3d|2147393385||t19735.7482523148s|41b40ac3128892a7|1277702|rds|local|vector|||0.036||
 msea_table_img_azd_plasma|stem|ce6477a334f82acc|7bea526b8b2ab7f9|d8b99da0dcf40f73|-1902151603||t19735.7481365741s|3ca494ffe426c4a9|1361789|rds|local|vector|||0.107||
@@ -426,6 +442,7 @@ plot_gsea_dot|function|e0e266424685bb06|||||||||||||||
 plot_gsea_table|function|8641889c1e806a2f|||||||||||||||
 plot_gsea_vol|function|68f1cee92def4df7|||||||||||||||
 plot_image|function|70114755cd9843c4|||||||||||||||
+plot_mice|function|afd9a2f372947a8c|||||||||||||||
 plot_mois|function|4ca4b9d2a3cde6ad|||||||||||||||
 plot_msea|function|88108d478aa80964|||||||||||||||
 plot_msea_table|function|5333f8e5fe9fb2d5|||||||||||||||
@@ -490,6 +507,8 @@ seahorse_mcti_time_timeline_plot|stem|a0ad1772746e6b8a|c6e81bc806386a88|ee2ab20b
 seahorse_mcti_timeline_plot|stem|eee199c5cc01abda|55b2496b46eb58b2|cfe5358b8c40bf1c|1592224214||t19713.7573148148s|2c3d41e45b0d3b5f|1101431|rds|local|vector|||0.719||
 seahorse_mcti_wells|stem|a5ac8ac7520f1d56|b6f125bd10ad4568|f530068803bb5fff|673276300||t19711.7628803313s|1d3248e1735e2915|450|qs|local|vector|||0.016||
 stat_bin_wt|function|6515e95a4ca5f458|||||||||||||||
+stats_histo|function|f9d059b677332740|||||||||||||||
+stats_vent|function|d08b335b784b73f6|||||||||||||||
 summarize_seahorse|function|c7de46e3177f56de|||||||||||||||
 summarize_seahorse_atp|function|c1e8d6b363e810a7|||||||||||||||
 summarize_seahorse_stress|function|fc26188460b40a90|||||||||||||||
