@@ -976,6 +976,36 @@ list(
     readr::read_csv(mice_file, show_col_types = FALSE)
   ),
 
+  # mice wt -----------------------------------------------------------------
+
+  tar_target(
+    mice_wt_data,
+    format_wt(mice_raw)
+  ),
+  tar_target(
+    mice_wt_mcti_data,
+    mice_wt_data |>
+      dplyr::filter(
+        start_date %in% c("2021-12-01", "2021-07-29", "2021-05-31", "2022-04-01")
+      )
+  ),
+  tar_target(
+    mice_wt_mcti_bin,
+    bin_wt(mice_wt_mcti_data)
+  ),
+  tar_target(
+    mice_wt_mcti_bin_stat,
+    stat_bin_wt(mice_wt_mcti_bin)
+  ),
+  tar_target(
+    mice_wt_mcti_plot,
+    plot_wt_timeline(
+      mice_wt_mcti_bin,
+      mice_wt_mcti_bin_stat
+    ),
+    format = "rds"
+  ),
+
   # analysis ----------------------------------------------------------------
 
   tar_quarto(
