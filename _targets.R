@@ -820,6 +820,99 @@ list(
     format = "rds"
   ),
 
+  # mid ---------------------------------------------------------------------
+
+  tar_target(
+    qbias_file,
+    raw_data_path("qbias-correction-factors"),
+    format = "file"
+  ),
+  tar_target(
+    qbias_ratios,
+    format_qbias(qbias_file)
+  ),
+  tar_target(
+    predicted_ratios,
+    calculate_predicted_ratios(isotope_library)
+  ),
+  tar_target(
+    correction_factors,
+    calculate_correction_factors(qbias_ratios, predicted_ratios)
+  ),
+  tar_target(
+    correction_matrices,
+    make_correction_matrices(isotope_library)
+  ),
+
+  # mid mcti ----------------------------------------------------------------
+
+  tar_target(
+    mid_mcti_files,
+    raw_data_path("\\d{4}-\\d{2}-\\d{2}_mcti_(glc2|gln5|lac3|glc6)\\.xlsx"),
+    format = "file"
+  ),
+  tar_target(
+    mid_mcti_mids,
+    format_mid_mcti(mid_mcti_files, correction_factors)
+  ),
+  tar_target(
+    mid_mcti_mids_corr,
+    correct_mids(mid_mcti_mids, correction_matrices)
+  ),
+  # tar_map(
+  #   values = list(
+  #     label = c("glc2", "gln5", "lac3", "glc6")
+  #   ),
+  #   names = label,
+  #   tar_target(
+  #     mid_mcti_plot,
+  #     plot_mids_all(mid_mcti_mids_corr, label = label)
+  #   ),
+  #   tar_target(
+  #     mid_mcti_img,
+  #     write_plot(mid_mcti_plot, label, path = "analysis/figures/mids"),
+  #     format = "file"
+  #   ),
+  #   NULL
+  # ),
+  # tar_map(
+  #   values = list(
+  #     label = c("gln5", "lac3", "glc6"),
+  #     title = list(
+  #       expression(paste("[U-"^13, "C"[5], "]-glutamine")),
+  #       expression(paste("[U-"^13, "C"[3], "]-lactate")),
+  #       expression(paste("[U-"^13, "C"[6], "]-glucose"))
+  #     )
+  #   ),
+  #   names = label,
+  #   tar_target(
+  #     mid_mcti_moi_data,
+  #     select_mid_mois(mid_mcti_mids_corr, label)
+  #   ),
+  #   tar_target(
+  #     mid_mcti_moi_stats,
+  #     group_twofactor(mid_mcti_moi_data, "labeled", comps_azd_2)
+  #   ),
+  #   tar_target(
+  #     mid_mcti_moi_plot,
+  #     plot_two_factor(
+  #       mid_mcti_moi_data,
+  #       mid_mcti_moi_stats,
+  #       x = "treatment",
+  #       y = "labeled",
+  #       ytitle = "Labeled fraction",
+  #       wrap = "metabolite",
+  #       title = title
+  #     ) +
+  #       ggplot2::scale_y_continuous(
+  #         breaks = seq(0, 1, 0.2),
+  #         limits = c(0, 1),
+  #         expand = ggplot2::expansion(c(0, 0))
+  #       )
+  #   ),
+  #   NULL
+  # ),
+
   # rnaseq ------------------------------------------------------------------
 
   tar_target(

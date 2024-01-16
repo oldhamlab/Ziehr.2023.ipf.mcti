@@ -1,5 +1,5 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|21aea3c391180173|||||||||||||||
+.Random.seed|object|6b1adf2ee585f081|||||||||||||||
 %nin%|function|b1eefa0a0b2c9c81|||||||||||||||
 analyze_blot|function|f5488fb7835b8798|||||||||||||||
 annot_metabs|function|13e70fae89fa3165|||||||||||||||
@@ -154,6 +154,8 @@ blots_filtered|stem|1e4ec4f26f09fb02|a060684b26f40be8|49774a9335478efb|187721644
 blots_index|stem|bdaec744187e04c6|d8d6daafd6186dd1|658ff7f0118fe5df|-903147691||t19688.6938500199s|f3cf95d7b5806e03|565|qs|local|vector|||0.005||
 blots_phospho|stem|51b9beeb72b65b4f|2f671b511b0638f1|7fb156f7277f2da5|963833598||t19688.9450578704s|9c2607ad1137822f|3242|qs|local|vector|||0.032||
 blots_raw|stem|c700748ffdf9395a|729fe59296e24a70|d029435fc723c5c3|-104016349||t19682.8647396289s|c4f982c3f7aafeb2|11096|qs|local|vector|||0.011||
+calculate_correction_factors|function|75cbbd9283a75a1b|||||||||||||||
+calculate_predicted_ratios|function|0341d02ab2e0b1f9|||||||||||||||
 clean_blots|function|7bf36cf513a1f1bd|||||||||||||||
 clean_contraction|function|f2820e6dc95245f4|||||||||||||||
 clean_data|function|c083100a5997df2b|||||||||||||||
@@ -179,6 +181,9 @@ contraction_plot|stem|df0fceffc684a3d1|16decdd848c18b57|d5e4e9b9afed7672|-806964
 contraction_raw|stem|711ed38a6309ea98|e64d52da8662667c|f1897e2040f4694c|-504790233||t19689.5697677763s|c6ea7bcf94489da6|1910|qs|local|vector|||0.243||
 contraction_stats|stem|05871bec11aede77|eb450deb0a6d3cb1|82adabe0ddaa5ea4|-200989543||t19689.5746602942s|6e2ad1e2d4a7cab8|275|qs|local|vector|||2.01||
 correct_drift|function|62deec87fd0a4085|||||||||||||||
+correct_mids|function|b58ebb1bcac75750|||||||||||||||
+correction_factors|stem|1af1d8214edf96a1|dedcdfc2209a3476|69d91aa24cd55cff|1675694256||t19738.7501086645s|5910c7405d142d73|851|qs|local|vector|||9.73|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment. Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.ℹ Please use M instead of .dataM. Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.ℹ Please use cf instead of .datacf|
+correction_matrices|stem|d9f4f019dc1e992b|ea2bb2b2910fdff3|312b6f2e249997f0|374603781||t19738.7473740027s|6ed8fa29d8aa65d6|4384|qs|local|vector|||4.247||
 count_rnaseq|function|0980a456aac06587|||||||||||||||
 dds|stem|c25f23ea3bcb2e73|034ce8deaf9b76b9|e0f4fd59509a5a9d|-790184130||t19737.7154861111s|e495860f272dd9dd|129292950|rds|local|vector|||374.427|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 deg_azd|stem|10dad581155534e3|8f69802109107250|44980825c4d4beb8|-1529961823||t19736.7528819444s|a82fef33d98a852b|1093267|qs|local|vector|||98.127||
@@ -199,6 +204,8 @@ format_metab_bleo_tar|function|5758fb0e229bf4a9|||||||||||||||
 format_metab_mcti_tar|function|46fed7005d1fad63|||||||||||||||
 format_metab_targeted|function|e140fab2e04f1537|||||||||||||||
 format_mice_col|function|4ae976db0f8ae085|||||||||||||||
+format_mid_mcti|function|6ce5a02646423775|||||||||||||||
+format_qbias|function|cea6cef08ca0d793|||||||||||||||
 format_vent|function|8d8e6d9a4c451283|||||||||||||||
 format_wells|function|5f35e790b4128150|||||||||||||||
 format_wt|function|ccbbdfedf67f9d6c|||||||||||||||
@@ -227,8 +234,10 @@ impute_missing|function|859c65bb905fa653|||||||||||||||
 index_blots|function|b7daf23ed900f1b5|||||||||||||||
 index_tfea|function|a267879c05dcb696|||||||||||||||
 interp_data|function|6fa02de42e4308f8|||||||||||||||
+isotope_library|object|37ed6eea65f7ef83|||||||||||||||
 list_files|function|1f658e2880a545a6|||||||||||||||
 make_bleo_samples|function|33803dfba7913e0d|||||||||||||||
+make_correction_matrices|function|85e033e47bc37412|||||||||||||||
 make_mcti_samples|function|21666e36e4f4af6f|||||||||||||||
 make_std_curves|function|e906807e131c0af7|||||||||||||||
 make_std_plots|function|1a52bdb3fbeef393|||||||||||||||
@@ -321,16 +330,20 @@ mice_wt_mcti_bin|stem|744df3a261eb7903|6e50e4afd3fe4a41|f5e1be3642a3eb3b|-187740
 mice_wt_mcti_bin_stat|stem|45e4dd19910870cc|3ae892f8ff54dc90|ab5c66b019e4c82c|-873819001||t19738.5965568219s|1a3e77433a71320b|598|qs|local|vector|||7.814|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 mice_wt_mcti_data|stem|9c66558ab26a9e2d|b6382407a5ce097d|02989fe9a46d1849|1122272822||t19737.8194328704s|6e25c6faaab0b512|3669|qs|local|vector|||0.002||
 mice_wt_mcti_plot|stem|ca172a373ce695d2|7113f75bbc6ab0a6|61766f272add04a0|-922775887||t19738.6024862153s|57dd13ba6d27d057|1049675|rds|local|vector|||15.18|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+mid_mcti_files|stem|9d7f9011fdc0b4bd|f33a2d1e091703ce|c184935d19a91dfc|-644419429|data-raw/mids/2022-02-17_mcti_glc2.xlsx*data-raw/mids/2022-02-26_mcti_gln5.xlsx*data-raw/mids/2022-03-02_mcti_lac3.xlsx*data-raw/mids/2022-03-06_mcti_glc6.xlsx|t19057.6480324074s|225e543f5f6976b9|4656516|file|local|vector|||7.476|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+mid_mcti_mids|stem|51cd347b73402ffd|008d2f66a27c5112|b87d52ada89eeffd|-1086882672||t19738.7519583999s|e22d7b647e3b5f4d|223368|qs|local|vector|||9.417|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+mid_mcti_mids_corr|stem|d4bc2469e696b2e1|aed783e7e610f85c|7b041ccfef61714f|-580821254||t19738.7519882758s|be205ca5cd0b3294|303892|qs|local|vector|||1.186||
+mmult|function|d61d395cdffd1c26|||||||||||||||
 msea_table_file_azd|stem|c09b897738b514a2|7ed817695918cb99|52b63384eddb08f5|-1635620234|analysis/figures/msea/msea_azd.png|t19735.7377893519s|5fa466f67117afe0|165275|file|local|vector|||0.907||
-msea_table_file_azd_lung|stem|a18fe9ce2ac6c0b2|8ac3585a64e360b6|8d22381567662487|-963608609|analysis/figures/msea/msea_bleo_azd.png|t19738.6286140259s|2249b242e670f562|56593|file|local|vector|||12.233|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
-msea_table_file_azd_plasma|stem|925166326739064b|4d75b0d1688ef312|d5bf80c8c07df308|-75061679|analysis/figures/msea/msea_bleo_azd.png|t19738.6314823877s|4295b1a873e7b759|70447|file|local|vector|||10.747|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
-msea_table_file_bleo_lung|stem|c8683b1e980368fe|1f0c9c2f38fce043|6e9a511e3dc8c438|1147614583|analysis/figures/msea/msea_bleo.png|t19738.6286184232s|62188041299adb7d|93633|file|local|vector|||12.603|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
-msea_table_file_bleo_plasma|stem|d8e82b6371b89749|83094b3aefa4775e|ae6b783f0e8de1b9|1909295116|analysis/figures/msea/msea_bleo.png|t19738.6314821314s|33a0093818ae0179|75484|file|local|vector|||10.74|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+msea_table_file_azd_lung|stem|a18fe9ce2ac6c0b2|8ac3585a64e360b6|8d22381567662487|-963608609|analysis/figures/msea/msea_bleo_azd.png|t19738.7519855588s|2249b242e670f562|56593|file|local|vector|||10.611|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+msea_table_file_azd_plasma|stem|925166326739064b|4d75b0d1688ef312|d5bf80c8c07df308|-75061679|analysis/figures/msea/msea_bleo_azd.png|t19738.7501231776s|4295b1a873e7b759|70447|file|local|vector|||11.19|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+msea_table_file_bleo_lung|stem|c8683b1e980368fe|1f0c9c2f38fce043|6e9a511e3dc8c438|1147614583|analysis/figures/msea/msea_bleo.png|t19738.7518682627s|62188041299adb7d|93633|file|local|vector|||2.302||
+msea_table_file_bleo_plasma|stem|d8e82b6371b89749|83094b3aefa4775e|ae6b783f0e8de1b9|1909295116|analysis/figures/msea/msea_bleo.png|t19738.750126452s|33a0093818ae0179|75484|file|local|vector|||11.383|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 msea_table_file_dual|stem|9abced7a25b8835e|dacade63aba9b931|cc52502e5073ea3f|1604289065|analysis/figures/msea/msea_dual.png|t19735.7378356481s|39b897f45dce990e|195510|file|local|vector|||1.264||
 msea_table_file_tgfb|stem|61f4aacb66941eee|ac94242928aa05cb|a9ef38b8f6a21f18|-1923767885|analysis/figures/msea/msea_tgfb.png|t19735.7377662037s|420e91dda9e809e6|97326|file|local|vector|||0.897||
 msea_table_file_vb|stem|69d0b14b2d65d28c|11b244c33f9123d0|d3fcb880dc4a013d|73956969|analysis/figures/msea/msea_vb.png|t19735.7378356481s|7ee97fb49915dc84|178470|file|local|vector|||1.313||
-msea_table_file_vb_lung|stem|f927a087fdbf8892|8c0f1d1e2a3dacd1|6146d2abe81b24c9|715728899|analysis/figures/msea/msea_bleo_vb.png|t19738.631483006s|4df55a61a16b52bf|109670|file|local|vector|||10.823|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
-msea_table_file_vb_plasma|stem|7aa8883b7b1108f3|e79c9aef57129b40|741eec21f2e4b5fe|-774647548|analysis/figures/msea/msea_bleo_vb.png|t19738.628618336s|c29f699dc1e1ccba|68697|file|local|vector|||12.309|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+msea_table_file_vb_lung|stem|f927a087fdbf8892|8c0f1d1e2a3dacd1|6146d2abe81b24c9|715728899|analysis/figures/msea/msea_bleo_vb.png|t19738.7501239023s|4df55a61a16b52bf|109670|file|local|vector|||11.293|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+msea_table_file_vb_plasma|stem|7aa8883b7b1108f3|e79c9aef57129b40|741eec21f2e4b5fe|-774647548|analysis/figures/msea/msea_bleo_vb.png|t19738.7519715209s|c29f699dc1e1ccba|68697|file|local|vector|||10.671|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 msea_table_img_azd|stem|4696a2df79f7049e|31201d139ad88432|82d4edf6ec75780d|1359279662||t19735.7454398148s|0ab41f2c52770bff|1903510|rds|local|vector|||5.111|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 msea_table_img_azd_lung|stem|80a59a91360a782e|a843cf0bd351df00|3f42007175feaf3d|2147393385||t19735.7482523148s|41b40ac3128892a7|1277702|rds|local|vector|||0.036||
 msea_table_img_azd_plasma|stem|ce6477a334f82acc|7bea526b8b2ab7f9|d8b99da0dcf40f73|-1902151603||t19735.7481365741s|3ca494ffe426c4a9|1361789|rds|local|vector|||0.107||
@@ -443,6 +456,7 @@ plot_gsea_table|function|8641889c1e806a2f|||||||||||||||
 plot_gsea_vol|function|68f1cee92def4df7|||||||||||||||
 plot_image|function|70114755cd9843c4|||||||||||||||
 plot_mice|function|afd9a2f372947a8c|||||||||||||||
+plot_mids_all|function|e1a841311ba21e71|||||||||||||||
 plot_mois|function|4ca4b9d2a3cde6ad|||||||||||||||
 plot_msea|function|88108d478aa80964|||||||||||||||
 plot_msea_table|function|5333f8e5fe9fb2d5|||||||||||||||
@@ -468,7 +482,10 @@ plot_vol_tfea|function|00dc66074c2673fa|||||||||||||||
 plot_volcano|function|6a84d2528ae6ad79|||||||||||||||
 plot_wt_timeline|function|32bc9279900d4a50|||||||||||||||
 pqn|function|22cfe6e9597fe66b|||||||||||||||
+predicted_ratios|stem|a46cd820c113a371|8ebabf8c3001251c|c89efa7575262d8d|192688976||t19738.7473208644s|7e50109c4a0b197a|346|qs|local|vector|||11.906|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment. Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.ℹ Please use metabolite instead of .datametabolite. Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.ℹ Please use pred_ratio instead of .datapred_ratio|
 prep_counts|function|d767033247c0690e|||||||||||||||
+qbias_file|stem|d2d12c3b4987dd96|bb57682ed8bb031a|c184935d19a91dfc|-1065715611|data-raw/mids/2022-02-27_qbias-correction-factors.csv|t19060.7903587963s|349295d3d306bc16|11105|file|local|vector|||7.844|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+qbias_ratios|stem|d315ca6d2b325e72|6157cab5f59aac19|72940d7e8eb2292a|1438937768||t19738.6734414831s|f7c5c0d44096b6fb|7548|qs|local|vector|||1.171|Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.ℹ Please use isotope instead of .dataisotope. Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.ℹ Please use area instead of .dataarea|
 quality_control|function|640255e09c51640f|||||||||||||||
 ratio_ttest|function|81e515be7749e9d3|||||||||||||||
 raw_data_path|function|fb672e8a80c40418|||||||||||||||
