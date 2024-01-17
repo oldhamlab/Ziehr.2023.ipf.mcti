@@ -98,7 +98,7 @@ plot_rnaseq_pca <- function(pca_data) {
     )
 }
 
-plot_counts <- function(dds, symbols) {
+plot_gois <- function(dds, symbols) {
   rows <- SummarizedExperiment::rowData(dds)$symbol %in% symbols
   dds[rows, ] |>
     se_to_tibble() |>
