@@ -11,3 +11,5 @@ data-raw/lactate
 *.html
 *.raw
 *.mzML
+
+/.quarto/

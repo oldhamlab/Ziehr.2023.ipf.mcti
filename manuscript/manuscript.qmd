@@ -1,0 +1,93 @@
+---
+title: "Lactate transport inhibition therapeutically reprograms fibroblast 
+    metabolism in experimental pulmonary fibrosis"
+    
+authors:
+- name: David R. Ziehr
+  affiliations: 
+  - ref: mgh
+  - ref: bwh
+  - ref: hms
+- name: Nathan M. Krah
+  affiliations:
+  - ref: utah_gen
+- name: Kevin Leahy 
+  affiliations:
+  - ref: bwh
+- name: K. Mark Parnell
+  affiliations:
+  - ref: vettore
+- name: Jack Varon
+  affiliations: 
+  - ref: bwh
+  - ref: hms
+- name: Rebecca M. Baron
+  affiliations:
+  - ref: bwh
+  - ref: hms
+- name: Nancy J. Philp
+  affiliations:
+  - ref: tj
+- name: Lida P. Hariri
+  affiliations: 
+  - ref: hms
+  - ref: mgh_path
+- name: Edy Y. Kim
+  affiliations:
+  - ref: bwh
+  - ref: hms
+- name: Rachel S. Knipe
+  affiliations:
+  - ref: mgh
+  - ref: hms
+- name: Jared Rutter
+  affiliations:
+  - ref: utah_biochem
+  - ref: utah_hhmi
+- name: William M. Oldham
+  affiliations:
+  - ref: bwh
+  - ref: hms
+  email: woldham@bwh.harvard.edu
+  corresponding: true
+    
+affiliations:
+- id: mgh
+  name: Department of Medicine, Massachusetts General Hospital, Boston, MA
+- id: bwh
+  name: Department of Medicine, Brigham and Women's Hospital and Harvard Medical School, Boston, MA
+- id: hms
+  name: Department of Medicine, Harvard Medical School, Boston, MA
+- id: utah_gen
+  name: Department of Human Genetics, University of Utah, Salt Lake City, UT
+- id: vettore
+  name: Vettore Biosciences, San Francisco, CA
+- id: tj
+  name: Department of Pathology, Anatomy & Cell Biology, Thomas Jefferson University, Philadelphia, PA
+- id: mgh_path
+  name: Department of Pathology, Massachusetts General Hospital, Boston, MA
+- id: utah_biochem
+  name: Department of Biochemistry, University of Utah, Salt Lake City, UT
+- id: utah_hhmi
+  name: Howard Hughes Medical Institute, University of Utah School of Medicine, Salt Lake City, UT 
+  
+format:
+  docx:
+    reference-doc: template.docx
+    page-width: 7.5
+    output-file: ziehr_2023_mcti_manuscript.docx
+    fig-align: center
+    
+bibliography: 
+- library.bib
+- pkgs.bib
+csl: jci.csl
+
+crossref: 
+  fig-title: ""
+  title-delim: ""
+
+filters:
+- authors-block
+---
+
