@@ -1,0 +1,115 @@
+---
+title: "Network Analysis"
+format: 
+  html:
+    embed-resources: true 
+    echo: false
+    warning: false
+    toc: true
+    toc-depth: 3
+    toc-location: left
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(here)
+library(targets)
+library(tidyverse)
+devtools::load_all()
+
+i_am("analysis/network.qmd")
+
+tar_config_set(store = here("_targets"))
+```
+
+## Build Networks
+
+```{r}
+#| label: universe
+
+tt_metab <- tar_read(metab_mcti_tar_tt_tgfb)
+all_metab <- tt_metab[["hmdb"]]
+sig_metab <- all_metab[tt_metab$adj.P.Val < 0.1]
+
+tt_genes <- tar_read(deg_tgfb) 
+all_genes <- tt_genes[["symbol"]]
+sig_genes <- all_genes[tt_genes$padj < 0.1]
+
+universe <- 
+  hmdb::hmdb_proteins |> 
+  filter(hmdb %in% all_metab & protein %in% all_genes)
+
+enriched <- 
+  universe |> 
+  filter(hmdb %in% sig_metab & protein %in% sig_genes)
+
+edges <- nrow(enriched)
+```
+
+## Compare to Random Networks
+
+```{r}
+#| label: random-networks
+
+sample_network <- function() {
+  metab <- sample(all_metab, length(sig_metab), replace = FALSE)
+  gene <- sample(all_genes, length(sig_genes), replace = FALSE)
+  hmdb::hmdb_proteins |> 
+    filter(hmdb %in% metab & protein %in% gene) |> 
+    nrow()
+}
+edge_list <- replicate(1000, sample_network())
+
+tibble(x = edge_list) |> 
+ggplot() +
+  geom_histogram(
+    aes(x = x), 
+    binwidth = 50
+  ) + 
+  geom_segment(
+    x = edges, 
+    xend = edges, 
+    y = 10, 
+    yend = 0, 
+    arrow = arrow(length = unit(10, "points")), 
+    color = "darkblue", 
+    linewidth = 1, 
+    lineend = "butt", 
+    linejoin = "bevel"
+  ) +
+  labs(
+    title = "Simulated networks", 
+    x = NULL, 
+    y = "Edge number"
+  ) +
+  scale_y_continuous(
+    expand = expansion(c(0, 0)), 
+    limits = nice_limits
+  ) +
+  theme_plot()
+```
+
+## Cluster Network
+
+```{r}
+#| label: graph
+
+tidygraph::tbl_graph(edges = select(enriched, hmdb, protein)) |> 
+  ggraph::ggraph(layout = "fr") +
+  ggraph::geom_edge_link()
+```
+
+
+```{r}
+#| label: cluster
+
+clusters <- 
+  enriched |> 
+  select(red = protein, blue = name) |> 
+  as.data.frame() |>
+  netZooR::createCondorObject() |> 
+  netZooR::condorCluster()
+```
+
