@@ -6,6 +6,7 @@
 suppressPackageStartupMessages({
   library(targets)
   library(tarchetypes)
+  library(patchwork)
 })
 
 # target options
@@ -141,6 +142,14 @@ list(
       format = "rds"
     ),
     NULL
+  ),
+  tar_target(
+    blot_plot_fig_ipf,
+    combine_plots(
+      list(blot_norm_ipf_mct1, blot_norm_ipf_mct4, blot_norm_ipf_sma),
+      list(blot_stats_ipf_mct1, blot_stats_ipf_mct4, blot_stats_ipf_sma)
+    ),
+    format = "rds"
   ),
 
   # contraction -------------------------------------------------------------
@@ -571,7 +580,7 @@ list(
 
   tar_target(
     metab_mcti_tar_file,
-    raw_data_path("myofib_azd3965-vb124_2022-02-10.xlsx"),
+    raw_data_path("myofib_azd3965-vb124_intra_2022-02-10.xlsx"),
     format = "file"
   ),
   tar_target(
@@ -1057,6 +1066,125 @@ list(
     format = "rds"
   ),
 
+  # cosmos toy --------------------------------------------------------------
+
+  tar_target(
+    carnival_options,
+    set_carnival_options()
+  ),
+  tar_target(
+    cosmos_data,
+    get_cosmos_data()
+  ),
+  tar_target(
+    cosmos_toy_forward_data,
+    preprocess(
+      "forward",
+      network = cosmos_data$toy_network,
+      signaling = cosmos_data$toy_signaling_input,
+      metabolites = cosmos_data$toy_metabolic_input,
+      transcripts = cosmos_data$toy_RNA,
+      carnival_options = carnival_options
+    )
+  ),
+  tar_target(
+    cosmos_toy_reverse_data,
+    preprocess(
+      "reverse",
+      network = cosmos_data$toy_network,
+      signaling = cosmos_data$toy_signaling_input,
+      metabolites = cosmos_data$toy_metabolic_input,
+      transcripts = cosmos_data$toy_RNA,
+      carnival_options = carnival_options
+    )
+  ),
+  tar_target(
+    cosmos_toy_forward,
+    run_cosmos(
+      "forward",
+      cosmos_toy_forward_data,
+      carnival_options = carnival_options
+    ) |>
+      cosmosR::format_COSMOS_res()
+  ),
+  tar_target(
+    cosmos_toy_reverse,
+    run_cosmos(
+      "reverse",
+      cosmos_toy_reverse_data,
+      carnival_options = carnival_options
+    ) |>
+      cosmosR::format_COSMOS_res()
+  ),
+  tar_target(
+    cosmos_toy_results,
+    combine_cosmos(cosmos_toy_forward, cosmos_toy_reverse)
+  ),
+
+  # cosmos ------------------------------------------------------------------
+
+  tar_target(
+    cosmos_tf,
+    format_tf(tfea_tgfb)
+  ),
+  tar_target(
+    cosmos_metab,
+    format_metab(metab_mcti_tar_tt_tgfb)
+  ),
+  tar_target(
+    cosmos_rna,
+    format_deg(deg_tgfb)
+  ),
+  tar_target(
+    cosmos_forward_data,
+    preprocess(
+      "forward",
+      network = cosmos_data$meta_network,
+      signaling = cosmos_tf,
+      metabolites = cosmos_metab,
+      transcripts = cosmos_rna,
+      diff_exp_threshold = 2.5,
+      maximum_network_depth = 10,
+      carnival_options = carnival_options
+    )
+  ),
+  tar_target(
+    cosmos_reverse_data,
+    preprocess(
+      "reverse",
+      network = cosmos_data$meta_network,
+      signaling = cosmos_tf,
+      metabolites = cosmos_metab,
+      transcripts = cosmos_rna,
+      diff_exp_threshold = 2.5,
+      maximum_network_depth = 10,
+      carnival_options = carnival_options
+    )
+  ),
+  tar_target(
+    cosmos_forward,
+    run_cosmos(
+      "forward",
+      cosmos_forward_data,
+      carnival_options = carnival_options,
+      timelimit = 28800
+    ) |>
+      cosmosR::format_COSMOS_res()
+  ),
+  tar_target(
+    cosmos_reverse,
+    run_cosmos(
+      "reverse",
+      cosmos_reverse_data,
+      carnival_options = carnival_options
+    ) |>
+      cosmosR::format_COSMOS_res()
+  ),
+  tar_target(
+    cosmos_results,
+    combine_cosmos(cosmos_forward, cosmos_reverse)
+  ),
+
   # mice --------------------------------------------------------------------
 
   tar_target(
@@ -1187,6 +1315,92 @@ list(
   tar_quarto(
     redox_analysis,
     path = "analysis/redox.qmd"
+  ),
+
+  # figure images -----------------------------------------------------------
+
+  tar_map(
+    values = tibble::tribble(
+      ~path,                        ~scale, ~hjust, ~vjust, ~names,
+      "ipf-mct-blots.png",          1.1,    0,      -0.05,  "mct_ipf"
+      # "bleo-mct-blots.png",         1.1,    0,      -0.05,  "mct_bleo",
+      # "tgfb-mct-blots.png",         1.1,    0,      -0.05,  "mct_tgfb",
+      # "sirna-mct-blots.png",        1,      0,      0,      "sma_sirna",
+      # "dual-azd-ipf-lf-blot-2.png", 1,      0,      0,      "ipf_lf_azd",
+      # "dual-azd-sma-blot.png",      1,      0,      -0.05,  "sma_azd",
+      # "dual-ar-sma-blot.png",       1.2,    0.1,    -0.05,  "sma_ar",
+      # "dual-azd-contract.png",      1,      0,      -0.05,  "contraction",
+      # "bleo-trichrome.png",         1,      0,      0,      "trichrome",
+      # "bleo-timeline.png",          1,      0,      0,      "timeline",
+      # "dual-azd-smad3-blot.png",    1,      0,      -0.05,  "smad3_azd",
+      # "dual-azd-erk-blot.png",      1,      0,      -0.05,  "erk_azd",
+      # "dual-azd-hif1a-blot.png",    1.3,    0,      -0.05,  "hif_azd"
+    ),
+    names = names,
+    tar_target(
+      fig_img_file,
+      manuscript_path(path),
+      format = "file"
+    ),
+    tar_target(
+      fig_img,
+      plot_image(fig_img_file, scale = scale, hjust = hjust, vjust = vjust),
+      format = "rds"
+    ),
+    NULL
+  ),
+
+  # figure 1 ----------------------------------------------------------------
+
+  tar_target(
+    fig01,
+    make_fig01(
+      fig_img_mct_ipf,
+      blot_plot_fig_ipf,
+      plot_blank("Western\nMCT expression\nIPF LF v. Normal"),
+      plot_blank("Summary\nMCTexpression\nIPF LF v. Normal"),
+      fig_img_mct_bleo,
+      blot_plot_fig_bleo,
+      fig_img_mct_tgfb,
+      blot_plot_fig_tgfb
+    ) |>
+      write_figures("Figure 01"),
+    format = "file"
+  ),
+
+  # manuscript --------------------------------------------------------------
+
+  tar_target(
+    template,
+    manuscript_path("template.docx"),
+    format = "file"
+  ),
+  tar_target(
+    pkg_citations,
+    write_pkg_cites(),
+    cue = tar_cue(mode = "always")
+  ),
+  tar_target(
+    csl,
+    manuscript_path("jci.csl"),
+    format = "file"
+  ),
+  tar_target(
+    refs,
+    rbbt::bbt_update_bib(
+      path = "manuscript/manuscript.qmd",
+      ignore = c("R-base"),
+      path_bib = "manuscript/library.bib"
+    ),
+    cue = tar_cue("always")
+  ),
+  tar_quarto(
+    manuscript,
+    path = manuscript_path("manuscript.qmd"),
+  ),
+  tar_quarto(
+    supplement,
+    path = manuscript_path("supplement.qmd"),
   ),
 
   NULL
