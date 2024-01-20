@@ -11,9 +11,11 @@
 *.html
 *.raw
 *.mzML
+*.tif
 ~$*
 
 analysis/figures
+analysis/carnival
 data-raw/glucose
 data-raw/lactate
 

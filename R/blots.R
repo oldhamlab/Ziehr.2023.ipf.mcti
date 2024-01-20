@@ -97,7 +97,8 @@ analyze_blot <- function(df, paired, comp = NULL) {
   } else {
     out <- twofactor(df, "norm", mixed = paired, comp)
   }
-  out
+  out |>
+    dplyr::mutate(protein = unique(df$protein), .before = 1)
 }
 
 plot_blot <- function(df, stats = NULL, title = NULL) {
@@ -131,4 +132,19 @@ phospho_ratio <- function(df) {
     ) |>
     dplyr::mutate(ratio = .data$phospho / .data$total) |>
     dplyr::filter(!is.na(.data$ratio))
+}
+
+combine_plots <- function(dfs, stats) {
+  df <- dplyr::bind_rows(dfs)
+  stat <- dplyr::bind_rows(stats)
+  prot <- unique(df$protein)
+  df$protein <- factor(df$protein, levels = prot)
+  stat$protein <- factor(stat$protein, levels = prot)
+
+  plot_blot(df, stat) +
+    ggplot2::facet_wrap(
+      ggplot2::vars(protein),
+      nrow = 1,
+      scales = "free_y"
+    )
 }

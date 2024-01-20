@@ -91,3 +91,56 @@ filters:
 - authors-block
 ---
 
+```{r}
+#| label: setup
+#| include: false
+
+# ensure refs are up-to-date
+targets::tar_load(refs)
+targets::tar_load(pkg_citations)
+
+# load data for paper
+
+
+# ensure figures are up-to-date
+# targets::tar_load(
+#   c(
+#     fig01, 
+#     fig02, 
+#     fig03,
+#     fig04,
+#     fig05, 
+#     fig06, 
+#     fig10, 
+#     fig11,
+#     resources_table,
+#     NULL
+#   )
+# )
+```
+
+\newpage
+
+# Abstract 
+
+
+# Keywords
+
+
+\newpage
+
+# Introduction
+
+Idiopathic pulmonary fibrosis (IPF) is a chronic and progressive lung disease with high mortality and limited therapeutic options. IPF affects approximately 150,000 patients in the U.S. with a median survival of 3-5 years [@esposito2015; @raghu2016; @martinez2017]. Currently approved pharmacotherapies for IPF are limited to the antifibrotics pirfenidone and nintedanib that slow, but do not stop, disease progression [@king2014; @richeldi2014], leaving lung transplantation as the only option available to eligible patients with progressive disease. The limited efficacy of antifibrotic therapies emphasizes the need for novel therapeutic approaches targeting different features of IPF pathobiology.
+
+Accumulating evidence suggests that metabolic reprogramming may be one such therapeutic vulnerability in IPF [@bueno2020; @selvarajah2021]. Lung fibrosis is driven by the excessive deposition of extracellular matrix by myofibroblasts [@martinez2017]. Fundamental changes in myofibroblast metabolism support myofibroblast differentiation and extracellular matrix production [@bernard2015; @xie2015; @goodwin2018; @hamanaka2019; @selvarajah2019]. In particular, increased glycolysis and lactate production have been observed in IPF myofibroblasts *ex vivo* and following TGF-β1 (TGFβ)-induced myofibroblast differentiation *in vitro* [@kottmann2012; @xie2015; @kottmann2015; @bernard2015]. These metabolic changes are critical for fibrogenesis, as small molecule inhibitors of glucose uptake, glycolysis, and lactate fermentation prevent myofibroblast differentiation *in vitro* and attenuate pulmonary fibrosis in animal models [@bernard2015; @kottmann2012; @xie2015; @goodwin2018; @judge2018; @cho2017]. Unfortunately, low target affinities, poor specificity, narrow therapeutic indices, and common genetic resistance have all hampered the translation of these investigational compounds for clinical use [@rodriguez-enriquez2009; @michelakis2017; @pelicano2006]. Moreover, the molecular mechanisms by which these metabolic inhibitors attenuate the myofibroblast differentiation transcriptional program remain unclear. In order to leverage metabolic therapies for IPF, more targeted and better characterized drugs must be developed.
+
+Toward this end, we sought to characterize the effects of a novel metabolic approach - inhibition of lactate transport - on myofibroblast differentiation and experimental pulmonary fibrosis. Lactate must be secreted to sustain glycolysis in myofibroblasts. A family of monocarboxylate transporters (MCT1-4) maintains lactate homeostasis and small molecule inhibitors of these transporters have been under active clinical development for oncologic applications where glycolytic reprogramming also features prominently in disease pathobiology [@puri2020; @cluntun2021]. Importantly, compared to previously investigated inhibitors of glycolysis, MCT inhibitors exhibit favorable pharmacologic profiles and have successfully translated to human clinic trials [@halford2023]. Before the promise of this therapeutic approach in IPF may be realized, however, the preclinical efficacy and molecular mechanisms-of-action of lactate transport inhibitors must be demonstrated experimentally.
+
+In this work, we evaluated the contribution of lactate transporters to experimental pulmonary fibrosis. We found increased expression of the lactate transporters MCT1 and MCT4 IPF patient lungs, consistent with increased glycolysis previously observed. Inhibition of these transporters attenuated bleomycin-induced lung fibrosis *in vivo* and TGFβ-induced myofibroblast differentiation *in vitro*, where MCT4 inhibition demonstrated increased therapeutic efficacy. *Using stable isotope tracing, high-resolution spatial metabolomics, we find...* Based on these findings, we report a novel MCT4 inhibitor suitable for human clinical studies. Together, these data illuminate a novel approach to disrupt the metabolic program fueling the exuberant fibrosis at the core of IPF and provide proof-of-concept to target lactate transporters in the treatment of this deadly disease. 
+
+# Results
+
+## MCT expression increases in human pulmonary fibrosis and experimental models
+
+Of the four lactate transporters, MCT1 and MCT4 are the most highly expressed in the lung [@frangogiannis2020]. Based on this observation, we characterized MCT1 and MCT4 expression in human IPF lung explants obtained at the time of transplantation. Consistent with a pathologic role for MCT1 and MCT4 in IPF, we found significantly increased expression of these proteins in human IPF lung compared to non-fibrotic control samples (**Figure 1A-B**). 

@@ -1,0 +1,13 @@
+Resource,Designation,Source,Identifiers,Notes
+antibody,HRP-anti-Rabbit IgG,Cell Signaling Technologies,7074,1:5000
+antibody,HRP-anti-Mouse IgG,Cell Signaling Technologies,7076,1:5000
+antibody,anti-MCT1,Thermo,PA5-72957,1:1000 WB
+antibody,anti-MCT4,abcam,ab244385,1:2000 WB
+antibody,anti-α-SMA,abcam,ab32575,1:2000 WB
+antibody,anti-Smad3,abcam,ab40854,
+antibody,anti-pSmad3,abcam,ab52903,
+antibody,anti-ERK,Cell Signaling Technologies,4696S,
+antibody,anti-pERK,Cell Signaling Technologies,4370S,
+antibody,anti-Col1a1,,,
+antibody,anti-HIF-1α,BD Biosciences,610958,1:1000 WB
+,,,,

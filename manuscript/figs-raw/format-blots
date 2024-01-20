@@ -1,0 +1,11 @@
+# blots
+
+- export as .png at 600 resolution
+- width is 150 pt (8 lanes), 45 (2 lanes)
+- height of control is 90 pt
+- add 1 pt black outline to gels
+- 5 pt vertical spacing between blots
+- text Calibri 12 pt
+- 10 pt horizontal spacing between blot and protein name
+- 10 pt between upper blot and bar
+- 5 pt between bar and upper text

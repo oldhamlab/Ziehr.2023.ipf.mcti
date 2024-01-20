@@ -13,3 +13,18 @@ test_quarto <- function(file = "manuscript.qmd") {
     execute_dir = getwd()
   )
 }
+
+plot_image <- function(img, scale = 1, hjust = 0, vjust = 0) {
+  cowplot::ggdraw() +
+    cowplot::draw_image(
+      magick::image_read(img),
+      scale = scale,
+      hjust = hjust,
+      vjust = vjust
+    )  +
+    theme_plot() +
+    ggplot2::theme(
+      panel.border = ggplot2::element_blank(),
+      axis.line = ggplot2::element_blank()
+    )
+}
