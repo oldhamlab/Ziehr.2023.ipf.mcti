@@ -4,12 +4,18 @@
 .httr-oauth
 .DS_Store
 .quarto
+
 *.scn
-analysis/figures
-data-raw/glucose
-data-raw/lactate
+*.png
+*.ai
 *.html
 *.raw
 *.mzML
+~$*
+
+analysis/figures
+data-raw/glucose
+data-raw/lactate
+
 
 /.quarto/
