@@ -1,8 +1,8 @@
 # plots.R
 
 theme_plot <- function(
-    base_size = 10,
-    base_family = "Arial",
+    base_size = 8,
+    base_family = "Calibri",
     base_line_size = base_size / 40,
     base_rect_size = base_size / 40
 ) {
@@ -134,7 +134,7 @@ theme_plot <- function(
     panel.spacing.y = NULL,
     panel.ontop    = FALSE,
 
-    strip.background = ggplot2::element_rect(fill = "white", colour = NA),
+    strip.background = ggplot2::element_blank(),
     strip.clip = "inherit",
     strip.text = ggplot2::element_text(
       colour = "grey10",
@@ -175,7 +175,9 @@ theme_plot <- function(
     plot.caption.position = "panel",
     plot.tag = ggplot2::element_text(
       size = ggplot2::rel(1.2),
-      hjust = 0.5, vjust = 0.5
+      face = "bold",
+      hjust = 0.5,
+      vjust = 0.5
     ),
     plot.tag.position = "topleft",
     plot.margin = ggplot2::margin(
@@ -244,8 +246,8 @@ plot_one_factor <- function(
     ggplot2::geom_errorbar(
       stat = "summary",
       fun.data = ggplot2::mean_se,
-      width = 0.25,
-      linewidth = 0.4,
+      width = 0.2,
+      linewidth = 0.3,
       show.legend = FALSE
     ) +
     ggbeeswarm::geom_quasirandom(
@@ -253,7 +255,7 @@ plot_one_factor <- function(
       color = "black",
       width = 0.05,
       size = 0.75,
-      stroke = 0.3,
+      stroke = 0.2,
       show.legend = FALSE
     ) +
     ggplot2::labs(
@@ -329,8 +331,8 @@ plot_two_factor <- function(
       ),
       stat = "summary",
       fun.data = ggplot2::mean_se,
-      width = 0.25,
-      linewidth = 0.4,
+      width = 0.2,
+      linewidth = 0.3,
       show.legend = FALSE
     ) +
     ggbeeswarm::geom_quasirandom(
@@ -340,7 +342,7 @@ plot_two_factor <- function(
       color = "black",
       width = 0.05,
       size = 0.75,
-      stroke = 0.3,
+      stroke = 0.2,
       show.legend = FALSE
     ) +
     ggplot2::labs(

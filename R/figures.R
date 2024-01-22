@@ -53,9 +53,9 @@ write_figures <- function(plot, filename, path = "manuscript/figs") {
   stringr::str_c(path, "/", filename, ".png")
 }
 
-make_fig01 <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
-  design <- "ab \n cd \n ef \n gh"
-  p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 +
+make_fig01 <- function(p1, p2, p3, p4, p5, p6) {
+  design <- "ab \n cd \n ef"
+  p1 + p2 + p3 + p4 + p5 + p6 +
     theme_patchwork(
       design = design,
       widths = ggplot2::unit(c(1, 1.75), "in"),

@@ -1,5 +1,5 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|cb6f51b57e223278|||||||||||||||
+.Random.seed|object|8b0e97da8d7a1a72|||||||||||||||
 %nin%|function|b1eefa0a0b2c9c81|||||||||||||||
 analyze_blot|function|778060229e0cfa97|||||||||||||||
 annot_metabs|function|13e70fae89fa3165|||||||||||||||
@@ -34,6 +34,9 @@ blot_norm_dual_perk|stem|d79bdf1ca54d936f|f03e51bad1648d6d|7d8848ca831a5e4c|-893
 blot_norm_dual_psmad3|stem|861b87b4a1499064|db16cd79954a4536|7d8848ca831a5e4c|-1885655891||t19682.8541898148s|35ca74335fb6f294|2604|qs|local|vector|||0.016||
 blot_norm_dual_sma|stem|8479aa5d6a25c938|1604edcd1295dfb6|7d8848ca831a5e4c|-920681715||t19682.8542013889s|e9c5590c1d3c6b4f|5422|qs|local|vector|||0.018||
 blot_norm_dual_smad3|stem|4b4ea198d65abd4f|450cd49aac9e4553|7d8848ca831a5e4c|-148303658||t19682.8541435185s|a59855b287c023e7|1613|qs|local|vector|||0.029||
+blot_norm_filter_bleo_mct1|stem|bf24fddb921af84f|bba47eaff881c587|b5a189b36826d4ab|-1481218095||t19744.6892841958s|0a1377fd9024ebc3|747|qs|local|vector|||5.017|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+blot_norm_filter_bleo_mct4|stem|a0a5a5535bbf1fef|ca57b2c16e858ca2|ffe5d85c9585c390|-1039811398||t19744.6892869816s|77f1a8cb303e5572|743|qs|local|vector|||5.011|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+blot_norm_filter_bleo_sma|stem|ad4a46f3d0fbd13a|0161d8141a1d6289|e383f4f5fb4994e6|1582110763||t19744.6892889921s|c92b8651eccb506b|746|qs|local|vector|||4.93|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 blot_norm_ipf_lf_col1a1|stem|f0d6148e933c5e94|f1c4ff566591fc4a|7d8848ca831a5e4c|-1114499824||t19683.6884375s|1a88ce0b64cc389f|1254|qs|local|vector|||0.018||
 blot_norm_ipf_lf_sma|stem|57e7d3a856b7fc67|33a2d577db9c68a9|7d8848ca831a5e4c|-1976790687||t19683.6881134259s|33d5b6a054f849fe|1250|qs|local|vector|||0.018||
 blot_norm_ipf_mct1|stem|7848ff5080c9ead0|23d899cefd3019fc|7d8848ca831a5e4c|-861151505||t19682.8541435185s|edd09b0ed7dbab0c|669|qs|local|vector|||0.021||
@@ -57,6 +60,9 @@ blot_plot_ar_sma|stem|ff669ef2480bbc61|6d2775b3a203e618|ad9cf1f5854ba081|3830594
 blot_plot_bleo_mct1|stem|80f05fae38b9b105|4f5333c59291f1e2|2d6c4f9dc43b92ea|-86281345||t19744.623969971s|cc2abd5723a2d7e7|1003366|rds|local|vector|||0.049||
 blot_plot_bleo_mct4|stem|b77f06564feb868a|5ea40822178bbc7f|03f499d7f01404ed|-588619735||t19744.6240094316s|fbb1abaaaa19623b|1039724|rds|local|vector|||0.048||
 blot_plot_bleo_sma|stem|7df8ae018af3efa2|819d00e596811f3d|541a469a032d3457|-1315766873||t19744.6238415595s|1be04e93c3b2c4aa|1001067|rds|local|vector|||5.038|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+blot_plot_comb_mct_bleo|stem|2ee4a30223bb3ddf|4642dbc5edb8e942|ef266ef3eaac897b|-1507491919||t19744.7196255388s|e7611dc4729f8290|954813|rds|local|vector|||5.011|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+blot_plot_comb_mct_ipf|stem|b5008f110d7297ee|ee2dec1655228564|36d4292cd87fc929|1232963119||t19744.7196213295s|dd05d12123936aad|954102|rds|local|vector|||4.985|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+blot_plot_comb_mct_tgfb|stem|4ae770acc3be0e6b|48345af145c169c9|ffcb9859e01d5ba0|-1306762721||t19744.7196117551s|5e9cbdc4db396d38|957805|rds|local|vector|||4.901|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 blot_plot_comp_mct1|stem|77d472668534588d|089f6806b3526769|310f8ea425b02bb3|-1939759398||t19744.6238921741s|32d1c43aea5c37d7|958588|rds|local|vector|||0.034||
 blot_plot_comp_mct4|stem|0ea2922041433038|63ba5b5e60a058be|c8a5d8b6128ef822|-2122317982||t19744.6238967093s|b1c35fb3befbb752|959646|rds|local|vector|||0.035||
 blot_plot_comp_sma|stem|14efd74872b837ca|69c09d611a93dea5|637973f76567d07a|-1896242402||t19744.6243122324s|3ccfe016a4ad26e0|1015818|rds|local|vector|||0.036||
@@ -129,6 +135,9 @@ blot_stats_dual_perk|stem|f9567b2d4d25e867|9045fca2a7d89cd8|3fbcbf3101cb50fb|-20
 blot_stats_dual_psmad3|stem|c6001703916bef38|31586b5cd480d298|2432d47cdf3d4a8c|172516328||t19744.6229778734s|355e02d86e0a1d2e|366|qs|local|vector|||0.337||
 blot_stats_dual_sma|stem|6ae40a34d9710bdb|94033f18ae21ab38|aa608e998ec25171|1982486193||t19744.6229940937s|0c79ab4d5be76e6d|422|qs|local|vector|||0.723||
 blot_stats_dual_smad3|stem|f090e9e5a2d0d2e3|f96ef1e2453c9ddc|e175f5ca9f5ad2bb|623252019||t19744.6230015236s|e334c4b74a456131|365|qs|local|vector|||0.329||
+blot_stats_filter_bleo_mct1|stem|a1188adc21d8f669|682928d7707a5e8e|3b0732592d84c924|-124245749||t19744.6991944697s|a2ec227a551ed8f0|231|qs|local|vector|||4.613|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+blot_stats_filter_bleo_mct4|stem|2088adde7ce73953|e1e95ed6f5e876b8|0b99eaad5dc70b27|153570184||t19744.6992009978s|b7e15d70da794704|235|qs|local|vector|||4.806|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+blot_stats_filter_bleo_sma|stem|3a042486a4d8793a|a51757f749d3bcc1|d906c59d5ef68cca|1306868068||t19744.6991941526s|7979acc55d607f70|242|qs|local|vector|||4.836|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 blot_stats_ipf_lf_col1a1|stem|3331ef05ad2073ff|6cad727d786adf6a|fa7573cd1bb570d0|-1047209119||t19744.6230385364s|30ed5b6f0c29cb62|367|qs|local|vector|||0.314||
 blot_stats_ipf_lf_sma|stem|07c79e0b5c14059b|f1ff1c40bafd6ddf|75cefdf182091ea7|1618305351||t19744.6230601759s|355e02d86e0a1d2e|366|qs|local|vector|||0.454||
 blot_stats_ipf_mct1|stem|546a11987c9329f7|17b2332dd741c169|38bba2289d91154b|-1454848315||t19740.6885020302s|53d67a509bd209ee|171|qs|local|vector|||5.112|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
@@ -165,7 +174,7 @@ clean_plates|function|6745c0940a56f7b0|||||||||||||||
 clean_plates_interp|function|c083100a5997df2b|||||||||||||||
 clrs|object|57829e057cd065dd|||||||||||||||
 combine_cosmos|function|d8283f348e7eac1f|||||||||||||||
-combine_plots|function|bcc795ecf36eb996|||||||||||||||
+combine_plots|function|42fcd83cdf2bff75|||||||||||||||
 comps_ar|object|79fdbbede9326cd8|||||||||||||||
 comps_ar_1|object|623ebb49712b31f8|||||||||||||||
 comps_ar_2|object|f33c95fc2e31c162|||||||||||||||
@@ -200,8 +209,13 @@ deg_vol_tgfb|stem|dc94721f63dc28e6|192b05ee027f325b|b588902e706abcd0|-56270616||
 deg_vol_vb|stem|264c013fe5c14c0a|d9f4dbda52ec213e|1df98aa64d70ea75|-1257461850||t19736.7528472222s|f83ddbb0881fa10b|4066158|rds|local|vector|||0.19||
 edge_plot|stem|177e4c7ecb0bdf66|f82af5ac042f1872|ad98d463a64de4bd|-559601641||t19739.7350115741s|87d54ba3d2ed8d46|130434543|rds|local|vector|||1.551||
 extracellular_analysis|stem|754a8a7b709455c7|ada6957013187599|db2a0f979109aeaf|1846625634|analysis/extracellular.html*analysis/extracellular.qmd|t19744.6242167741s|c61d7e27312339ab|2177714|file|local|vector|||15.374||
+fig_img_file_mct_bleo|stem|2a02305340b17a1a|c248cd303edf98e2|5e3b8b98b37b61e0|-1023944967|manuscript/figs-raw/bleo-mct-blots.png|t19542.803587963s|150035c935326d9d|507045|file|local|vector|||4.632|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
 fig_img_file_mct_ipf|stem|bff3552fcfe8e707|d048757a138d9000|5e3b8b98b37b61e0|1429490457|manuscript/figs-raw/ipf-mct-blots.png|t19542.7932986111s|98a99c32ca14919e|343044|file|local|vector|||4.743|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
-fig_img_mct_ipf|stem|2e54236283669c31|459eb4fb5148084b|81cfad0aa2b2c0b6|1241263230||t19740.6615494188s|4237c736d7ab8a30|3760246|rds|local|vector|||4.657|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+fig_img_file_mct_tgfb|stem|d03db91e903c75a9|bf3041bbbcf9924e|5e3b8b98b37b61e0|1002022137|manuscript/figs-raw/tgfb-mct-blots.png|t19542.8232986111s|c5abeb6ab316cfde|97353|file|local|vector|||4.587|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+fig_img_mct_bleo|stem|390327d82912cb85|64683d92e82a680c|3413745ae3688de0|-796451094||t19744.7141189183s|5342d16df30b1ce9|5238122|rds|local|vector|||5.237|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+fig_img_mct_ipf|stem|a40ec48ce69cb44e|459eb4fb5148084b|da928c084300f2b5|1241263230||t19744.7141372812s|f683fe82b1bebb41|3760283|rds|local|vector|||5.173|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment|
+fig_img_mct_tgfb|stem|4b292a449a056590|246955f4228772d4|c6615ed19562a426|-2051778963||t19744.7141608303s|e8543a6edc38d186|1685713|rds|local|vector|||0.044||
+fig01|stem|6ca698a06f03ec73|ee5c02bb1bf94bc3|b06fa62a15931599|1606177601|manuscript/figs/Figure 01.png|t19744.7197215699s|2c10aec7d3bb04af|291681|file|local|vector|||1.887|font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in PostScript font database. font family Calibri not found in|
 filter_blots|function|6fd3076c3a6e8adb|||||||||||||||
 filter_plates|function|c33fbdd00ad9c744|||||||||||||||
 fit_limma_metab|function|96b90df46f2bc296|||||||||||||||
@@ -248,7 +262,7 @@ isotope_library|object|37ed6eea65f7ef83|||||||||||||||
 list_files|function|1f658e2880a545a6|||||||||||||||
 make_bleo_samples|function|33803dfba7913e0d|||||||||||||||
 make_correction_matrices|function|85e033e47bc37412|||||||||||||||
-make_fig01|function|20fdc83dae6f469f|||||||||||||||
+make_fig01|function|43d9e27b1b9bdccc|||||||||||||||
 make_mcti_samples|function|21666e36e4f4af6f|||||||||||||||
 make_std_curves|function|e906807e131c0af7|||||||||||||||
 make_std_plots|function|1a52bdb3fbeef393|||||||||||||||
@@ -460,41 +474,41 @@ plates_std_plots_lactate|stem|f167b1054508c1a9|788633dd4032ebf2|94d05e241af8e2df
 plates_std_plots_nad_nad|stem|39d56d03c5dbafa4|bbd053c9efac1c8e|ffc0d500ef7995e1|-1738690992|analysis/figures/nad_nad_std_curves|t19689.7359988363s|dd56a5971d025bfa|192|file_fast|local|vector|||1.172||
 plates_std_plots_nad_protein|stem|cb5acd91caea1331|a305fe9788ec0a89|da37eb077b1526d2|1095393944|analysis/figures/nad_protein_std_curves|t19689.7360015783s|dd56a5971d025bfa|192|file_fast|local|vector|||2.523||
 plates_std_plots_picogreen|stem|11bcc7d16595e92b|62f2c86ee20eb41f|5dd338cd5cbe8a7a|1660051337|analysis/figures/picogreen_std_curves|t19689.7360126722s|4e7818a2d57934b5|736|file_fast|local|vector|||6.134||
-plot_bleo_lactate|function|73aaa38953374e8b|||||||||||||||
-plot_blot|function|191ccf1cf8147fc7|||||||||||||||
+plot_bleo_lactate|function|0d606d9edbcc6a5b|||||||||||||||
+plot_blot|function|662ae7da7bd784c7|||||||||||||||
 plot_counts|function|fd5d4d193ff8e85b|||||||||||||||
-plot_edge|function|adfe9169016bd878|||||||||||||||
-plot_gois|function|fd5d4d193ff8e85b|||||||||||||||
-plot_gsea_dot|function|e0e266424685bb06|||||||||||||||
+plot_edge|function|afc0eb408252b0ab|||||||||||||||
+plot_gois|function|e1802dd9ee3392a4|||||||||||||||
+plot_gsea_dot|function|c5fcb7146e397d6c|||||||||||||||
 plot_gsea_table|function|8641889c1e806a2f|||||||||||||||
-plot_gsea_vol|function|68f1cee92def4df7|||||||||||||||
-plot_image|function|70114755cd9843c4|||||||||||||||
-plot_mice|function|afd9a2f372947a8c|||||||||||||||
-plot_mids_all|function|e1a841311ba21e71|||||||||||||||
-plot_mois|function|4ca4b9d2a3cde6ad|||||||||||||||
+plot_gsea_vol|function|f1d8edd267882489|||||||||||||||
+plot_image|function|a86f12ad6f919521|||||||||||||||
+plot_mice|function|d76ce6c765dbf568|||||||||||||||
+plot_mids_all|function|7bd89b86630c038f|||||||||||||||
+plot_mois|function|cd60bba2affb61b2|||||||||||||||
 plot_msea|function|88108d478aa80964|||||||||||||||
 plot_msea_table|function|5333f8e5fe9fb2d5|||||||||||||||
-plot_one_factor|function|7cb67a5052a8672d|||||||||||||||
+plot_one_factor|function|4ebaed4795508a35|||||||||||||||
 plot_path|function|c6054bef7da642cb|||||||||||||||
-plot_pca_metab|function|1fdcf8f63eedc8f7|||||||||||||||
+plot_pca_metab|function|afb3d0e25227a3a6|||||||||||||||
 plot_progeny|function|19d47153ea45d398|||||||||||||||
-plot_rnaseq_pca|function|e90b6cf71fd0495d|||||||||||||||
+plot_rnaseq_pca|function|5875aeab361f681f|||||||||||||||
 plot_rnaseq_vol|function|378ad0fbf2d16225|||||||||||||||
-plot_seahorse_atp_bars|function|654a7d56950bcf7a|||||||||||||||
+plot_seahorse_atp_bars|function|3b97b82cbdf3c243|||||||||||||||
 plot_seahorse_bars|function|3f9fbd8af2e6ee6e|||||||||||||||
-plot_seahorse_pheno|function|528ca20dfd831d27|||||||||||||||
-plot_seahorse_stress|function|c464c6c914801363|||||||||||||||
-plot_seahorse_summary|function|f7ba6710c8c8bf7c|||||||||||||||
-plot_seahorse_timelines|function|127e291299e3f328|||||||||||||||
-plot_table|function|49e164e75b9ea7bb|||||||||||||||
+plot_seahorse_pheno|function|db70958b036f2390|||||||||||||||
+plot_seahorse_stress|function|4245ed29ebe3c006|||||||||||||||
+plot_seahorse_summary|function|da4ed07b7698c406|||||||||||||||
+plot_seahorse_timelines|function|30648e48cca93653|||||||||||||||
+plot_table|function|7714351cc521e440|||||||||||||||
 plot_tf|function|1c7b52399ada944c|||||||||||||||
-plot_tf_targets|function|29a580b39457fea7|||||||||||||||
-plot_two_factor|function|7e6df6c3729a9246|||||||||||||||
+plot_tf_targets|function|cdf3aea9c84b8de3|||||||||||||||
+plot_two_factor|function|2e45b1944ec8ba31|||||||||||||||
 plot_vol_metab|function|944c3bc82127c8b0|||||||||||||||
-plot_vol_rnaseq|function|9991e1510abf3b55|||||||||||||||
+plot_vol_rnaseq|function|ca856e5b4d6db619|||||||||||||||
 plot_vol_tfea|function|00dc66074c2673fa|||||||||||||||
-plot_volcano|function|6a84d2528ae6ad79|||||||||||||||
-plot_wt_timeline|function|32bc9279900d4a50|||||||||||||||
+plot_volcano|function|c4b7ed7e1173e5e9|||||||||||||||
+plot_wt_timeline|function|d7e3956a169e02ed|||||||||||||||
 pqn|function|22cfe6e9597fe66b|||||||||||||||
 predicted_ratios|stem|a46cd820c113a371|8ebabf8c3001251c|c89efa7575262d8d|192688976||t19738.7473148148s|7e50109c4a0b197a|346|qs|local|vector|||11.906|replacing previous import S4ArraysmakeNindexFromArrayViewport by DelayedArraymakeNindexFromArrayViewport when loading SummarizedExperiment. Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.ℹ Please use metabolite instead of .datametabolite. Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.ℹ Please use pred_ratio instead of .datapred_ratio|
 prep_counts|function|d767033247c0690e|||||||||||||||
@@ -563,7 +577,7 @@ tfea_vol_dual|stem|29955b54741c2b3f|0b1517c3611fa668|0de3563b02b050f2|-25791736|
 tfea_vol_tgfb|stem|bc8628130bb9633f|1ecd017d6980a061|c6678bd3e7e0f1d0|1030081076||t19739.7833912037s|571b176070b04c6b|1185562|rds|local|vector|||0.298||
 tfea_vol_vb|stem|dffdbae78c98e038|d74b622fc576a31a|410c6223605ff802|-462772465||t19739.7834259259s|0ff16495de9727e6|1184317|rds|local|vector|||0.451||
 theme_patchwork|function|2602793a02ea39e3|||||||||||||||
-theme_plot|function|2c036f654d9ecdf9|||||||||||||||
+theme_plot|function|9dc6a1ba4ccbe45c|||||||||||||||
 top_table_metab|function|9b8de229196d113a|||||||||||||||
 twofactor|function|915be7f84ef3f8db|||||||||||||||
 vst_rnaseq|function|cbe62becdb90a89b|||||||||||||||

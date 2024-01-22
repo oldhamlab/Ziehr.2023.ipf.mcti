@@ -143,13 +143,69 @@ list(
     ),
     NULL
   ),
-  tar_target(
-    blot_plot_fig_ipf,
-    combine_plots(
-      list(blot_norm_ipf_mct1, blot_norm_ipf_mct4, blot_norm_ipf_sma),
-      list(blot_stats_ipf_mct1, blot_stats_ipf_mct4, blot_stats_ipf_sma)
+  tar_map(
+    values = list(
+      names = c(
+        "bleo_mct1",
+        "bleo_mct4",
+        "bleo_sma"
+      ),
+      data = rlang::syms(c(
+        "blot_norm_bleo_mct1",
+        "blot_norm_bleo_mct4",
+        "blot_norm_bleo_sma"
+      ))
     ),
-    format = "rds"
+    names = names,
+    tar_target(
+      blot_norm_filter,
+      dplyr::filter(data, treatment == "Veh")
+    )
+  ),
+  tar_map(
+    values = list(
+      names = c(
+        "bleo_mct1",
+        "bleo_mct4",
+        "bleo_sma"
+      ),
+      data = rlang::syms(c(
+        "blot_stats_bleo_mct1",
+        "blot_stats_bleo_mct4",
+        "blot_stats_bleo_sma"
+      ))
+    ),
+    names = names,
+    tar_target(
+      blot_stats_filter,
+      dplyr::filter(data, treatment == "Veh" & is.na(condition)) |>
+        dplyr::mutate(x = 1.5)
+    )
+  ),
+  tar_map(
+    values = list(
+      names = c(
+        "mct_ipf",
+        "mct_bleo",
+        "mct_tgfb"
+      ),
+      data = list(
+        rlang::syms(c("blot_norm_ipf_mct1", "blot_norm_ipf_mct4", "blot_norm_ipf_sma")),
+        rlang::syms(c("blot_norm_filter_bleo_mct1", "blot_norm_filter_bleo_mct4", "blot_norm_filter_bleo_sma")),
+        rlang::syms(c("blot_norm_untreated_mct1", "blot_norm_untreated_mct4", "blot_norm_untreated_sma"))
+      ),
+      stats = list(
+        rlang::syms(c("blot_stats_ipf_mct1", "blot_stats_ipf_mct4", "blot_stats_ipf_sma")),
+        rlang::syms(c("blot_stats_filter_bleo_mct1", "blot_stats_filter_bleo_mct4", "blot_stats_filter_bleo_sma")),
+        rlang::syms(c("blot_stats_untreated_mct1", "blot_stats_untreated_mct4", "blot_stats_untreated_sma"))
+      )
+    ),
+    names = names,
+    tar_target(
+      blot_plot_comb,
+      combine_plots(data, stats),
+      format = "rds"
+    )
   ),
 
   # contraction -------------------------------------------------------------
@@ -1203,19 +1259,19 @@ list(
   tar_map(
     values = tibble::tribble(
       ~path,                        ~scale, ~hjust, ~vjust, ~names,
-      "ipf-mct-blots.png",          1.1,    0,      -0.05,  "mct_ipf"
-      # "bleo-mct-blots.png",         1.1,    0,      -0.05,  "mct_bleo",
-      # "tgfb-mct-blots.png",         1.1,    0,      -0.05,  "mct_tgfb",
-      # "sirna-mct-blots.png",        1,      0,      0,      "sma_sirna",
-      # "dual-azd-ipf-lf-blot-2.png", 1,      0,      0,      "ipf_lf_azd",
-      # "dual-azd-sma-blot.png",      1,      0,      -0.05,  "sma_azd",
-      # "dual-ar-sma-blot.png",       1.2,    0.1,    -0.05,  "sma_ar",
-      # "dual-azd-contract.png",      1,      0,      -0.05,  "contraction",
-      # "bleo-trichrome.png",         1,      0,      0,      "trichrome",
-      # "bleo-timeline.png",          1,      0,      0,      "timeline",
-      # "dual-azd-smad3-blot.png",    1,      0,      -0.05,  "smad3_azd",
-      # "dual-azd-erk-blot.png",      1,      0,      -0.05,  "erk_azd",
-      # "dual-azd-hif1a-blot.png",    1.3,    0,      -0.05,  "hif_azd"
+      "ipf-mct-blots.png",          1.1,    0,      -0.05,  "mct_ipf",
+      "bleo-mct-blots.png",         1.1,    0,      -0.05,  "mct_bleo",
+      "tgfb-mct-blots.png",         1.1,    0,      -0.05,  "mct_tgfb",
+      "sirna-mct-blots.png",        1,      0,      0,      "sma_sirna",
+      "dual-azd-ipf-lf-blot-2.png", 1,      0,      0,      "ipf_lf_azd",
+      "dual-azd-sma-blot.png",      1,      0,      -0.05,  "sma_azd",
+      "dual-ar-sma-blot.png",       1.2,    0.1,    -0.05,  "sma_ar",
+      "dual-azd-contract.png",      1,      0,      -0.05,  "contraction",
+      "bleo-trichrome.png",         1,      0,      0,      "trichrome",
+      "bleo-timeline.png",          1,      0,      0,      "timeline",
+      "dual-azd-smad3-blot.png",    1,      0,      -0.05,  "smad3_azd",
+      "dual-azd-erk-blot.png",      1,      0,      -0.05,  "erk_azd",
+      "dual-azd-hif1a-blot.png",    1.3,    0,      -0.05,  "hif_azd"
     ),
     names = names,
     tar_target(
@@ -1233,21 +1289,19 @@ list(
 
   # figure 1 ----------------------------------------------------------------
 
-  # tar_target(
-  #   fig01,
-  #   make_fig01(
-  #     fig_img_mct_ipf,
-  #     blot_plot_fig_ipf,
-  #     plot_blank("Western\nMCT expression\nIPF LF v. Normal"),
-  #     plot_blank("Summary\nMCTexpression\nIPF LF v. Normal"),
-  #     fig_img_mct_bleo,
-  #     blot_plot_fig_bleo,
-  #     fig_img_mct_tgfb,
-  #     blot_plot_fig_tgfb
-  #   ) |>
-  #     write_figures("Figure 01"),
-  #   format = "file"
-  # ),
+  tar_target(
+    fig01,
+    make_fig01(
+      fig_img_mct_ipf,
+      blot_plot_comb_mct_ipf,
+      fig_img_mct_bleo,
+      blot_plot_comb_mct_bleo,
+      fig_img_mct_tgfb,
+      blot_plot_comb_mct_tgfb
+    ) |>
+      write_figures("Figure 01"),
+    format = "file"
+  ),
 
   # manuscript --------------------------------------------------------------
 
