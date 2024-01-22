@@ -1066,125 +1066,6 @@ list(
     format = "rds"
   ),
 
-  # cosmos toy --------------------------------------------------------------
-
-  tar_target(
-    carnival_options,
-    set_carnival_options()
-  ),
-  tar_target(
-    cosmos_data,
-    get_cosmos_data()
-  ),
-  tar_target(
-    cosmos_toy_forward_data,
-    preprocess(
-      "forward",
-      network = cosmos_data$toy_network,
-      signaling = cosmos_data$toy_signaling_input,
-      metabolites = cosmos_data$toy_metabolic_input,
-      transcripts = cosmos_data$toy_RNA,
-      carnival_options = carnival_options
-    )
-  ),
-  tar_target(
-    cosmos_toy_reverse_data,
-    preprocess(
-      "reverse",
-      network = cosmos_data$toy_network,
-      signaling = cosmos_data$toy_signaling_input,
-      metabolites = cosmos_data$toy_metabolic_input,
-      transcripts = cosmos_data$toy_RNA,
-      carnival_options = carnival_options
-    )
-  ),
-  tar_target(
-    cosmos_toy_forward,
-    run_cosmos(
-      "forward",
-      cosmos_toy_forward_data,
-      carnival_options = carnival_options
-    ) |>
-      cosmosR::format_COSMOS_res()
-  ),
-  tar_target(
-    cosmos_toy_reverse,
-    run_cosmos(
-      "reverse",
-      cosmos_toy_reverse_data,
-      carnival_options = carnival_options
-    ) |>
-      cosmosR::format_COSMOS_res()
-  ),
-  tar_target(
-    cosmos_toy_results,
-    combine_cosmos(cosmos_toy_forward, cosmos_toy_reverse)
-  ),
-
-  # cosmos ------------------------------------------------------------------
-
-  tar_target(
-    cosmos_tf,
-    format_tf(tfea_tgfb)
-  ),
-  tar_target(
-    cosmos_metab,
-    format_metab(metab_mcti_tar_tt_tgfb)
-  ),
-  tar_target(
-    cosmos_rna,
-    format_deg(deg_tgfb)
-  ),
-  tar_target(
-    cosmos_forward_data,
-    preprocess(
-      "forward",
-      network = cosmos_data$meta_network,
-      signaling = cosmos_tf,
-      metabolites = cosmos_metab,
-      transcripts = cosmos_rna,
-      diff_exp_threshold = 2.5,
-      maximum_network_depth = 10,
-      carnival_options = carnival_options
-    )
-  ),
-  tar_target(
-    cosmos_reverse_data,
-    preprocess(
-      "reverse",
-      network = cosmos_data$meta_network,
-      signaling = cosmos_tf,
-      metabolites = cosmos_metab,
-      transcripts = cosmos_rna,
-      diff_exp_threshold = 2.5,
-      maximum_network_depth = 10,
-      carnival_options = carnival_options
-    )
-  ),
-  tar_target(
-    cosmos_forward,
-    run_cosmos(
-      "forward",
-      cosmos_forward_data,
-      carnival_options = carnival_options,
-      timelimit = 28800
-    ) |>
-      cosmosR::format_COSMOS_res()
-  ),
-  tar_target(
-    cosmos_reverse,
-    run_cosmos(
-      "reverse",
-      cosmos_reverse_data,
-      carnival_options = carnival_options
-    ) |>
-      cosmosR::format_COSMOS_res()
-  ),
-  tar_target(
-    cosmos_results,
-    combine_cosmos(cosmos_forward, cosmos_reverse)
-  ),
-
   # mice --------------------------------------------------------------------
 
   tar_target(
@@ -1352,21 +1233,21 @@ list(
 
   # figure 1 ----------------------------------------------------------------
 
-  tar_target(
-    fig01,
-    make_fig01(
-      fig_img_mct_ipf,
-      blot_plot_fig_ipf,
-      plot_blank("Western\nMCT expression\nIPF LF v. Normal"),
-      plot_blank("Summary\nMCTexpression\nIPF LF v. Normal"),
-      fig_img_mct_bleo,
-      blot_plot_fig_bleo,
-      fig_img_mct_tgfb,
-      blot_plot_fig_tgfb
-    ) |>
-      write_figures("Figure 01"),
-    format = "file"
-  ),
+  # tar_target(
+  #   fig01,
+  #   make_fig01(
+  #     fig_img_mct_ipf,
+  #     blot_plot_fig_ipf,
+  #     plot_blank("Western\nMCT expression\nIPF LF v. Normal"),
+  #     plot_blank("Summary\nMCTexpression\nIPF LF v. Normal"),
+  #     fig_img_mct_bleo,
+  #     blot_plot_fig_bleo,
+  #     fig_img_mct_tgfb,
+  #     blot_plot_fig_tgfb
+  #   ) |>
+  #     write_figures("Figure 01"),
+  #   format = "file"
+  # ),
 
   # manuscript --------------------------------------------------------------
 
