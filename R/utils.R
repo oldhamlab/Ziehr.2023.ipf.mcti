@@ -88,6 +88,7 @@ refactor <- function(df) {
   if ("treatment" %in% names(df)) {
     treat <- c(
       "None" = "none",
+      "None" = "None",
       "Veh" = "DMSO",
       "Veh" = "vehicle",
       "Veh" = "Veh",
@@ -107,6 +108,7 @@ refactor <- function(df) {
       "siMCT4" = "siMCT4",
       "siMCT1/4" = "siMCT1/4",
       "Lac" = "lactate",
+      "Med" = "Med",
       NULL
     )
     df <-
@@ -151,11 +153,13 @@ refactor <- function(df) {
       "Ctl\nVB" = "control\nVB124",
       "VB" = "VB",
       "Ctl\nAZD/VB" = "control\nAZD/VB",
+      "Ctl\nMed" = "Ctl\nMed",
       "TGFβ\nNone" = "tgfb\nnone",
       "TGFβ\nVeh" = "tgfb\nDMSO",
       "TGFβ\nAZD" = "tgfb\nAZD3965",
       "TGFβ\nVB" = "tgfb\nVB124",
       "TGFβ\nAZD/VB" = "tgfb\nAZD/VB" ,
+      "TGFβ\nMed" = "TGFβ\nMed",
       NULL
     )
     df <-

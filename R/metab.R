@@ -549,25 +549,12 @@ format_metab_targeted <- function(path) {
     )
 }
 
-make_mcti_samples <- function() {
-  sample <- as.character(1:60)
-  condition <- rep(c("tgfb", "control"), each = 5)
-  treatment <- rep(c("DMSO", "VB124", "AZD3965", "AZD/VB", "none"), 2)
-  replicate <- rep(1:6, each = 10)
-
-  tibble::tibble(
-    sample = sample,
-    condition = rep(condition, 6),
-    treatment = rep(treatment, 6),
-    replicate = as.factor(replicate)
-  ) |>
+make_mcti_samples <- function(path) {
+  readr::read_csv(path) |>
     dplyr::mutate(
-      group = stringr::str_c(.data$condition, .data$treatment, sep = "\n")
+      dplyr::across(c(sample, replicate), as.character)
     ) |>
-    refactor() |>
-    dplyr::mutate(
-      dplyr::across(c("condition", "treatment", "group"), forcats::fct_drop)
-    )
+    refactor()
 }
 
 format_metab_mcti_tar <- function(df, samples) {

@@ -671,126 +671,148 @@ list(
 
   # metab mcti --------------------------------------------------------------
 
-  tar_target(
-    metab_mcti_tar_file,
-    raw_data_path("myofib_azd3965-vb124_intra_2022-02-10.xlsx"),
-    format = "file"
-  ),
-  tar_target(
-    metab_mcti_tar_raw,
-    format_metab_targeted(metab_mcti_tar_file)
-  ),
-  tar_target(
-    metab_mcti_samples,
-    make_mcti_samples()
-  ),
-  tar_target(
-    metab_mcti_tar_se,
-    format_metab_mcti_tar(metab_mcti_tar_raw, metab_mcti_samples)
-  ),
-  tar_target(
-    metab_mcti_tar_clean,
-    metab_mcti_tar_se |>
-      remove_missing_metab() |>
-      correct_drift() |>
-      quality_control() |>
-      impute_missing() |>
-      pqn() |>
-      annot_metabs()
-  ),
-  tar_target(
-    metab_mcti_tar_pca,
-    plot_pca_metab(metab_mcti_tar_clean),
-    format = "rds"
-  ),
-  tar_target(
-    metab_mcti_tar_out,
-    metab_mcti_tar_clean[, metab_mcti_tar_clean$replicate != 5]
-  ),
-  tar_target(
-    metab_mcti_tar_treated,
-    metab_mcti_tar_out[, metab_mcti_tar_out$treatment != "None"]
-  ),
-  tar_target(
-    metab_mcti_tar_limma,
-    fit_limma_metab(
-      metab_mcti_tar_out,
-      tgfb_main = (TGFβ.None + TGFβ.Veh + TGFβ.AZD + TGFβ.VB + TGFβ.AZD.VB) / 5 -
-        (Ctl.None + Ctl.Veh + Ctl.AZD + Ctl.VB + Ctl.AZD.VB) / 5,
-      azd_main = (TGFβ.AZD + Ctl.AZD) / 2 - (TGFβ.Veh + Ctl.Veh) / 2,
-      vb_main = (TGFβ.VB + Ctl.VB) / 2 - (TGFβ.Veh + Ctl.Veh) / 2,
-      dual_main = (TGFβ.AZD.VB + Ctl.AZD.VB) / 2 - (TGFβ.Veh + Ctl.Veh) / 2
-    )
-  ),
   tar_map(
     values = list(
-      comparison = c("tgfb_main", "azd_main", "vb_main", "dual_main"),
-      fills = list(
-        c("TGFβ", "Ctl"),
-        c("AZD", "Veh"),
-        c("VB", "Veh"),
-        c("AZD/VB", "Veh")
+      names = c("intra", "extra"),
+      path = c(
+        "myofib_azd3965-vb124_intra_2022-02-10",
+        "myofib_azd3965-vb124_extra_2024-01-19"
       ),
-      title = c("TGFβ", "AZD", "VB", "AZD/VB"),
-      filename = stringr::str_c("msea_", c("tgfb", "azd", "vb", "dual")),
-      names = c("tgfb", "azd", "vb", "dual")
+      outs = list(5, 5)
     ),
     names = names,
     tar_target(
-      metab_mcti_tar_tt,
-      top_table_metab(metab_mcti_tar_out, metab_mcti_tar_limma, comparison)
-    ),
-    tar_target(
-      metab_mcti_tar_vol,
-      plot_volcano(
-        metab_mcti_tar_tt,
-        x = "logFC",
-        y = "adj.P.Val",
-        stat = "t",
-        label = "metabolite",
-        fills = fills,
-        title = title
-      ),
-      format = "rds"
-    ),
-    tar_target(
-      metab_mcti_tar_msea,
-      run_msea(metab_mcti_tar_tt, metabolite_pathways)
-    ),
-    tar_target(
-      metab_mcti_tar_msea_table,
-      plot_msea_table(metab_mcti_tar_msea, title = title, fills = fills),
-      format = "rds"
-    ),
-    tar_target(
-      msea_table_file,
-      write_table(
-        metab_mcti_tar_msea_table,
-        path = "analysis/figures/msea/",
-        filename
-      ),
+      metab_mcti_tar_file,
+      raw_data_path(stringr::str_c(path, ".xlsx")),
       format = "file"
     ),
     tar_target(
-      msea_table_img,
-      plot_table(msea_table_file),
+      metab_mcti_tar_raw,
+      format_metab_targeted(metab_mcti_tar_file)
+    ),
+    tar_target(
+      metab_mcti_samples_file,
+      raw_data_path(stringr::str_c(path, ".csv")),
+      format = "file"
+    ),
+    tar_target(
+      metab_mcti_samples,
+      make_mcti_samples(metab_mcti_samples_file)
+    ),
+    tar_target(
+      metab_mcti_tar_se,
+      format_metab_mcti_tar(metab_mcti_tar_raw, metab_mcti_samples)
+    ),
+    tar_target(
+      metab_mcti_tar_clean,
+      metab_mcti_tar_se |>
+        remove_missing_metab() |>
+        correct_drift() |>
+        quality_control() |>
+        impute_missing() |>
+        pqn() |>
+        annot_metabs()
+    ),
+    tar_target(
+      metab_mcti_tar_pca,
+      plot_pca_metab(metab_mcti_tar_clean),
+      format = "rds"
+    ),
+    tar_target(
+      metab_mcti_tar_out,
+      metab_mcti_tar_clean[, metab_mcti_tar_clean$replicate %nin% outs]
+    ),
+    tar_target(
+      metab_mcti_tar_treated,
+      metab_mcti_tar_out[, metab_mcti_tar_out$treatment %nin% c("None", "Med")]
+    ),
+    tar_target(
+      metab_mcti_tar_pca_filter,
+      plot_pca_metab(metab_mcti_tar_treated),
+      format = "rds"
+    ),
+    tar_target(
+      metab_mcti_tar_limma,
+      fit_limma_metab(
+        metab_mcti_tar_out,
+        tgfb_main = (TGFβ.None + TGFβ.Veh + TGFβ.AZD + TGFβ.VB + TGFβ.AZD.VB) / 5 -
+          (Ctl.None + Ctl.Veh + Ctl.AZD + Ctl.VB + Ctl.AZD.VB) / 5,
+        azd_main = (TGFβ.AZD + Ctl.AZD) / 2 - (TGFβ.Veh + Ctl.Veh) / 2,
+        vb_main = (TGFβ.VB + Ctl.VB) / 2 - (TGFβ.Veh + Ctl.Veh) / 2,
+        dual_main = (TGFβ.AZD.VB + Ctl.AZD.VB) / 2 - (TGFβ.Veh + Ctl.Veh) / 2
+      )
+    ),
+    tar_map(
+      values = list(
+        comparison = c("tgfb_main", "azd_main", "vb_main", "dual_main"),
+        fills = list(
+          c("TGFβ", "Ctl"),
+          c("AZD", "Veh"),
+          c("VB", "Veh"),
+          c("AZD/VB", "Veh")
+        ),
+        title = c("TGFβ", "AZD", "VB", "AZD/VB"),
+        filename = stringr::str_c("msea_", c("tgfb", "azd", "vb", "dual")),
+        names = c("tgfb", "azd", "vb", "dual")
+      ),
+      names = names,
+      tar_target(
+        metab_mcti_tar_tt,
+        top_table_metab(metab_mcti_tar_out, metab_mcti_tar_limma, comparison)
+      ),
+      tar_target(
+        metab_mcti_tar_vol,
+        plot_volcano(
+          metab_mcti_tar_tt,
+          x = "logFC",
+          y = "adj.P.Val",
+          stat = "t",
+          label = "metabolite",
+          fills = fills,
+          title = title
+        ),
+        format = "rds"
+      ),
+      tar_target(
+        metab_mcti_tar_msea,
+        run_msea(metab_mcti_tar_tt, metabolite_pathways)
+      ),
+      tar_target(
+        metab_mcti_tar_msea_table,
+        plot_msea_table(metab_mcti_tar_msea, title = title, fills = fills),
+        format = "rds"
+      ),
+      tar_target(
+        msea_table_file,
+        write_table(
+          metab_mcti_tar_msea_table,
+          path = "analysis/figures/msea/",
+          filename
+        ),
+        format = "file"
+      ),
+      tar_target(
+        msea_table_img,
+        plot_table(msea_table_file),
+        format = "rds"
+      ),
+      NULL
+    ),
+    tar_target(
+      metab_mcti_tar_tt,
+      dplyr::bind_rows(
+        AZD = metab_mcti_tar_tt_azd,
+        VB = metab_mcti_tar_tt_vb,
+        `AZD/VB` = metab_mcti_tar_tt_dual,
+        .id = "treatment"
+      )
+    ),
+    tar_target(
+      metab_mcti_tar_lactate,
+      plot_mois(metab_mcti_tar_treated, metab_mcti_tar_tt, "lactate"),
       format = "rds"
     ),
     NULL
-  ),
-  tar_target(
-    metab_mcti_tar_tt,
-    dplyr::bind_rows(
-      AZD = metab_mcti_tar_tt_azd,
-      VB = metab_mcti_tar_tt_vb,
-      `AZD/VB` = metab_mcti_tar_tt_dual,
-      .id = "treatment"
-    )
-  ),
-  tar_target(
-    metab_mcti_tar_lactate,
-    plot_mois(metab_mcti_tar_treated, metab_mcti_tar_tt, "lactate"),
-    format = "rds"
   ),
 
   # metab bleo --------------------------------------------------------------
