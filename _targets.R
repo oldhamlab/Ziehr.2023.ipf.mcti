@@ -145,67 +145,103 @@ list(
   ),
   tar_map(
     values = list(
-      names = c(
-        "bleo_mct1",
-        "bleo_mct4",
-        "bleo_sma"
+      experiment = list(
+        "ipf",
+        "bleo",
+        "untreated",
+        "sirna",
+        "dual",
+        c("dual", "ar"),
+        "ipf-lf"
       ),
-      data = rlang::syms(c(
-        "blot_norm_bleo_mct1",
-        "blot_norm_bleo_mct4",
-        "blot_norm_bleo_sma"
-      ))
-    ),
-    names = names,
-    tar_target(
-      blot_norm_filter,
-      dplyr::filter(data, treatment == "Veh")
-    )
-  ),
-  tar_map(
-    values = list(
-      names = c(
-        "bleo_mct1",
-        "bleo_mct4",
-        "bleo_sma"
+      protein = list(
+        c("α-SMA", "MCT1", "MCT4"),
+        c("α-SMA", "MCT1", "MCT4"),
+        c("α-SMA", "MCT1", "MCT4"),
+        c("α-SMA", "MCT1", "MCT4"),
+        c("α-SMA", "Col1a1"),
+        "α-SMA",
+        c("α-SMA", "Col1a1")
       ),
-      data = rlang::syms(c(
-        "blot_stats_bleo_mct1",
-        "blot_stats_bleo_mct4",
-        "blot_stats_bleo_sma"
-      ))
-    ),
-    names = names,
-    tar_target(
-      blot_stats_filter,
-      dplyr::filter(data, treatment == "Veh" & is.na(condition)) |>
-        dplyr::mutate(x = 1.5)
-    )
-  ),
-  tar_map(
-    values = list(
-      names = c(
-        "mct_ipf",
-        "mct_bleo",
-        "mct_tgfb"
+      treatment = list(
+        NULL,
+        "Veh",
+        NULL,
+        NULL,
+        c("Veh", "AZD", "VB", "AZD/VB"),
+        c("Veh", "AR", "VB", "AR/VB"),
+        c("Veh", "AZD", "VB", "AZD/VB")
       ),
-      data = list(
-        rlang::syms(c("blot_norm_ipf_mct1", "blot_norm_ipf_mct4", "blot_norm_ipf_sma")),
-        rlang::syms(c("blot_norm_filter_bleo_mct1", "blot_norm_filter_bleo_mct4", "blot_norm_filter_bleo_sma")),
-        rlang::syms(c("blot_norm_untreated_mct1", "blot_norm_untreated_mct4", "blot_norm_untreated_sma"))
+      condition = list(
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL
       ),
-      stats = list(
-        rlang::syms(c("blot_stats_ipf_mct1", "blot_stats_ipf_mct4", "blot_stats_ipf_sma")),
-        rlang::syms(c("blot_stats_filter_bleo_mct1", "blot_stats_filter_bleo_mct4", "blot_stats_filter_bleo_sma")),
-        rlang::syms(c("blot_stats_untreated_mct1", "blot_stats_untreated_mct4", "blot_stats_untreated_sma"))
+      comp = list(
+        TRUE,
+        TRUE,
+        TRUE,
+        rlang::sym("comps_sirna"),
+        rlang::sym("comps_azd_2"),
+        rlang::sym("comps_ar_2"),
+        rlang::sym("comps_azd_2")
+      ),
+      fn = list(
+        group_ratio_ttest,
+        group_ratio_ttest,
+        group_ratio_ttest,
+        group_twofactor,
+        group_twofactor,
+        group_twofactor,
+        group_twofactor
+      ),
+      nrow = list(1, 1, 1, NULL, NULL, NULL, NULL),
+      ncol = list(NULL, NULL, NULL, 1, 1, 1, 1),
+      strip_pos = list(
+        "top",
+        "top",
+        "top",
+        "right",
+        "right",
+        "top",
+        "right"
+      ),
+      name = list(
+        "fig_ipf",
+        "fig_bleo",
+        "fig_tgfb",
+        "fig_sirna",
+        "fig_azd",
+        "fig_ar",
+        "fig_ipf_lf"
       )
     ),
-    names = names,
+    names = name,
     tar_target(
-      blot_plot_comb,
-      combine_plots(data, stats),
+      blot_norm,
+      norm_blot(blots_filtered, experiment, protein, treatment, condition)
+    ),
+    tar_target(
+      blot_stats,
+      fn(blot_norm, "norm", comp)
+    ),
+    tar_target(
+      blot_plot,
+      plot_blot(blot_norm, blot_stats) +
+        ggplot2::facet_wrap(
+          ggplot2::vars(.data[["protein"]]),
+          scales = "free_y",
+          nrow = nrow,
+          ncol = ncol,
+          strip.position = strip_pos
+        ),
       format = "rds"
-    )
+    ),
+    NULL
   ),
 
   # contraction -------------------------------------------------------------
@@ -407,7 +443,8 @@ list(
     names = names,
     tar_target(
       pg_filter,
-      filter_plates(plates_conc_picogreen, exp = exp, treat = treat)
+      filter_plates(plates_conc_picogreen, exp = exp, treat = treat) |>
+        normalize("conc", "experiment")
     ),
     tar_target(
       pg_stats,
@@ -419,7 +456,7 @@ list(
         pg_filter,
         pg_stats,
         "treatment",
-        "conc",
+        "conc_corr",
         ytitle = "Cell number"
       ) +
         ggplot2::facet_wrap(
@@ -1263,7 +1300,7 @@ list(
       "bleo-mct-blots.png",         1.1,    0,      -0.05,  "mct_bleo",
       "tgfb-mct-blots.png",         1.1,    0,      -0.05,  "mct_tgfb",
       "sirna-mct-blots.png",        1,      0,      0,      "sma_sirna",
-      "dual-azd-ipf-lf-blot-2.png", 1,      0,      0,      "ipf_lf_azd",
+      "dual-azd-ipf-lf-blot-2.png", 0.9,    0,      0,      "ipf_lf_azd",
       "dual-azd-sma-blot.png",      1,      0,      -0.05,  "sma_azd",
       "dual-ar-sma-blot.png",       1.2,    0.1,    -0.05,  "sma_ar",
       "dual-azd-contract.png",      1,      0,      -0.05,  "contraction",
@@ -1293,13 +1330,45 @@ list(
     fig01,
     make_fig01(
       fig_img_mct_ipf,
-      blot_plot_comb_mct_ipf,
+      blot_plot_fig_ipf,
       fig_img_mct_bleo,
-      blot_plot_comb_mct_bleo,
+      blot_plot_fig_bleo,
       fig_img_mct_tgfb,
-      blot_plot_comb_mct_tgfb
+      blot_plot_fig_tgfb
     ) |>
       write_figures("Figure 01"),
+    format = "file"
+  ),
+
+  # figure 2 ----------------------------------------------------------------
+
+  tar_target(
+    fig02,
+    make_fig02(
+      fig_img_sma_sirna,
+      blot_plot_fig_sirna,
+      fig_img_ipf_lf_azd,
+      blot_plot_fig_ipf_lf,
+      fig_img_sma_azd,
+      blot_plot_fig_azd +
+        ggplot2::guides(fill = "none"),
+      fig_img_contraction,
+      contraction_plot
+    ) |>
+      write_figures("Figure 02"),
+    format = "file"
+  ),
+  tar_target(
+    fig02s,
+    make_fig02s(
+      pg_plot_sirna,
+      fig_img_sma_ar,
+      blot_plot_fig_ar +
+        ggplot2::guides(fill = "none"),
+      pg_plot_azd,
+      pg_plot_ar
+    ) |>
+      write_figures("Figure 02_supplement"),
     format = "file"
   ),
 

@@ -62,3 +62,37 @@ make_fig01 <- function(p1, p2, p3, p4, p5, p6) {
       heights = ggplot2::unit(1, "in")
     )
 }
+
+make_fig02 <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
+  design <- "
+  abcd
+  abcd
+  efgh
+  ef##
+  "
+
+  p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(c(1.5, 1.75, 1.5, 1.75), "in"),
+      heights = ggplot2::unit(c(0.75, 0.75, 1, 0.5), "in"),
+      guides = "collect"
+    ) &
+    ggplot2::theme(
+      legend.position = "bottom"
+    )
+}
+
+make_fig02s <- function(p1, p2, p3, p4, p5) {
+  design <- "a# \n bc \n de"
+  p1 + p2 + p3 + p4 + p5 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(c(1.5, 1.5), "in"),
+      heights = ggplot2::unit(1, "in"),
+      guides = "collect"
+    ) &
+    ggplot2::theme(
+      legend.position = "bottom"
+    )
+}

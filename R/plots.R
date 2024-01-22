@@ -110,7 +110,7 @@ theme_plot <- function(
       half_line
     ),
     legend.key = ggplot2::element_rect(fill = "white", colour = NA),
-    legend.key.size = ggplot2::unit(0.8, "lines"),
+    legend.key.size = ggplot2::unit(0.6, "lines"),
     legend.key.height = NULL,
     legend.key.width = NULL,
     legend.text = ggplot2::element_text(size = ggplot2::rel(0.8)),
@@ -129,7 +129,7 @@ theme_plot <- function(
     panel.border = ggplot2::element_rect(fill = NA, color = "grey30"),
     panel.grid = ggplot2::element_blank(),
     panel.grid.minor = ggplot2::element_line(linewidth = ggplot2::rel(0.5)),
-    panel.spacing = ggplot2::unit(half_line, "pt"),
+    panel.spacing = ggplot2::unit(base_size, "pt"),
     panel.spacing.x = NULL,
     panel.spacing.y = NULL,
     panel.ontop    = FALSE,

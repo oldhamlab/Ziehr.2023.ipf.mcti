@@ -103,20 +103,20 @@ targets::tar_load(pkg_citations)
 
 
 # ensure figures are up-to-date
-# targets::tar_load(
-#   c(
-#     fig01, 
-#     fig02, 
-#     fig03,
-#     fig04,
-#     fig05, 
-#     fig06, 
-#     fig10, 
-#     fig11,
-#     resources_table,
-#     NULL
-#   )
-# )
+targets::tar_load(
+  c(
+    fig01,
+    # fig02,
+    # fig03,
+    # fig04,
+    # fig05,
+    # fig06,
+    # fig10,
+    # fig11,
+    # resources_table,
+    NULL
+  )
+)
 ```
 
 \newpage
@@ -143,4 +143,35 @@ In this work, we evaluated the contribution of lactate transporters to experimen
 
 ## MCT expression increases in human pulmonary fibrosis and experimental models
 
-Of the four lactate transporters, MCT1 and MCT4 are the most highly expressed in the lung [@frangogiannis2020]. Based on this observation, we characterized MCT1 and MCT4 expression in human IPF lung explants obtained at the time of transplantation. Consistent with a pathologic role for MCT1 and MCT4 in IPF, we found significantly increased expression of these proteins in human IPF lung compared to non-fibrotic control samples (**Figure 1A-B**). 
+Of the four lactate transporters, MCT1 and MCT4 are the most highly expressed in the lung [@frangogiannis2020]. Based on this observation, we characterized MCT1 and MCT4 expression in human IPF lung explants obtained at the time of transplantation. Consistent with a pathologic role for MCT1 and MCT4 in IPF, we found significantly increased expression of these proteins in human IPF lung compared to non-fibrotic control samples (**Figure 1A-B**). These findings were recapitulated in experimental pulmonary fibrosis where intratracheal bleomycin increased both MCT1 and MCT4 expression (**Figure 1C-D**). 
+
+A defining feature of IPF is the activation of tissue myofibroblasts, which are characterized by the *de novo* expression of smooth muscle α-actin (α-SMA); stress fiber formation; and increased migration, contraction, and extracellular matrix production [@selvarajah2021; @xie2015; @tomasek2002]. TGFβ is the most potent inducer of myofibroblast activation *in vitro* and *in vivo*. TGFβ-dependent α-SMA expression is a well-accepted and widely utilized model of myofibroblast activation relevant to pulmonary fibrosis [@goodwin2018; @cui2019; @rangarajan2018; @locy2020]. Consistent with our findings in human IPF lungs, we observed increased expression of MCT1 and MCT4 in normal human lung fibroblasts following TGFβ treatment (**Figure 1E-F**). These findings are consistent with increased expression of other glycolytic enzymes and the associated metabolic changes that have been previously observed in these cells [@xie2015]. Together, these data demonstrate that pulmonary fibrosis is associated with increased expression of lactate transporters in the lung generally and in myofibroblasts specifically. 
+
+## Lactate transport is essential for myofibroblast differentiation *in vitro*
+
+Using RNA interference and pharmacologic approaches, we next tested whether MCT expression and activity were required for myofibroblast differentiation *in vitro*. Lung fibroblasts were transfected with siRNA targeting MCT1 and MCT4 separately and together. After 24 h, the cells were treated with TGFβ for 48 h to induce myofibroblast differentiation. The siRNAs reduced lactate transporter protein levels > 80% (**Figure 2A-B**). Decreasing MCT1 or MCT4 expression caused a marked reduction in TGFβ-stimulated α-SMA expression. Notably, siMCT1 also decreased MCT4 expression. Interestingly, the mRNA sequence homology of these transporters is low and the MCT1 siRNA sequences do not match the MCT4 mRNA sequence, perhaps suggesting a post-translational explanation for this phenomenon. No adverse effects of lactate transporter knockdown on cell viability were observed, and siMCT1 significantly increased cell count in both control and TGFβ-treated cells (**Supplemental Figure 2A**). 
+
+Given the reduction of MCT4 expression following siMCT1 treatment, we next evaluated the effects of pharmacologic MCT inhibitors on myofibroblast differentiation. AZD3965 is a high-affinity (*K~i~* 1.6 nM) inhibitor of MCT1 [@curtis2017]. VB124 is a recently developed high-affinity (IC~50~ 19 nM) inhibitor of MCT4 [@cluntun2021]. IPF lung fibroblasts were differentiated with TGFβ in the presence of these MCT inhibitors (**Figure 2C-D**). MCT4 inhibition by VB124 alone, or in combination with AZD3965, decreased Col1a1 and α-SMA expression. These effects were also observed in normal lung fibroblasts where AZD3965 as well as VB124, separately or together, decreased α-SMA expression (**Figure 2E-F**). AR-C155858, which is a high-affinity(*K~i~* 2 nM) inhibitor of both MCT1 and MCT2 [@ovens2010], also decreased α-SMA expression alone and in combination with VB124 (**Supplemental Figure 2B-C**). Pharmacologic MCT inhibition did not affect cell counts over 48 h of treatment (**Supplemental Figure 2D-E**). As anticipated, decreased Col1a1 and α-SMA expression was associated with decreased myofibroblast contractility as assessed by gel contraction assay (**Figure 2G-H**). Together, these data indicate that MCT expression and activity are required for myofibroblast differentiation *in vitro*. 
+
+\newpage
+
+# Methods
+
+\newpage
+
+# Acknowledgements
+
+# Conflicts of Interest
+
+\newpage
+
+# References
+
+::: {#refs}
+:::
+
+\newpage
+
+# Figures
+
+![**Figure 1 - Lactate transporter expression increases in human IPF and experimental models.** (**A**) Immunoblot of whole lung homogenates from explanted IPF lungs and controls (Ctl). (**B**) Quantification of band densities from (A). (**C**) Immunoblot of whole lung homogenates from bleomycin (bleo)- and vehicle (Ctl)-treated mice. (**D**) Quantification of band densities from (C). (**E**) Representative immunoblot of cell lysates from normal human lung fibroblasts treated with TGFβ to induce myofibroblast differentiation. (**F**) Quantification of band densities from (E). Individual data points are biological replicates. Summary data are mean ± SEM (\* p < 0.05).](figs/Figure 01.png)

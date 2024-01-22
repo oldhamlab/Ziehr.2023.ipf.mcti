@@ -134,17 +134,26 @@ phospho_ratio <- function(df) {
     dplyr::filter(!is.na(.data$ratio))
 }
 
-combine_plots <- function(dfs, stats) {
+combine_plots <- function(dfs, stats, orient = "h") {
   df <- dplyr::bind_rows(dfs)
   stat <- dplyr::bind_rows(stats)
   prot <- unique(df$protein)
   df$protein <- factor(df$protein, levels = prot)
   stat$protein <- factor(stat$protein, levels = prot)
 
+  if (orient == "h") {
+    nrow <- 1
+    ncol <- NULL
+  } else if (orient == "v") {
+    nrow <- NULL
+    ncol <- 1
+  }
+
   plot_blot(df, stat) +
     ggplot2::facet_wrap(
       ggplot2::vars(protein),
-      nrow = 1,
+      nrow = nrow,
+      ncol = ncol,
       scales = "free_y"
     )
 }

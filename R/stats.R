@@ -32,6 +32,18 @@ ratio_ttest <- function(df, y, paired){
     annot_stats()
 }
 
+group_ratio_ttest <- function(df, y, ...) {
+  cols <- c("protein", "name", "rate", "stage", "stats")
+
+  df |>
+    tidyr::nest() |>
+    dplyr::mutate(
+      stats = purrr::map(.data$data, ratio_ttest, y = y, ...)
+    ) |>
+    dplyr::select(tidyselect::any_of(cols)) |>
+    tidyr::unnest(c("stats"))
+}
+
 
 onefactor <- function(
     df,
