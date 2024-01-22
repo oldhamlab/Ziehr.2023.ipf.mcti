@@ -215,24 +215,6 @@
       ],
       "Hash": "671e3153ea303d8e7671a1871f98f8e1"
     },
-    "CARNIVAL": {
-      "Package": "CARNIVAL",
-      "Version": "2.12.0",
-      "Source": "Bioconductor",
-      "Requirements": [
-        "R",
-        "dplyr",
-        "igraph",
-        "lpSolve",
-        "readr",
-        "rjson",
-        "rmarkdown",
-        "stringr",
-        "tibble",
-        "tidyr"
-      ],
-      "Hash": "b87986f70ef9a4071bb1ed53f2139f3b"
-    },
     "Category": {
       "Package": "Category",
       "Version": "2.68.0",
@@ -1473,33 +1455,6 @@
         "rlang"
       ],
       "Hash": "bb097fccb22d156624fd07cd2894ddb6"
-    },
-    "cosmosR": {
-      "Package": "cosmosR",
-      "Version": "1.5.2",
-      "Source": "GitHub",
-      "RemoteType": "github",
-      "RemoteHost": "api.github.com",
-      "RemoteUsername": "saezlab",
-      "RemoteRepo": "cosmosR",
-      "RemoteRef": "master",
-      "RemoteSha": "c5e29e0c1015be66d594837c1d8882f6c9cdcfd8",
-      "Requirements": [
-        "CARNIVAL",
-        "GSEABase",
-        "R",
-        "decoupleR",
-        "dorothea",
-        "dplyr",
-        "igraph",
-        "progress",
-        "purrr",
-        "rlang",
-        "stringr",
-        "utils",
-        "visNetwork"
-      ],
-      "Hash": "a664d00fdc65c37714aceb54574e8930"
     },
     "cowplot": {
       "Package": "cowplot",
@@ -3015,13 +2970,6 @@
         "lattice"
       ],
       "Hash": "3434988413fbabfdb0fcd6067d7e1aa4"
-    },
-    "lpSolve": {
-      "Package": "lpSolve",
-      "Version": "5.6.20",
-      "Source": "Repository",
-      "Repository": "RSPM",
-      "Hash": "2801c8082e89ed84cc0dbe43de850d31"
     },
     "lubridate": {
       "Package": "lubridate",
@@ -5105,24 +5053,6 @@
         "R"
       ],
       "Hash": "c826c7c4241b6fc89ff55aaea3fa7491"
-    },
-    "visNetwork": {
-      "Package": "visNetwork",
-      "Version": "2.1.2",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Requirements": [
-        "R",
-        "grDevices",
-        "htmltools",
-        "htmlwidgets",
-        "jsonlite",
-        "magrittr",
-        "methods",
-        "stats",
-        "utils"
-      ],
-      "Hash": "3e48b097e8d9a91ecced2ed4817a678d"
     },
     "vroom": {
       "Package": "vroom",
