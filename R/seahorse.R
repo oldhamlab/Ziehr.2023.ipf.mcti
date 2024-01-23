@@ -110,7 +110,13 @@ seahorse_group_onefactor <- function(x) {
 }
 
 plot_seahorse_summary <- function(x, stats) {
-  plot_one_factor(x, stats, x = "group", y = "value_corr", ytitle = "fmol/min/cell") +
+  plot_one_factor(
+    x,
+    stats,
+    x = "group",
+    y = "value_corr",
+    ytitle = "fmol/min/cell"
+  ) +
     ggplot2::facet_grid(
       cols = ggplot2::vars(.data$stage),
       rows = ggplot2::vars(.data$name),
@@ -200,8 +206,8 @@ plot_seahorse_atp_bars <- function(x, stats) {
         ymin = .data$ymin,
         ymax = .data$ymax
       ),
-      width = 0.25,
-      linewidth = 0.4
+      width = 0.2,
+      linewidth = 0.3,
     ) +
     ggbeeswarm::geom_quasirandom(
       data = pts,
@@ -212,7 +218,7 @@ plot_seahorse_atp_bars <- function(x, stats) {
       color = "black",
       width = 0.05,
       size = 0.75,
-      stroke = 0.3,
+      stroke = 0.2,
       show.legend = FALSE
     ) +
     ggplot2::geom_text(
@@ -284,12 +290,17 @@ plot_seahorse_pheno <- function(x) {
       color = "white",
       show.legend = FALSE
     ) +
-    ggplot2::geom_text(
-      ggplot2::aes(label = .data$group),
-      size = 1.75,
+    ggrepel::geom_text_repel(
+      ggplot2::aes(
+        label = .data$group
+      ),
+      point.padding = 6,
+      force_pull = 1,
+      lineheight = 1,
       nudge_x = 0.5,
-      nudge_y = -0.6,
+      nudge_y = -0.5,
       color = "black",
+      size = 1.75,
       show.legend = FALSE
     ) +
     ggplot2::scale_fill_manual(

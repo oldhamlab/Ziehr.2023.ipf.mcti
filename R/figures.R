@@ -96,3 +96,34 @@ make_fig02s <- function(p1, p2, p3, p4, p5) {
       legend.position = "bottom"
     )
 }
+
+make_fig03 <- function(p1, p2, p3, p4, p5) {
+  design <- "abc \n ddd \n eff"
+
+  ((p1 + p2 + patchwork::guide_area() & ggplot2::guides(fill = ggplot2::guide_legend(nrow = 2))) +
+      patchwork::plot_layout(guides = "collect")) +
+    ((p3) + patchwork::plot_layout(guides = "keep")) +
+    (p4 + patchwork::plot_layout(guides = "keep")) + p5 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(c(2, 2, 0.5), "in"),
+      heights = ggplot2::unit(c(1.5), "in")
+    ) &
+    ggplot2::theme(
+      legend.position = "bottom"
+    )
+}
+
+make_fig03s <- function(p1, p2, p3, p4) {
+  design <- "abc \n ddd \n eee"
+
+  ((p1 + p2 + patchwork::guide_area() & ggplot2::guides(fill = ggplot2::guide_legend(nrow = 2))) +
+      patchwork::plot_layout(guides = "collect")) +
+    ((p3) + patchwork::plot_layout(guides = "keep")) +
+    p4 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(c(2, 2, 0.5), "in"),
+      heights = ggplot2::unit(c(1.5, 2, 1.5), "in")
+    )
+}

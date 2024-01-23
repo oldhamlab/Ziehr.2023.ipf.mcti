@@ -182,9 +182,9 @@ list(
         NULL
       ),
       comp = list(
-        TRUE,
-        TRUE,
-        TRUE,
+        FALSE,
+        FALSE,
+        FALSE,
         rlang::sym("comps_sirna"),
         rlang::sym("comps_azd_2"),
         rlang::sym("comps_ar_2"),
@@ -1390,7 +1390,33 @@ list(
       pg_plot_azd,
       pg_plot_ar
     ) |>
-      write_figures("Figure 02_supplement"),
+      write_figures("Figure 02.supplement"),
+    format = "file"
+  ),
+
+  # figure 3 ----------------------------------------------------------------
+
+  tar_target(
+    fig03,
+    make_fig03(
+      plate_plot_lactate_sirna,
+      plate_plot_lactate_azd,
+      seahorse_mcti_timeline_plot,
+      seahorse_mcti_atp_bars,
+      seahorse_mcti_atp_pheno
+    ) |>
+      write_figures("Figure 03"),
+    format = "file"
+  ),
+  tar_target(
+    fig03s,
+    make_fig03s(
+      plate_plot_lactate_ar,
+      plate_plot_glucose_azd,
+      seahorse_mcti_summary_plot,
+      seahorse_mcti_stress_plot
+    ) |>
+      write_figures("Figure 03.supplement"),
     format = "file"
   ),
 
