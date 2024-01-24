@@ -127,3 +127,25 @@ make_fig03s <- function(p1, p2, p3, p4) {
       heights = ggplot2::unit(c(1.5, 2, 1.5), "in")
     )
 }
+
+make_fig04 <- function(p1, p2, p3, p4) {
+  design <- "abcd"
+  p1 + p2 + p3 + p4 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(2, "in"),
+      heights = ggplot2::unit(c(2, 2.5), "in")
+    ) &
+    ggplot2::theme(legend.position = "bottom")
+}
+
+make_fig04s <- function(p1, p2, p3, p4) {
+  design <- "abcd"
+  p1 + p2 + p3 + p4 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(2, "in"),
+      heights = ggplot2::unit(c(2, 2.5), "in")
+    ) &
+    ggplot2::theme(legend.position = "bottom")
+}

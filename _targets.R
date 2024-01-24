@@ -15,7 +15,8 @@ tar_option_set(
     "tidyverse",
     "patchwork",
     "scales",
-    "SummarizedExperiment"
+    "SummarizedExperiment",
+    "extrafont"
   ),
   format = "qs",
   controller = crew::crew_controller_local(workers = 4)
@@ -728,7 +729,7 @@ list(
     ),
     tar_target(
       metab_mcti_tar_pca_filter,
-      plot_pca_metab(metab_mcti_tar_treated),
+      plot_pca_metab(metab_mcti_tar_treated, show_reps = FALSE),
       format = "rds"
     ),
     tar_target(
@@ -983,59 +984,59 @@ list(
     mid_mcti_mids_corr,
     correct_mids(mid_mcti_mids, correction_matrices)
   ),
-  # tar_map(
-  #   values = list(
-  #     label = c("glc2", "gln5", "lac3", "glc6")
-  #   ),
-  #   names = label,
-  #   tar_target(
-  #     mid_mcti_plot,
-  #     plot_mids_all(mid_mcti_mids_corr, label = label)
-  #   ),
-  #   tar_target(
-  #     mid_mcti_img,
-  #     write_plot(mid_mcti_plot, label, path = "analysis/figures/mids"),
-  #     format = "file"
-  #   ),
-  #   NULL
-  # ),
-  # tar_map(
-  #   values = list(
-  #     label = c("gln5", "lac3", "glc6"),
-  #     title = list(
-  #       expression(paste("[U-"^13, "C"[5], "]-glutamine")),
-  #       expression(paste("[U-"^13, "C"[3], "]-lactate")),
-  #       expression(paste("[U-"^13, "C"[6], "]-glucose"))
-  #     )
-  #   ),
-  #   names = label,
-  #   tar_target(
-  #     mid_mcti_moi_data,
-  #     select_mid_mois(mid_mcti_mids_corr, label)
-  #   ),
-  #   tar_target(
-  #     mid_mcti_moi_stats,
-  #     group_twofactor(mid_mcti_moi_data, "labeled", comps_azd_2)
-  #   ),
-  #   tar_target(
-  #     mid_mcti_moi_plot,
-  #     plot_two_factor(
-  #       mid_mcti_moi_data,
-  #       mid_mcti_moi_stats,
-  #       x = "treatment",
-  #       y = "labeled",
-  #       ytitle = "Labeled fraction",
-  #       wrap = "metabolite",
-  #       title = title
-  #     ) +
-  #       ggplot2::scale_y_continuous(
-  #         breaks = seq(0, 1, 0.2),
-  #         limits = c(0, 1),
-  #         expand = ggplot2::expansion(c(0, 0))
-  #       )
-  #   ),
-  #   NULL
-  # ),
+  tar_map(
+    values = list(
+      label = c("glc2", "gln5", "lac3", "glc6")
+    ),
+    names = label,
+    tar_target(
+      mid_mcti_plot,
+      plot_mids_all(mid_mcti_mids_corr, label = label)
+    ),
+    tar_target(
+      mid_mcti_img,
+      write_plot(mid_mcti_plot, label, path = "analysis/figures/mids"),
+      format = "file"
+    ),
+    NULL
+  ),
+  tar_map(
+    values = list(
+      label = c("gln5", "lac3", "glc6"),
+      title = list(
+        expression(paste("[U-"^13, "C"[5], "]-glutamine")),
+        expression(paste("[U-"^13, "C"[3], "]-lactate")),
+        expression(paste("[U-"^13, "C"[6], "]-glucose"))
+      )
+    ),
+    names = label,
+    tar_target(
+      mid_mcti_moi_data,
+      select_mid_mois(mid_mcti_mids_corr, label)
+    ),
+    tar_target(
+      mid_mcti_moi_stats,
+      group_twofactor(mid_mcti_moi_data, "labeled", comps_azd_2)
+    ),
+    tar_target(
+      mid_mcti_moi_plot,
+      plot_two_factor(
+        mid_mcti_moi_data,
+        mid_mcti_moi_stats,
+        x = "treatment",
+        y = "labeled",
+        ytitle = "Labeled fraction",
+        wrap = "metabolite",
+        title = title
+      ) +
+        ggplot2::scale_y_continuous(
+          breaks = seq(0, 1, 0.2),
+          limits = c(0, 1),
+          expand = ggplot2::expansion(c(0, 0))
+        )
+    ),
+    NULL
+  ),
 
   # rnaseq ------------------------------------------------------------------
 
@@ -1419,6 +1420,34 @@ list(
       write_figures("Figure 03.supplement"),
     format = "file"
   ),
+
+  # figure 4 ----------------------------------------------------------------
+
+  tar_target(
+    fig04,
+    make_fig04(
+      metab_mcti_tar_pca_filter_intra +
+        ggplot2::theme(legend.margin = ggplot2::margin(t = -40)),
+      metab_mcti_tar_lactate_intra,
+      metab_mcti_tar_vol_dual_intra,
+      msea_table_img_dual_intra
+    ) |>
+      write_figures("Figure 04"),
+    format = "file"
+  ),
+  tar_target(
+    fig04s,
+    make_fig04s(
+      metab_mcti_tar_pca_filter_extra +
+        ggplot2::theme(legend.margin = ggplot2::margin(t = -40)),
+      metab_mcti_tar_lactate_extra,
+      metab_mcti_tar_vol_dual_extra,
+      msea_table_img_dual_extra
+    ) |>
+      write_figures("Figure 04.supplement"),
+    format = "file"
+  ),
+
 
   # manuscript --------------------------------------------------------------
 

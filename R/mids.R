@@ -271,89 +271,89 @@ format_mid_mcti <- function(files, correction_factors){
     dplyr::group_by(dplyr::across("run_date":"metabolite"))
 }
 
-# select_mid_mois <- function(df, trace) {
-#   metabs <- c("PYR", "LAC", "CIT", "2OG", "SUC", "MAL")
-#
-#   df |>
-#     dplyr::filter(.data$tracer == trace) |>
-#     dplyr::filter(.data$metabolite %in% metabs) |>
-#     dplyr::filter(.data$isotope == "M0") |>
-#     dplyr::group_by(.data$metabolite) |>
-#     dplyr::mutate(grand_mean = mean(.data$mid_corr)) |>
-#     dplyr::group_by(.data$metabolite, .data$replicate) |>
-#     dplyr::mutate(
-#       exp_mean = mean(.data$mid_corr),
-#       cf = grand_mean - exp_mean,
-#       # labeled = 1 - .data$mid_corr + .data$cf,
-#       labeled = 1 - .data$mid_corr,
-#       metabolite = factor(metabolite, levels = metabs)
-#     ) |>
-#     dplyr::select(
-#       "sample",
-#       group = "replicate",
-#       "condition":"metabolite",
-#       "area",
-#       "mid_corr",
-#       "labeled"
-#     ) |>
-#     dplyr::group_by(.data$metabolite)
-# }
-#
-#
-# format_bleo_mids <- function(files, mice) {
-#   nms <- stringr::str_extract(basename(files), "lung|plasma")
-#   files <- rlang::set_names(files, nms)
-#
-#   sample <- as.character(1:17)
-#   start_date <- lubridate::as_date(rep("2022-08-05", 17))
-#   mouse_no <- c(1:6, 8, 10:11, 13:18, 23, 24)
-#
-#   samples <-
-#     tibble::tibble(
-#       sample = sample,
-#       start_date = start_date,
-#       mouse_no = mouse_no
-#     ) |>
-#     dplyr::left_join(mice, by = c("start_date", "mouse_no")) |>
-#     dplyr::mutate(
-#       group = factor(
-#         group,
-#         levels = c("Veh", "Bleo", "AZD", "VB"),
-#         labels = c("Ctl", "Bleo", "AZD", "VB")
-#       )
-#     )
-#
-#   purrr::map_dfr(
-#     files,
-#     readxl::read_excel,
-#     sheet = 2,
-#     .id = "tissue"
-#   ) |>
-#     dplyr::select(
-#       tissue,
-#       id = `Raw File Name`,
-#       sample = `Sample ID`,
-#       metabolite = `Compound Name`,
-#       area = `Peak Area`
-#     ) |>
-#     tidyr::separate(metabolite, c("metabolite", "isotope"), sep = " ") |>
-#     dplyr::filter(sample != "blank") |>
-#     dplyr::left_join(samples, by = "sample") |>
-#     dplyr::filter(stringr::str_detect(end_note, "13c")) |>
-#     dplyr::group_by(tissue, sample, metabolite) |>
-#     dplyr::mutate(
-#       mid = area / sum(area)
-#     ) |>
-#     dplyr::select(
-#       id,
-#       sample,
-#       group,
-#       metabolite,
-#       isotope,
-#       area,
-#       mid
-#     ) |>
-#     dplyr::filter(!is.na(mid)) |>
-#     dplyr::arrange(metabolite, group, sample) |>
-#     dplyr::group_by(dplyr::across("tissue":"metabolite"))
-# }
+select_mid_mois <- function(df, trace) {
+  metabs <- c("PYR", "LAC", "CIT", "2OG", "SUC", "MAL")
+
+  df |>
+    dplyr::filter(.data$tracer == trace) |>
+    dplyr::filter(.data$metabolite %in% metabs) |>
+    dplyr::filter(.data$isotope == "M0") |>
+    dplyr::group_by(.data$metabolite) |>
+    dplyr::mutate(grand_mean = mean(.data$mid_corr)) |>
+    dplyr::group_by(.data$metabolite, .data$replicate) |>
+    dplyr::mutate(
+      exp_mean = mean(.data$mid_corr),
+      cf = grand_mean - exp_mean,
+      # labeled = 1 - .data$mid_corr + .data$cf,
+      labeled = 1 - .data$mid_corr,
+      metabolite = factor(metabolite, levels = metabs)
+    ) |>
+    dplyr::select(
+      "sample",
+      group = "replicate",
+      "condition":"metabolite",
+      "area",
+      "mid_corr",
+      "labeled"
+    ) |>
+    dplyr::group_by(.data$metabolite)
+}
+
+
+format_bleo_mids <- function(files, mice) {
+  nms <- stringr::str_extract(basename(files), "lung|plasma")
+  files <- rlang::set_names(files, nms)
+
+  sample <- as.character(1:17)
+  start_date <- lubridate::as_date(rep("2022-08-05", 17))
+  mouse_no <- c(1:6, 8, 10:11, 13:18, 23, 24)
+
+  samples <-
+    tibble::tibble(
+      sample = sample,
+      start_date = start_date,
+      mouse_no = mouse_no
+    ) |>
+    dplyr::left_join(mice, by = c("start_date", "mouse_no")) |>
+    dplyr::mutate(
+      group = factor(
+        group,
+        levels = c("Veh", "Bleo", "AZD", "VB"),
+        labels = c("Ctl", "Bleo", "AZD", "VB")
+      )
+    )
+
+  purrr::map_dfr(
+    files,
+    readxl::read_excel,
+    sheet = 2,
+    .id = "tissue"
+  ) |>
+    dplyr::select(
+      tissue,
+      id = `Raw File Name`,
+      sample = `Sample ID`,
+      metabolite = `Compound Name`,
+      area = `Peak Area`
+    ) |>
+    tidyr::separate(metabolite, c("metabolite", "isotope"), sep = " ") |>
+    dplyr::filter(sample != "blank") |>
+    dplyr::left_join(samples, by = "sample") |>
+    dplyr::filter(stringr::str_detect(end_note, "13c")) |>
+    dplyr::group_by(tissue, sample, metabolite) |>
+    dplyr::mutate(
+      mid = area / sum(area)
+    ) |>
+    dplyr::select(
+      id,
+      sample,
+      group,
+      metabolite,
+      isotope,
+      area,
+      mid
+    ) |>
+    dplyr::filter(!is.na(mid)) |>
+    dplyr::arrange(metabolite, group, sample) |>
+    dplyr::group_by(dplyr::across("tissue":"metabolite"))
+}

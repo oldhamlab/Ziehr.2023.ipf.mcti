@@ -433,8 +433,8 @@ plot_mois <- function(se, tt, moi){
       position = ggplot2::position_dodge(width = 0.55),
       stat = "summary",
       fun.data = ggplot2::mean_se,
-      width = 0.25,
-      linewidth = 0.25,
+      width = 0.2,
+      linewidth = 0.3,
       show.legend = FALSE
     ) +
     ggbeeswarm::geom_quasirandom(
@@ -443,8 +443,8 @@ plot_mois <- function(se, tt, moi){
       pch = 1,
       color = "black",
       width = 0.05,
-      size = 0.5,
-      stroke = 0.25,
+      size = 0.75,
+      stroke = 0.2,
       show.legend = FALSE
     ) +
     ggplot2::geom_text(
