@@ -674,14 +674,14 @@ list(
 
   tar_map(
     values = list(
-      names = c("intra", "extra"),
+      type = c("intra", "extra"),
       path = c(
         "myofib_azd3965-vb124_intra_2022-02-10",
         "myofib_azd3965-vb124_extra_2024-01-19"
       ),
       outs = list(5, 5)
     ),
-    names = names,
+    names = type,
     tar_target(
       metab_mcti_tar_file,
       raw_data_path(stringr::str_c(path, ".xlsx")),
@@ -788,7 +788,7 @@ list(
         write_table(
           metab_mcti_tar_msea_table,
           path = "analysis/figures/msea/",
-          filename
+          stringr::str_c(filename, "_", type)
         ),
         format = "file"
       ),
