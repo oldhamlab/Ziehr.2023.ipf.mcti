@@ -991,7 +991,8 @@ list(
     names = label,
     tar_target(
       mid_mcti_plot,
-      plot_mids_all(mid_mcti_mids_corr, label = label)
+      plot_mids_all(mid_mcti_mids_corr, label = label),
+      format = "rds"
     ),
     tar_target(
       mid_mcti_img,
@@ -1033,7 +1034,8 @@ list(
           breaks = seq(0, 1, 0.2),
           limits = c(0, 1),
           expand = ggplot2::expansion(c(0, 0))
-        )
+        ),
+      format = "rds"
     ),
     NULL
   ),
@@ -1439,7 +1441,7 @@ list(
     fig04s,
     make_fig04s(
       metab_mcti_tar_pca_filter_extra +
-        ggplot2::theme(legend.margin = ggplot2::margin(t = -40)),
+        ggplot2::theme(legend.margin = ggplot2::margin(t = 0)),
       metab_mcti_tar_lactate_extra,
       metab_mcti_tar_vol_dual_extra,
       msea_table_img_dual_extra

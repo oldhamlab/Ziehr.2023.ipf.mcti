@@ -283,7 +283,7 @@ plot_pca_metab <- function(clean, batch = TRUE, show_reps = TRUE){
     ) +
     ggplot2::scale_x_continuous(
       breaks = scales::breaks_extended(n = 4, only.loose = TRUE),
-      expand = ggplot2::expansion(c(0, 0)),
+      expand = ggplot2::expansion(c(0.1, 0.1)),
       limits = nice_limits
     ) +
     ggplot2::scale_y_continuous(
