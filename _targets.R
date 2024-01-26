@@ -1428,6 +1428,11 @@ list(
   tar_target(
     fig04,
     make_fig04(
+      metab_mcti_tar_pca_filter_extra +
+        ggplot2::theme(legend.margin = ggplot2::margin(t = 0)),
+      metab_mcti_tar_lactate_extra,
+      metab_mcti_tar_vol_dual_extra,
+      msea_table_img_dual_extra,
       metab_mcti_tar_pca_filter_intra +
         ggplot2::theme(legend.margin = ggplot2::margin(t = -40)),
       metab_mcti_tar_lactate_intra,
@@ -1440,11 +1445,18 @@ list(
   tar_target(
     fig04s,
     make_fig04s(
-      metab_mcti_tar_pca_filter_extra +
-        ggplot2::theme(legend.margin = ggplot2::margin(t = 0)),
-      metab_mcti_tar_lactate_extra,
-      metab_mcti_tar_vol_dual_extra,
-      msea_table_img_dual_extra
+      metab_mcti_tar_vol_tgfb_extra,
+      msea_table_img_tgfb_extra,
+      metab_mcti_tar_vol_tgfb_intra,
+      msea_table_img_tgfb_intra,
+      metab_mcti_tar_vol_azd_extra,
+      msea_table_img_azd_extra,
+      metab_mcti_tar_vol_azd_intra,
+      msea_table_img_azd_intra,
+      metab_mcti_tar_vol_vb_extra,
+      msea_table_img_vb_extra,
+      metab_mcti_tar_vol_vb_intra,
+      msea_table_img_vb_intra
     ) |>
       write_figures("Figure 04.supplement"),
     format = "file"

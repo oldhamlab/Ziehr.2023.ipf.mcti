@@ -164,12 +164,14 @@ theme_plot <- function(
     ),
     plot.title.position = "panel",
     plot.subtitle = ggplot2::element_text( # font size "regular"
-      hjust = 0, vjust = 1,
+      hjust = 0,
+      vjust = 1,
       margin = ggplot2::margin(b = half_line)
     ),
     plot.caption = ggplot2::element_text( # font size "small"
       size = ggplot2::rel(0.8),
-      hjust = 1, vjust = 1,
+      hjust = 1,
+      vjust = 1,
       margin = ggplot2::margin(t = half_line)
     ),
     plot.caption.position = "panel",

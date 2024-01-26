@@ -128,24 +128,82 @@ make_fig03s <- function(p1, p2, p3, p4) {
     )
 }
 
-make_fig04 <- function(p1, p2, p3, p4) {
+make_fig04 <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
   design <- "abcd"
-  p1 + p2 + p3 + p4 +
+  extra <-
+    p1 + p2 + p3 + p4 +
+    patchwork::plot_annotation(
+      title = "Extracellular",
+      theme = ggplot2::theme(
+        plot.title = ggplot2::element_text(
+          hjust = 0.5
+        )
+      )
+    ) +
     theme_patchwork(
       design = design,
+      tags = list(c("A", "B", "C", "D")),
       widths = ggplot2::unit(2, "in"),
-      heights = ggplot2::unit(c(2, 2.5), "in")
-    ) &
-    ggplot2::theme(legend.position = "bottom")
+      heights = ggplot2::unit(2, "in")
+    )
+
+  intra <-
+    p5 + p6 + p7 + p8 +
+    patchwork::plot_annotation(
+      title = "Intracellular",
+      theme = ggplot2::theme(
+        plot.title = ggplot2::element_text(
+          hjust = 0.5
+        )
+      )
+    ) +
+    theme_patchwork(
+      design = design,
+      tags = list(c("E", "F", "G", "H")),
+      widths = ggplot2::unit(2, "in"),
+      heights = ggplot2::unit(2, "in")
+    )
+
+  patchwork::wrap_elements(full = extra) +
+    patchwork::wrap_elements(full = intra) +
+    theme_patchwork(
+      design = "a \n b",
+      widths = ggplot2::unit(9.5, "in"),
+      heights = ggplot2::unit(3.5, "in"),
+      tags = NULL
+    )
 }
 
-make_fig04s <- function(p1, p2, p3, p4) {
-  design <- "abcd"
-  p1 + p2 + p3 + p4 +
+make_fig04s <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) {
+  design <- "ab \n cd \n ef"
+
+  extra <-
+    p1 + p2 + p5 + p6 + p9 + p10 +
+    patchwork::plot_annotation(
+      title = "Extracellular",
+      theme = ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+    ) +
     theme_patchwork(
       design = design,
-      widths = ggplot2::unit(2, "in"),
-      heights = ggplot2::unit(c(2, 2.5), "in")
+      tags = list(c("A", "B", "E", "F", "I", "J"))
+    )
+  intra <-
+    p3 + p4 + p7 + p8 + p11 + p12 +
+    patchwork::plot_annotation(
+      title = "Intracellular",
+      theme = ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+    ) +
+    theme_patchwork(
+      design = design,
+      tags = list(c("C", "D", "G", "H", "K", "L"))
+    )
+
+  patchwork::wrap_elements(full = extra) + patchwork::wrap_elements(full = intra) +
+    theme_patchwork(
+      design = "ab",
+      widths = ggplot2::unit(4, "in"),
+      heights = ggplot2::unit(6, "in"),
+      tags = NULL
     ) &
     ggplot2::theme(legend.position = "bottom")
 }
