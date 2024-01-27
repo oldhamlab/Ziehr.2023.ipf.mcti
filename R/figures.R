@@ -136,7 +136,9 @@ make_fig04 <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
       title = "Extracellular",
       theme = ggplot2::theme(
         plot.title = ggplot2::element_text(
-          hjust = 0.5
+          hjust = 0.5,
+          face = "bold",
+          size = ggplot2::rel(1)
         )
       )
     ) +
@@ -153,7 +155,9 @@ make_fig04 <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
       title = "Intracellular",
       theme = ggplot2::theme(
         plot.title = ggplot2::element_text(
-          hjust = 0.5
+          hjust = 0.5,
+          face = "bold",
+          size = ggplot2::rel(1)
         )
       )
     ) +
@@ -181,7 +185,13 @@ make_fig04s <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) {
     p1 + p2 + p5 + p6 + p9 + p10 +
     patchwork::plot_annotation(
       title = "Extracellular",
-      theme = ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+      theme = ggplot2::theme(
+        plot.title = ggplot2::element_text(
+          hjust = 0.5,
+          size = ggplot2::rel(0.8),
+          face = "bold"
+        )
+      )
     ) +
     theme_patchwork(
       design = design,
@@ -191,7 +201,13 @@ make_fig04s <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) {
     p3 + p4 + p7 + p8 + p11 + p12 +
     patchwork::plot_annotation(
       title = "Intracellular",
-      theme = ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+      theme = ggplot2::theme(
+        plot.title = ggplot2::element_text(
+          hjust = 0.5,
+          size = ggplot2::rel(0.8),
+          face = "bold"
+        )
+      )
     ) +
     theme_patchwork(
       design = design,
