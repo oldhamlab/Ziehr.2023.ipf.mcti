@@ -279,12 +279,7 @@ select_mid_mois <- function(df, trace) {
     dplyr::filter(.data$metabolite %in% metabs) |>
     dplyr::filter(.data$isotope == "M0") |>
     dplyr::group_by(.data$metabolite) |>
-    dplyr::mutate(grand_mean = mean(.data$mid_corr)) |>
-    dplyr::group_by(.data$metabolite, .data$replicate) |>
     dplyr::mutate(
-      exp_mean = mean(.data$mid_corr),
-      cf = grand_mean - exp_mean,
-      # labeled = 1 - .data$mid_corr + .data$cf,
       labeled = 1 - .data$mid_corr,
       metabolite = factor(metabolite, levels = metabs)
     ) |>
@@ -356,4 +351,32 @@ format_bleo_mids <- function(files, mice) {
     dplyr::filter(!is.na(mid)) |>
     dplyr::arrange(metabolite, group, sample) |>
     dplyr::group_by(dplyr::across("tissue":"metabolite"))
+}
+
+calc_mid_ratio <- function(df, top, bottom) {
+  tibble::as_tibble(top) |>
+    dplyr::mutate(ratio = "top") |>
+    dplyr::bind_rows(
+      tibble::as_tibble(bottom) |>
+        dplyr::mutate(ratio = "bottom")
+    ) |>
+    dplyr::left_join(df, by = c("tracer", "metabolite", "isotope")) |>
+    tidyr::unite(metabolite, metabolite, isotope, sep = " ") |>
+    dplyr::group_by(tracer, sample, replicate, condition, treatment) |>
+    dplyr::summarise(
+      metabolite = stringr::str_c(
+        metabolite[ratio == "top"], " / ", metabolite[ratio == "bottom"]
+      ),
+      value = mid_corr[ratio == "top"] / mid_corr[ratio == "bottom"]
+    ) |>
+    dplyr::select(
+      tracer,
+      metabolite,
+      sample,
+      group = replicate,
+      condition,
+      treatment,
+      value
+    ) |>
+    dplyr::ungroup()
 }

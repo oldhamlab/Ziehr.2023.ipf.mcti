@@ -1039,6 +1039,46 @@ list(
     ),
     NULL
   ),
+  tar_map(
+    values = list(
+      names = c("lac_cit_pyr", "lac_lac_pyr"),
+      top = alist(
+        list(tracer = "lac3", metabolite = "CIT", isotope = "M4"),
+        list(tracer = "lac3", metabolite = "LAC", isotope = "M3")
+      ),
+      bottom = alist(
+        list(tracer = "lac3", metabolite = "PYR", isotope = "M3"),
+        list(tracer = "lac3", metabolite = "PYR", isotope = "M3")
+      ),
+      ytitle = c("CIT M2 / PYR M3", "LAC M3 / PYR M3")
+    ),
+    names = names,
+    tar_target(
+      mid_ratios,
+      calc_mid_ratio(mid_mcti_mids_corr, top, bottom)
+    ),
+    tar_target(
+      mid_ratios_stats,
+      twofactor(mid_ratios, "value", comps = comps_azd_2)
+    ),
+    tar_target(
+      mid_ratios_plots,
+      plot_two_factor(
+        mid_ratios,
+        mid_ratios_stats,
+        x = "treatment",
+        y = "value",
+        ytitle = ytitle
+      ) +
+        ggplot2::scale_y_continuous(
+          # breaks = seq(0, 1, 0.2),
+          # limits = c(0, 1),
+          expand = ggplot2::expansion(c(0, 0))
+        ),
+      format = "rds"
+    ),
+    NULL
+  ),
 
   # rnaseq ------------------------------------------------------------------
 
