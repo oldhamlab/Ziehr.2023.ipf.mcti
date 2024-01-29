@@ -361,7 +361,7 @@ plot_edge <- function(x, dds) {
       color = NULL,
       fill = NULL
     ) +
-    ggplot2::guides(color = ggplot2::guide_legend(ncol = 1, byrow = TRUE)) +
+    ggplot2::guides(color = ggplot2::guide_legend(ncol = 2, byrow = TRUE)) +
     ggplot2::coord_cartesian(clip = "off") +
     theme_plot() +
     ggplot2::theme(

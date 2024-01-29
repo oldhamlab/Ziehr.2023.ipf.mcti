@@ -107,9 +107,9 @@ targets::tar_load(
   c(
     fig01,
     fig02,
-    # fig03,
-    # fig04,
-    # fig05,
+    fig03,
+    fig04,
+    fig05,
     # fig06,
     # fig10,
     # fig11,
@@ -117,6 +117,22 @@ targets::tar_load(
     NULL
   )
 )
+```
+
+```{r}
+#| label: calculations
+#| include: false
+
+targets::tar_load(
+  c(
+    deg_tgfb_dual
+  )
+)
+
+deg_tot <- nrow(deg_tgfb_dual)
+deg_diff <- nrow(dplyr::filter(deg_tgfb_dual, padj < 0.05)) 
+deg_frac <- sprintf("%1.0f", deg_diff / deg_tot * 100, "%")
+deg_tot <- scales::label_comma(accuracy = 1)(deg_tot)
 ```
 
 \newpage
@@ -147,7 +163,7 @@ Of the four lactate transporters, MCT1 and MCT4 are the most highly expressed in
 
 A defining feature of IPF is the activation of tissue myofibroblasts, which are characterized by the *de novo* expression of smooth muscle α-actin (α-SMA); stress fiber formation; and increased migration, contraction, and extracellular matrix production [@selvarajah2021; @xie2015; @tomasek2002]. TGFβ is the most potent inducer of myofibroblast activation *in vitro* and *in vivo*. TGFβ-dependent α-SMA expression is a well-accepted and widely utilized model of myofibroblast activation relevant to pulmonary fibrosis [@goodwin2018; @cui2019; @rangarajan2018; @locy2020]. Consistent with our findings in human IPF lungs, we observed increased expression of MCT1 and MCT4 in normal human lung fibroblasts following TGFβ treatment (**Figure 1E-F**). These findings are consistent with increased expression of other glycolytic enzymes and the associated metabolic changes that have been previously observed in these cells [@xie2015]. Together, these data demonstrate that pulmonary fibrosis is associated with increased expression of lactate transporters in the lung generally and in myofibroblasts specifically. 
 
-## Lactate transport is essential for myofibroblast differentiation *in vitro*
+## Myofibroblast differentiation *in vitro* requires lactate transport 
 
 Using RNA interference and pharmacologic approaches, we next tested whether MCT expression and activity were required for myofibroblast differentiation *in vitro*. Lung fibroblasts were transfected with siRNA targeting MCT1 and MCT4 separately and together. After 24 h, the cells were treated with TGFβ for 48 h to induce myofibroblast differentiation. The siRNAs reduced lactate transporter protein levels > 80% (**Figure 2A-B**). Decreasing MCT1 or MCT4 expression caused a marked reduction in TGFβ-stimulated α-SMA expression. Notably, siMCT1 also decreased MCT4 expression. Interestingly, the mRNA sequence homology of these transporters is low and the MCT1 siRNA sequences do not match the MCT4 mRNA sequence, perhaps suggesting a post-translational explanation for this phenomenon. No adverse effects of lactate transporter knockdown on cell viability were observed, and siMCT1 significantly increased cell count in both control and TGFβ-treated cells (**Supplemental Figure 2A**). 
 
@@ -165,11 +181,38 @@ To develop additional support for this hypothesis, we performed liquid chromatog
 
 Similar effects on intracellular metabolites were observed. Principal components (PC) analysis demonstrated excellent clustering of treatment groups with the drug effect corresponding to PC1 and the TGFβ treatment effect corresponding to PC2. Similar to the extracellular flux results, the magnitude of drug-induced perturbations were increased from MCT1 to MCT4 to combined inhibition (**Figure 4E**), as demonstrated by intracellular lactate levels (**Figure 4F**). As expected from measures of extracellular lactate following MCT inhibition, intracellular lactate accumulation increases modestly with MCT4 inhibition and markedly with MCT1/4 inhibition. TGFβ treatment was associated with diverse changes in the intracellular metabolomic profile of treated fibroblasts (**Supplemental Figure 4C-D**). The effect of AZD3965 alone on intracellular metabolite levels was modest (**Supplemental Figure 4G-H**). By contrast, MCT4 inhibition by VB124 alone (**Supplemental Figure 4K-L**) or combined with AZD3965 (**Figure 4G-H**) caused substantial perturbations to intracellular metabolism. Specifically, we observed enrichment of the glycolysis and tricarboxylic acid (TCA) cycle metabolite sets with MCT4 inhibition. Together, these data indicate that inhibition of lactate export leads to accumulation of upstream glycolytic intermediates that are rerouted to mitochondrial oxidative metabolic pathways. 
 
+To test this hypothesis, we next labeled lung fibroblasts with [U-^13^C~6~]-glucose (8 mM) in medium containing lactate (2 mM), glutamine (1 mM), and pyruvate (1 mM) during TGFβ stimulation and treatment with MCT inhibitors (**Figure 4I**). TGFβ increases ^13^C incorporation from glucose into pyruvate, lactate, citrate, succinate (SUC), and malate (MAL), consistent with increased flux from glucose into the TCA cycle. While AZD3965 had little impact on these labeling patterns, MCT4 inhibition significantly increased the fractions of these metabolites labeled by glucose, providing direct evidence for a proportional increase in glucose oxidation following MCT4 inhibition, consistent with the bioenergetic and steady-state metabolomics experiments described above. 
+
+Increased metabolite labeling by glucose must by offset by decreased labeling from other substrates. Since recent data suggest that lactate is a major oxidative fuel source in the lung [@hui2017; @hui2020; @copeland2023], we reasoned that MCT inhibition would decrease oxidation of exogenous lactate. To test this, lung fibroblasts were cultured with [U-^13^C~3~]-lactate (2 mM) in medium containing naturally labeled glucose, glutamine, and pyruvate (**Figure 4J**). Extracellular [U-^13^C~3~]-lactate labeled ~ 50% of intracellular pyruvate and lactate at baseline with significant downstream incorporation into TCA metabolites. This labeling was decreased following TGFβ treatment, mirroring increased fractional labeling from glucose. MCT inhibition had no impact on fractional labeling of TCA intermediates by [U-^13^C]-glutamine (**Supplemental Figure 4M**). Interestingly, MCT4 inhibition alone or with AZD3965 decreased ^13^C labeling of intracellular metabolites by lactate, emphasizing the importance of bi-directional lactate transport mediated by MCTs. Similar to our measurements of extracellular lactate, the effects of MCT inhibition were more pronounced when both inhibitors were used simultaneously, again demonstrating some functional redundancy of MCT1 and MCT4 in lung fibroblasts.
+
+## MCT inhibition attenuates pro-fibrotic transcriptional programs
+
+To identify anti-fibrotic transcriptional programs mediated by MCT inhibition, we performed RNA-seq on lung fibroblasts treated with TGFβ in combination with AZD3965 or VB124 (**Figure 5**). Principal components analysis (PCA) of the transcriptional changes mirrored the metabolomic findings. The first principal component corresponded to TGFβ treatment, accounting for 71% of the overall variance, while MCT4 inhibition, either alone or in combination with MCT1 inhibition aligned with the second principal component (**Figure 5A**). Samples treated with the MCT1 inhibitor AZD3965 were similar to vehicle-treated controls. Differential expression analysis of TGFβ-treated cells identified the expected increased expression of extracellular matrix proteins (**Supplemental Figure 5A**) and enrichment of the epithelial-to-mesenchymal (EMT) gene set, among others (**Figure 5B**). Consistent with the PCA results, only GRIK4 and BRI3 were differentially expressed following AZD3965 (**Supplemental Figure 5B**). By contrast, VB124, alone (**Supplemental Figure 5C**) or in combination with AZD3965 (**Figure 5C**), demonstrated more substantial reprogramming of myofibroblast transcription with `r deg_diff` of `r deg_tot` genes (`r deg_frac`%) differentially expressed at an FDR < 0.05. 
+
+Co-administration of either AZD3965 or VB124 reversed TGFβ-dependent enrichment of the EMT gene set, which is the Hallmark gene set containing genes related to fibrosis (**Figure 5B**). Leading edge analysis of the EMT gene set identified seven genes shared among all three comparisons (*i.e.*, genes increased by TGFβ and decreased by both AZD3965 and VB124) (**Figure 5D**). These genes include: biglycan (BGN), COL6A3, Frizzled 8 (FZD8), matrix Gla protein (MGP), Prostate Transmembrane Protein, Androgen Induced 1 (PMEPA1), TIMP metallopeptidase inhibitor 1 (TIMP1), and tenascin-C (TNC). Many of these genes contribute to the pathobiology of pulmonary fibrosis or serve as biomarkers of disease or treatment response [@kwapiszewska2018; @williams2020; @baarsma2017; @todd2020; @bhattacharyya2016]. Together, these data suggest lactate transport inhibitors attenuate the pro-fibrotic transcriptional program in TGFβ-treated LFs. 
+
+## Lactate transport inhibition signals through histone lactylation
+
+We next sought to identify the signaling mechanism(s) linking lactate transport inhibition to anti-fibrotic transcriptional programs. Since increasing intracellular lactate was associated with more potent inhibition of α-SMA expression, we first treated cells with TGFβ in combination with extracellular lactate (10 mM). A prior studies demonstrated that extracellular lactate modestly increased α-SMA expression in the absence of TGFβ [@kottman2012]. We found that extracellular lactate did not impact α-SMA expression in TGFβ-treated LFs (**Figure 6A-B**), suggesting that accumulation of intracellular lactate alone does not mediate the anti-fibrotic effects of MCT inhibition.
+
+Next, we examined TGFβ-dependent signaling. TGFβ activates both SMAD and non-SMAD signaling pathways. MCT inhibition did not decrease Smad3 or ERK phosphorylation after 48 h of TGFβ stimulation (**Figure 6C-D**). 
 
 
-To test this hypothesis, we next labeled lung fibroblasts with [U-^13^C~6~]-glucose (8 mM) in medium containing lactate (2 mM), glutamine (1 mM), and pyruvate (1 mM) during TGFβ stimulation and treatment with MCT inhibitors (**Figure 4E-F**). TGFβ increases ^13^C incorporation from glucose into pyruvate, lactate, citrate, succinate (SUC), and malate (MAL), consistent with increased flux from glucose into the TCA cycle. While AZD3965 had little impact on these labeling patterns, MCT4 inhibition significantly increased the fractions of these metabolites labeled by glucose, providing direct evidence for a proportional increase in glucose oxidation following MCT4 inhibition, consistent with the bioenergetic and steady-state metabolomics experiments described above. 
 
-Increased metabolite labeling by glucose must by offset by decreased labeling from other substrates. Since recent data suggest that lactate is a major oxidative fuel source in lung [@hui2017; @hui2020], we reasoned that MCT inhibition would decrease oxidation of exogenous lactate. To test this, lung fibroblasts were cultured with [U-^13^C~3~]-lactate (2 mM) in medium containing naturally labeled glucose, glutamine, and pyruvate (**Figure 4F**). Notably, extracellular [U-^13^C~3~]-lactate labeled ~ 50% of intracellular pyruvate and lactate at baseline with significant downstream incorporation into TCA metabolites. This labeling was decreased following TGFβ treatment, mirroring increased fractional labeling from glucose. MCT inhibition had no impact on fractional labeling of TCA intermediates by [U-^13^C]-glutamine (**Supplemental Figure 4G**). Interestingly, MCT4 inhibition alone or combined with AZD3965 decreased ^13^C labeling of intracellular metabolites by lactate, emphasizing the importance of bi-directional lactate transport mediated by MCTs. Similar to our measurements of extracellular lactate, the effects of MCT inhibition were more pronounced when both inhibitors were used simultaneously, again demonstrating some functional redundancy of MCT1 and MCT4 in lung fibroblasts. 
+
+## Lactate transport inhibition / redox stress section
+
+We next examined whether MCT inhibition affects TGFβ-dependent signaling pathways. TGFβ activates both SMAD and non-SMAD signaling pathways. We found no impact of MCT inhibition on decreasing Smad3 or ERK phosphorylation in LFs 48 h following TGFβ stimulation (**Figure 5**). 
+
+Hypoxia-inducible factor 1α (HIF-1α) is activated in lung fibroblasts following TGFβ and is required for myofibroblast differentiation and experimental pulmonary fibrosis partly through activation of glycolysis [@goodwin2018]. We found maximal HIF-1α stabilization 6 h following TGFβ treatment. At this time point, MCT inhibition did not decrease HIF-1α (**Figure 5E-F**), rather, HIF-1α protein levels were increased with combined MCT1 and MCT4 inhibition. 
+
+\newpage
+
+# Discussion
+
+Craig Thompson paper: Lactate activates ETC independently of its metabolism
+
+Craig Thompson paper: Isotope labeling in lung fibroblasts
 
 \newpage
 

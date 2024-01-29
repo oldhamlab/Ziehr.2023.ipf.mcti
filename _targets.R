@@ -1041,16 +1041,30 @@ list(
   ),
   tar_map(
     values = list(
-      names = c("lac_cit_pyr", "lac_lac_pyr"),
+      names = c(
+        "glc_cit_m2_pyr",
+        "glc_cit_m3_pyr",
+        "glc_cit_m4_pyr",
+        "glc_lac_pyr"
+      ),
       top = alist(
-        list(tracer = "lac3", metabolite = "CIT", isotope = "M4"),
-        list(tracer = "lac3", metabolite = "LAC", isotope = "M3")
+        list(tracer = "glc6", metabolite = "CIT", isotope = "M2"),
+        list(tracer = "glc6", metabolite = "CIT", isotope = "M3"),
+        list(tracer = "glc6", metabolite = "CIT", isotope = "M4"),
+        list(tracer = "glc6", metabolite = "LAC", isotope = "M3")
       ),
       bottom = alist(
-        list(tracer = "lac3", metabolite = "PYR", isotope = "M3"),
-        list(tracer = "lac3", metabolite = "PYR", isotope = "M3")
+        list(tracer = "glc6", metabolite = "PYR", isotope = "M3"),
+        list(tracer = "glc6", metabolite = "PYR", isotope = "M3"),
+        list(tracer = "glc6", metabolite = "PYR", isotope = "M3"),
+        list(tracer = "glc6", metabolite = "PYR", isotope = "M3")
       ),
-      ytitle = c("CIT M2 / PYR M3", "LAC M3 / PYR M3")
+      ytitle = c(
+        "CIT M2 / PYR M3",
+        "CIT M3 / PYR M3",
+        "CIT M4 / PYR M3",
+        "LAC M3 / PYR M3"
+      )
     ),
     names = names,
     tar_target(
@@ -1373,7 +1387,8 @@ list(
       "bleo-timeline.png",          1,      0,      0,      "timeline",
       "dual-azd-smad3-blot.png",    1,      0,      -0.05,  "smad3_azd",
       "dual-azd-erk-blot.png",      1,      0,      -0.05,  "erk_azd",
-      "dual-azd-hif1a-blot.png",    1.3,    0,      -0.05,  "hif_azd"
+      "dual-azd-hif1a-blot.png",    1.3,    0,      -0.05,  "hif_azd",
+      "lactate-sma-blot.png",       1,      0,      0,      "sma_lac"
     ),
     names = names,
     tar_target(
@@ -1477,7 +1492,9 @@ list(
         ggplot2::theme(legend.margin = ggplot2::margin(t = -40)),
       metab_mcti_tar_lactate_intra,
       metab_mcti_tar_vol_dual_intra,
-      msea_table_img_dual_intra
+      msea_table_img_dual_intra,
+      mid_mcti_moi_plot_glc6,
+      mid_mcti_moi_plot_lac3
     ) |>
       write_figures("Figure 04"),
     format = "file"
@@ -1496,12 +1513,49 @@ list(
       metab_mcti_tar_vol_vb_extra,
       msea_table_img_vb_extra,
       metab_mcti_tar_vol_vb_intra,
-      msea_table_img_vb_intra
+      msea_table_img_vb_intra,
+      mid_mcti_moi_plot_gln5
     ) |>
       write_figures("Figure 04.supplement"),
     format = "file"
   ),
 
+  # figure 5 ----------------------------------------------------------------
+
+  tar_target(
+    fig05,
+    make_fig05(
+      rnaseq_pca_plot,
+      gsea_dot_plot,
+      deg_vol_dual,
+      edge_plot
+    ) |>
+      write_figures("Figure 05"),
+    format = "file"
+  ),
+  tar_target(
+    fig05s,
+    make_fig05s(
+      deg_vol_tgfb,
+      deg_vol_azd,
+      deg_vol_vb
+    ) |>
+      write_figures("Figure 05.supplement"),
+    format = "file"
+  ),
+
+
+  # figure 6 ----------------------------------------------------------------
+
+  tar_target(
+    fig06,
+    make_fig06(
+      fig_img_sma_lac,
+      blot_plot_lactate_sma
+    ) |>
+      write_figures("Figure 06"),
+    format = "file"
+  ),
 
   # manuscript --------------------------------------------------------------
 

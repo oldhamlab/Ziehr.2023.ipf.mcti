@@ -128,7 +128,7 @@ make_fig03s <- function(p1, p2, p3, p4) {
     )
 }
 
-make_fig04 <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
+make_fig04 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10) {
   design <- "abcd"
   extra <-
     p1 + p2 + p3 + p4 +
@@ -168,17 +168,27 @@ make_fig04 <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
       heights = ggplot2::unit(2, "in")
     )
 
+  mids <-
+    p9 + p10 +
+    patchwork::plot_layout(guides = "collect") +
+    theme_patchwork(
+      design = "ab",
+      tags = list(c("I", "J"))
+    ) &
+    ggplot2::theme(legend.position = "bottom")
+
   patchwork::wrap_elements(full = extra) +
     patchwork::wrap_elements(full = intra) +
+    patchwork::wrap_elements(full = mids) +
     theme_patchwork(
-      design = "a \n b",
+      design = "a \n b \n c",
       widths = ggplot2::unit(9.5, "in"),
       heights = ggplot2::unit(3.5, "in"),
       tags = NULL
     )
 }
 
-make_fig04s <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) {
+make_fig04s <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13) {
   design <- "ab \n cd \n ef"
 
   extra <-
@@ -213,13 +223,53 @@ make_fig04s <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) {
       design = design,
       tags = list(c("C", "D", "G", "H", "K", "L"))
     )
-
-  patchwork::wrap_elements(full = extra) + patchwork::wrap_elements(full = intra) +
+  mids <-
+    p13 +
     theme_patchwork(
-      design = "ab",
-      widths = ggplot2::unit(4, "in"),
-      heights = ggplot2::unit(6, "in"),
-      tags = NULL
+      tags = list("M")
     ) &
     ggplot2::theme(legend.position = "bottom")
+
+  patchwork::wrap_elements(full = extra) +
+    patchwork::wrap_elements(full = intra) +
+    patchwork::wrap_elements(full = mids) +
+    theme_patchwork(
+      design = "ab \n c#",
+      widths = ggplot2::unit(4, "in"),
+      heights = ggplot2::unit(c(6, 3), "in"),
+      tags = NULL
+    )
+}
+
+make_fig05 <- function(p1, p2, p3, p4) {
+  design <- "ab \n cb \n dd"
+  p1 + p2 + p3 + p4 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(c(2, 1.5), "in"),
+      heights = ggplot2::unit(c(2, 2, 2), "in")
+    )
+}
+
+make_fig05s <- function(p1, p2, p3) {
+  design <- "abc"
+  p1 + p2 + p3 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(2, "in"),
+      heights = ggplot2::unit(2, "in")
+    ) &
+    ggplot2::theme(
+      legend.position = "bottom"
+    )
+}
+
+make_fig06 <- function(p1, p2) {
+  design <- "ab"
+  p1 + p2 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(1.5, "in"),
+      heights = ggplot2::unit(1.5, "in")
+    )
 }
