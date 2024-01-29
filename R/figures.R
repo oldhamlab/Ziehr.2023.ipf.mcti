@@ -264,12 +264,14 @@ make_fig05s <- function(p1, p2, p3) {
     )
 }
 
-make_fig06 <- function(p1, p2) {
-  design <- "ab"
-  p1 + p2 +
+make_fig06 <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
+  design <- "abcd \n efgh"
+  p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 +
     theme_patchwork(
       design = design,
       widths = ggplot2::unit(1.5, "in"),
-      heights = ggplot2::unit(1.5, "in")
-    )
+      heights = ggplot2::unit(c(1, 2), "in"),
+      guides = "collect"
+    ) &
+    ggplot2::theme(legend.position = "bottom")
 }

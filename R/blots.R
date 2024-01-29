@@ -44,8 +44,10 @@ filter_blots <- function(df) {
     dplyr::filter(!(.data$experiment == "ipf" & .data$batch == 2)) |>
     dplyr::filter(!(.data$experiment == "ipf-lf" & .data$batch %in% 1:2)) |>
     dplyr::filter(!(.data$experiment == "dual" & .data$protein == "Col1a1" & .data$batch %in% 1:4)) |>
-    dplyr::filter(!(.data$experiment == "dual" & .data$protein %in% prots & .data$batch %in% 1:4)) |>
-    dplyr::filter(!(.data$experiment == "dual" & .data$protein %in% c("pAKT", "AKT") & .data$trial == 2))
+    # dplyr::filter(!(.data$experiment == "dual" & .data$protein %in% prots & .data$batch %in% 1:4)) |>
+    dplyr::filter(!(.data$experiment == "dual" & .data$protein %in% c("pAKT", "AKT") & .data$batch == 5 & .data$trial == 2)) |>
+    dplyr::filter(!(.data$experiment == "dual" & .data$protein %in% c("pERK", "ERK") & .data$batch == 3 & .data$trial %in% 3:4)) |>
+    dplyr::filter(!(.data$experiment == "six" & .data$protein == "HIF-1α" & .data$trial == 5))
 }
 
 index_blots <- function(df) {
@@ -81,7 +83,8 @@ norm_blot <- function(df, exp, prot, treat = NULL, cond = NULL) {
             .data$treatment == min(.data$treatment)
         ],
         na.rm = TRUE
-      )
+      ),
+      protein = factor(.data$protein, levels = prot)
     )
 }
 
@@ -119,10 +122,11 @@ phospho_ratio <- function(df) {
     dplyr::mutate(
       phospho = ifelse(
         stringr::str_detect(.data$protein, "^p\\D"),
-        "phospho",
-        "total"
+        "density",
+        "background"
       ),
       protein = stringr::str_replace(.data$protein, "^p", ""),
+      protein = stringr::str_c("p", .data$protein, "/", .data$protein),
       .after = "dose"
     ) |>
     dplyr::select("group", "experiment":"protein", "ratio") |>
@@ -130,30 +134,6 @@ phospho_ratio <- function(df) {
       names_from = "phospho",
       values_from = "ratio"
     ) |>
-    dplyr::mutate(ratio = .data$phospho / .data$total) |>
+    dplyr::mutate(ratio = .data$density / .data$background) |>
     dplyr::filter(!is.na(.data$ratio))
-}
-
-combine_plots <- function(dfs, stats, orient = "h") {
-  df <- dplyr::bind_rows(dfs)
-  stat <- dplyr::bind_rows(stats)
-  prot <- unique(df$protein)
-  df$protein <- factor(df$protein, levels = prot)
-  stat$protein <- factor(stat$protein, levels = prot)
-
-  if (orient == "h") {
-    nrow <- 1
-    ncol <- NULL
-  } else if (orient == "v") {
-    nrow <- NULL
-    ncol <- 1
-  }
-
-  plot_blot(df, stat) +
-    ggplot2::facet_wrap(
-      ggplot2::vars(protein),
-      nrow = nrow,
-      ncol = ncol,
-      scales = "free_y"
-    )
 }

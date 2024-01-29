@@ -110,7 +110,7 @@ targets::tar_load(
     fig03,
     fig04,
     fig05,
-    # fig06,
+    fig06,
     # fig10,
     # fig11,
     # resources_table,
@@ -125,12 +125,12 @@ targets::tar_load(
 
 targets::tar_load(
   c(
-    deg_tgfb_dual
+    deg_dual
   )
 )
 
-deg_tot <- nrow(deg_tgfb_dual)
-deg_diff <- nrow(dplyr::filter(deg_tgfb_dual, padj < 0.05)) 
+deg_tot <- nrow(deg_dual)
+deg_diff <- nrow(dplyr::filter(deg_dual, padj < 0.05)) 
 deg_frac <- sprintf("%1.0f", deg_diff / deg_tot * 100, "%")
 deg_tot <- scales::label_comma(accuracy = 1)(deg_tot)
 ```
@@ -193,9 +193,13 @@ Co-administration of either AZD3965 or VB124 reversed TGFβ-dependent enrichment
 
 ## Lactate transport inhibition signals through histone lactylation
 
-We next sought to identify the signaling mechanism(s) linking lactate transport inhibition to anti-fibrotic transcriptional programs. Since increasing intracellular lactate was associated with more potent inhibition of α-SMA expression, we first treated cells with TGFβ in combination with extracellular lactate (10 mM). A prior studies demonstrated that extracellular lactate modestly increased α-SMA expression in the absence of TGFβ [@kottman2012]. We found that extracellular lactate did not impact α-SMA expression in TGFβ-treated LFs (**Figure 6A-B**), suggesting that accumulation of intracellular lactate alone does not mediate the anti-fibrotic effects of MCT inhibition.
+We next sought to identify the signaling mechanism(s) linking lactate transport inhibition to anti-fibrotic transcriptional programs. Since increasing intracellular lactate was associated with more potent inhibition of α-SMA expression, we first treated cells with TGFβ in combination with extracellular lactate (10 mM). A prior study demonstrated that extracellular lactate modestly increased α-SMA expression in the absence of TGFβ [@kottmann2012]. We found that extracellular lactate did not impact α-SMA expression in TGFβ-treated LFs (**Figure 6A-B**), suggesting that accumulation of intracellular lactate alone does not mediate the anti-fibrotic effects of MCT inhibition.
 
-Next, we examined TGFβ-dependent signaling. TGFβ activates both SMAD and non-SMAD signaling pathways. MCT inhibition did not decrease Smad3 or ERK phosphorylation after 48 h of TGFβ stimulation (**Figure 6C-D**). 
+Prior work has also linked inhibition of glycolysis and lactate production to hypoxia-inducible factor 1α activation (HIF-1α), which contributes to myofibroblast differentiation [@kottmann2012; @goodwin2018]. We found maximal HIF-1α activation 6 h following TGFβ stimulation. At this time point, HIF-1α protein levels were similar across vehicle-, AZD3965-, and VB124-treated cells (**Figure 6C-D**). In LFs treated with dual inhibitors, HIF-1α protein was increased compared to vehicle, consistent with enrichment of the "Hypoxia" gene set in our RNA-seq data (**Figure 5B**). These findings, in light of prior studies, indicate that lactate transport inhibition acts downstream of HIF-1α-dependent transcriptional programs to inhibit myofibroblast differentiation. 
+
+Next, we examined TGFβ-dependent signaling. TGFβ activates both SMAD and non-SMAD signaling pathways through a cascade of protein phosphorylation events. MCT inhibitors did not decrease Smad3 or ERK phosphorylation after 48 h of TGFβ stimulation (**Figure 6E-H**). 
+
+Recently, 
 
 
 
