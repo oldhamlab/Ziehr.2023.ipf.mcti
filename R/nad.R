@@ -1,19 +1,19 @@
 # nad.R
 
 clean_nad <- function(protein, nad) {
+  metabs <- unique(nad$nucleotide)
+  top <- metabs[metabs %in% c("NADH", "NADPH")]
+  bottom <- metabs[metabs %in% c("NAD", "NADP")]
+
   protein <-
     protein |>
-    dplyr::mutate(
-      protein = 300 * .data$conc  # μg protein
-    ) |>
-    dplyr::select(-"conc")
+    dplyr::rename(protein = "conc") |>
+    # μg protein or divide cell by 1000
+    dplyr::mutate(protein = ifelse(top == "NADPH", protein / 1000, protein))
 
   nad <-
     nad |>
-    dplyr::rename(measurement = "nucleotide") |>
-    dplyr::mutate(
-      conc = 900 * .data$conc  # pmol nucleotide
-    )
+    dplyr::rename(measurement = "nucleotide") # pmol nucleotide
 
   dplyr::left_join(
     protein,
@@ -25,13 +25,15 @@ clean_nad <- function(protein, nad) {
       values_from = "conc"
     ) |>
     dplyr::mutate(
-      NAD_norm = .data$NAD / .data$protein,  # pmol / μg
-      NADH_norm = .data$NADH / .data$protein,
-      Ratio = .data$NADH / .data$NAD
+      # pmol / μg protein or fmol / cell
+      "{bottom}_norm" := .data[[bottom]] / .data$protein,
+      "{top}_norm" := .data[[top]] / .data$protein,
+
+      "{top}/{bottom}" := .data[[top]] / .data[[bottom]]
     ) |>
     refactor() |>
     tidyr::pivot_longer(
-      "NAD":"Ratio",
+      !("experiment":"protein"),
       names_to = "measurement",
       values_to = "value"
     ) |>

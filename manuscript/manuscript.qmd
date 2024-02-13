@@ -191,7 +191,7 @@ To identify anti-fibrotic transcriptional programs mediated by MCT inhibition, w
 
 Co-administration of either AZD3965 or VB124 reversed TGFβ-dependent enrichment of the EMT gene set, which is the Hallmark gene set containing genes related to fibrosis (**Figure 5B**). Leading edge analysis of the EMT gene set identified seven genes shared among all three comparisons (*i.e.*, genes increased by TGFβ and decreased by both AZD3965 and VB124) (**Figure 5D**). These genes include: biglycan (BGN), COL6A3, Frizzled 8 (FZD8), matrix Gla protein (MGP), Prostate Transmembrane Protein, Androgen Induced 1 (PMEPA1), TIMP metallopeptidase inhibitor 1 (TIMP1), and tenascin-C (TNC). Many of these genes contribute to the pathobiology of pulmonary fibrosis or serve as biomarkers of disease or treatment response [@kwapiszewska2018; @williams2020; @baarsma2017; @todd2020; @bhattacharyya2016]. Together, these data suggest lactate transport inhibitors attenuate the pro-fibrotic transcriptional program in TGFβ-treated LFs. 
 
-## Lactate transport inhibition signals through histone lactylation
+## Lactate transport inhibition may signal through histone lactylation
 
 We next sought to identify the signaling mechanism(s) linking lactate transport inhibition to anti-fibrotic transcriptional programs. Since increasing intracellular lactate was associated with more potent inhibition of α-SMA expression, we first treated cells with TGFβ in combination with extracellular lactate (10 mM). A prior study demonstrated that extracellular lactate modestly increased α-SMA expression in the absence of TGFβ [@kottmann2012]. We found that extracellular lactate did not impact α-SMA expression in TGFβ-treated LFs (**Figure 6A-B**), suggesting that accumulation of intracellular lactate alone does not mediate the anti-fibrotic effects of MCT inhibition.
 
@@ -199,16 +199,13 @@ Prior work has also linked inhibition of glycolysis and lactate production to hy
 
 Next, we examined TGFβ-dependent signaling. TGFβ activates both SMAD and non-SMAD signaling pathways through a cascade of protein phosphorylation events. MCT inhibitors did not decrease Smad3 or ERK phosphorylation after 48 h of TGFβ stimulation (**Figure 6E-H**). 
 
-Recently, 
+Post-translational protein modification of histone lysine residues by lactylation has been identified as a novel mechanism of metabolic regulation of gene expression [@zhang2019a]. Given the increase in intracellular lactate following MCT4 inhibition, we measured H3 histone lactylation by immunoblot (**Figure 6I-J**). We found that inhibition of both MCT1 and MCT4 increased histone lactylation and may account for some of the transcriptional changes observed following these treatments. 
+
+## Lactate transport inhibition contributes to antioxidant defense
+
+Lactate metabolism is closely coupled to cellular redox homeostasis through its metabolism by lactate dehydrogenases, which couple lactate oxidation to NADH production. Since prior studies have suggested that reactive oxygen species (ROS) are important for TGFβ-mediated gene expression, we next examined the impact of lactate transport inhibition on cellular redox homeostasis. Consistent with an increase in intracellular lactate, we observed a concomitant increase in intracellular NADH/NAD^+^ (**Figure 7A-C**). 
 
 
-
-
-## Lactate transport inhibition / redox stress section
-
-We next examined whether MCT inhibition affects TGFβ-dependent signaling pathways. TGFβ activates both SMAD and non-SMAD signaling pathways. We found no impact of MCT inhibition on decreasing Smad3 or ERK phosphorylation in LFs 48 h following TGFβ stimulation (**Figure 5**). 
-
-Hypoxia-inducible factor 1α (HIF-1α) is activated in lung fibroblasts following TGFβ and is required for myofibroblast differentiation and experimental pulmonary fibrosis partly through activation of glycolysis [@goodwin2018]. We found maximal HIF-1α stabilization 6 h following TGFβ treatment. At this time point, MCT inhibition did not decrease HIF-1α (**Figure 5E-F**), rather, HIF-1α protein levels were increased with combined MCT1 and MCT4 inhibition. 
 
 \newpage
 

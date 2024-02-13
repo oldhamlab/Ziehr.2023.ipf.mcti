@@ -19,7 +19,8 @@ clean_blots <- function(df) {
       "cnn1" = "CNN1",
       "hif1a" = "HIF-1α",
       "akt" = "AKT",
-      "pakt" = "pAKT"
+      "pakt" = "pAKT",
+      "h3" = "H3"
     )
 
   df |>
@@ -112,26 +113,30 @@ plot_blot <- function(df, stats = NULL, title = NULL) {
   }
 }
 
-phospho_ratio <- function(df) {
-  prots <- c("AKT", "AMPK", "ERK", "Smad3")
+blot_ratios <- function(df) {
+  num <- c("pAKT", "pAMPK", "pERK", "pSmad3", "Kla")
+  denom <- c("AKT", "AMPK", "ERK", "Smad3", "H3")
+  ratios <- stringr::str_c(num, denom, sep = "/")
 
   df |>
     dplyr::filter(
-      stringr::str_detect(.data$protein, paste(prots, collapse = "|"))
+      stringr::str_detect(.data$protein, paste(c(num, denom), collapse = "|"))
     ) |>
     dplyr::mutate(
-      phospho = ifelse(
-        stringr::str_detect(.data$protein, "^p\\D"),
+      temp = ifelse(
+        .data$protein %in% num,
         "density",
         "background"
       ),
-      protein = stringr::str_replace(.data$protein, "^p", ""),
-      protein = stringr::str_c("p", .data$protein, "/", .data$protein),
+      protein = purrr::map_chr(
+        .data$protein,
+        \(x) ratios[stringr::str_detect(ratios, x)]
+      ),
       .after = "dose"
     ) |>
     dplyr::select("group", "experiment":"protein", "ratio") |>
     tidyr::pivot_wider(
-      names_from = "phospho",
+      names_from = "temp",
       values_from = "ratio"
     ) |>
     dplyr::mutate(ratio = .data$density / .data$background) |>

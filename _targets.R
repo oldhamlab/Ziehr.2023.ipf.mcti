@@ -51,7 +51,7 @@ list(
   ),
   tar_target(
     blots_phospho,
-    phospho_ratio(blots_filtered)
+    blot_ratios(blots_filtered)
   ),
   tar_target(
     blots_all,
@@ -110,7 +110,10 @@ list(
       "dual",        "pAKT/AKT",     "dual_p_akt",       FALSE,    rlang::sym("comps_azd_2"),
       "dual",        "pAMPK/AMPK",   "dual_p_ampk",      FALSE,    rlang::sym("comps_azd_2"),
       "dual",        "pERK/ERK",     "dual_p_erk",       FALSE,    rlang::sym("comps_azd_2"),
-      "dual",        "pSmad3/Smad3", "dual_p_smad3",     FALSE,    rlang::sym("comps_azd_2")
+      "dual",        "pSmad3/Smad3", "dual_p_smad3",     FALSE,    rlang::sym("comps_azd_2"),
+      "lactyl",      "Kla",          "lactyl_kla",       FALSE,    rlang::sym("comps_azd_2"),
+      "lactyl",      "H3",           "lactyl_h3",        FALSE,    rlang::sym("comps_azd_2"),
+      "lactyl",      "Kla/H3",       "lactyl_kla_h3",    FALSE,    rlang::sym("comps_azd_2")
     ),
     names = name,
     tar_target(
@@ -139,7 +142,8 @@ list(
         c("dual", "ar"),
         "ipf-lf",
         "dual",
-        "dual"
+        "dual",
+        "lactyl"
       ),
       protein = list(
         c("α-SMA", "MCT1", "MCT4"),
@@ -150,7 +154,8 @@ list(
         "α-SMA",
         c("α-SMA", "Col1a1"),
         c("pSmad3", "Smad3", "pSmad3/Smad3"),
-        c("pERK", "ERK", "pERK/ERK")
+        c("pERK", "ERK", "pERK/ERK"),
+        c("Kla", "H3", "Kla/H3")
       ),
       treatment = list(
         NULL,
@@ -161,9 +166,11 @@ list(
         c("Veh", "AR", "VB", "AR/VB"),
         c("Veh", "AZD", "VB", "AZD/VB"),
         c("Veh", "AZD", "VB", "AZD/VB"),
+        c("Veh", "AZD", "VB", "AZD/VB"),
         c("Veh", "AZD", "VB", "AZD/VB")
       ),
       condition = list(
+        NULL,
         NULL,
         NULL,
         NULL,
@@ -183,6 +190,7 @@ list(
         rlang::sym("comps_ar_2"),
         rlang::sym("comps_azd_2"),
         rlang::sym("comps_azd_2"),
+        rlang::sym("comps_azd_2"),
         rlang::sym("comps_azd_2")
       ),
       fn = list(
@@ -194,10 +202,11 @@ list(
         group_twofactor,
         group_twofactor,
         group_twofactor,
+        group_twofactor,
         group_twofactor
       ),
-      nrow = list(1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL),
-      ncol = list(NULL, NULL, NULL, 1, 1, 1, 1, 1, 1),
+      nrow = list(1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+      ncol = list(NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1),
       strip_pos = list(
         "top",
         "top",
@@ -205,6 +214,7 @@ list(
         "right",
         "right",
         "top",
+        "right",
         "right",
         "right",
         "right"
@@ -218,7 +228,8 @@ list(
         "fig_ar",
         "fig_ipf_lf",
         "fig_psmad3",
-        "fig_perk"
+        "fig_perk",
+        "fig_kla_h3"
       )
     ),
     names = name,
@@ -287,10 +298,15 @@ list(
   # plates ------------------------------------------------------------------
 
   tar_map(
-    values = list(
-      x = c("picogreen", "lactate", "nad_protein", "nad_nad", "glucose"),
-      cf = c(5129, 20000, 300, 900, 1110000),
-      bywell = c(TRUE, TRUE, FALSE, FALSE, TRUE)
+    values = tibble::tribble(
+      ~x, ~cf,
+      "picogreen",    5129,
+      "lactate",      20000,
+      "nad_protein",  300,
+      "nad_nad",      900,
+      "glucose",      1110000,
+      "nadp_dna",     5129,
+      "nadp_nadp",    600
     ),
     names = x,
     tar_target(
@@ -482,6 +498,14 @@ list(
     nad_clean,
     clean_nad(plates_conc_nad_protein, plates_conc_nad_nad)
   ),
+  tar_target(
+    nadp_clean,
+    clean_nad(plates_conc_nadp_dna, plates_conc_nadp_nadp)
+  ),
+  tar_target(
+    nad_nadp_clean,
+    dplyr::bind_rows(nad_clean, nadp_clean)
+  ),
   tar_map(
     values = list(
       names = c(
@@ -489,27 +513,42 @@ list(
         "nad_norm",
         "nadh",
         "nadh_norm",
-        "ratio"
+        "nadh_ratio",
+        "nadp",
+        "nadp_norm",
+        "nadph",
+        "nadph_norm",
+        "nadph_ratio"
       ),
       measure = c(
         "NAD",
         "NAD_norm",
         "NADH",
         "NADH_norm",
-        "Ratio"
+        "NADH/NAD",
+        "NADP",
+        "NADP_norm",
+        "NADPH",
+        "NADPH_norm",
+        "NADPH/NADP"
       ),
       ytitle = c(
         "NAD (pmol)",
         "NAD (pmol / μg protein)",
         "NADH (pmol)",
         "NADH (pmol / μg protein)",
-        "NADH / NAD"
+        "NADH / NAD<sup>+</sup>",
+        "NADP (pmol)",
+        "NADP (fmol / cell)",
+        "NADPH (pmol)",
+        "NADPH (fmol / cell)",
+        "NADPH / NADP<sup>+</sup>"
       )
     ),
     names = names,
     tar_target(
       nad_filter,
-      dplyr::filter(nad_clean, measurement == measure)
+      dplyr::filter(nad_nadp_clean, measurement == measure)
     ),
     tar_target(
       nad_stats,
@@ -527,7 +566,8 @@ list(
         "treatment",
         "value_corr",
         ytitle = ytitle
-      ),
+      ) +
+        ggplot2::theme(axis.title.y.left = ggtext::element_markdown()),
       format = "rds"
     )
   ),
@@ -1388,7 +1428,8 @@ list(
       "dual-azd-smad3-blot.png",    1,      0,      -0.05,  "smad3_azd",
       "dual-azd-erk-blot.png",      1,      0,      -0.05,  "erk_azd",
       "dual-azd-hif1a-blot.png",    1,      0,      -0.05,  "hif_azd",
-      "lactate-sma-blot.png",       1.2,    0,      -0.05,  "sma_lac"
+      "lactate-sma-blot.png",       1.2,    0,      -0.05,  "sma_lac",
+      "dual-azd-kla-h3.png",        1,      0,      0,      "azd_kla"
     ),
     names = names,
     tar_target(
@@ -1544,7 +1585,6 @@ list(
     format = "file"
   ),
 
-
   # figure 6 ----------------------------------------------------------------
 
   tar_target(
@@ -1557,11 +1597,37 @@ list(
       fig_img_smad3_azd,
       blot_plot_fig_psmad3,
       fig_img_erk_azd,
-      blot_plot_fig_perk
+      blot_plot_fig_perk,
+      fig_img_azd_kla,
+      blot_plot_lactyl_kla_h3
     ) |>
       write_figures("Figure 06"),
     format = "file"
   ),
+
+  # figure 7 ----------------------------------------------------------------
+
+  tar_target(
+    fig07,
+    make_fig07(
+      nad_plot_nad_norm,
+      nad_plot_nadh_norm,
+      nad_plot_nadh_ratio,
+      nad_plot_nadp_norm,
+      nad_plot_nadph_norm,
+      nad_plot_nadph_ratio
+    ) |>
+      write_figures("Figure 07"),
+    format = "file"
+  ),
+  # tar_target(
+  #   fig07s,
+  #   make_fig07s(
+  #
+  #   ) |>
+  #     write_figures("Figure 07.supplement"),
+  #   format = "file"
+  # ),
 
   # manuscript --------------------------------------------------------------
 
