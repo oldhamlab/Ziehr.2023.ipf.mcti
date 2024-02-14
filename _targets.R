@@ -597,6 +597,42 @@ list(
     ros_clean,
     dplyr::bind_rows(ros_clean_cellrox, ros_clean_mitosox)
   ),
+  tar_map(
+    values = list(
+      names = c("cellrox", "mitosox", "mitotracker", "ratio"),
+      measure = c("CellROX", "MitoSOX", "MitoTracker", "Ratio"),
+      ytitle = c(
+        "CellROX",
+        "MitoSOX",
+        "MitoTracker",
+        "MitoSOX (normalized)"
+      )
+    ),
+    names = names,
+    tar_target(
+      ros_norm,
+      norm_ros(ros_clean, measure)
+    ),
+    tar_target(
+      ros_stats,
+      seahorse_group_onefactor(ros_norm) |>
+        dplyr::mutate(measurement = measure) |>
+        dplyr::rename(group = "x")
+    ),
+    tar_target(
+      ros_plot,
+      plot_mice(
+        ros_norm,
+        ros_stats,
+        measure = measure,
+        x = "group",
+        y = "value_corr",
+        ytitle = ytitle
+      ),
+      format = "rds"
+    ),
+    NULL
+  ),
 
   # seahorse ----------------------------------------------------------------
 
@@ -1647,7 +1683,7 @@ list(
       nad_plot_nadp_norm,
       nad_plot_nadph_norm,
       nad_plot_nadph_ratio,
-      patchwork::plot_spacer(), # CellROX
+      ros_plot_cellrox,
       metab_mcti_tar_proline_intra
     ) |>
       write_figures("Figure 07"),

@@ -4,6 +4,10 @@ experiment,well,type,condition,treatment,time,value
 2023-11-17,A3,sample,control,DMSO,1,4252.7
 2023-11-17,A4,sample,control,DMSO,1,4019.3
 2023-11-17,A5,sample,control,DMSO,1,4200.7
+2023-11-17,A2,sample,control,DMSO,3,4315.2
+2023-11-17,A3,sample,control,DMSO,3,4252.7
+2023-11-17,A4,sample,control,DMSO,3,4019.3
+2023-11-17,A5,sample,control,DMSO,3,4200.7
 2023-11-17,B1,sample,tgfb,DMSO,1,3851
 2023-11-17,B2,sample,tgfb,DMSO,1,3087.7
 2023-11-17,B3,sample,tgfb,DMSO,1,3153.8
