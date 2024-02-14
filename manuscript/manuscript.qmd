@@ -111,6 +111,7 @@ targets::tar_load(
     fig04,
     fig05,
     fig06,
+    fig07,
     # fig10,
     # fig11,
     # resources_table,
@@ -203,7 +204,10 @@ Post-translational protein modification of histone lysine residues by lactylatio
 
 ## Lactate transport inhibition contributes to antioxidant defense
 
-Lactate metabolism is closely coupled to cellular redox homeostasis through its metabolism by lactate dehydrogenases, which couple lactate oxidation to NADH production. Since prior studies have suggested that reactive oxygen species (ROS) are important for TGFβ-mediated gene expression, we next examined the impact of lactate transport inhibition on cellular redox homeostasis. Consistent with an increase in intracellular lactate, we observed a concomitant increase in intracellular NADH/NAD^+^ (**Figure 7A-C**). 
+Lactate metabolism is closely coupled to cellular redox homeostasis through its metabolism by lactate dehydrogenases, which couple lactate oxidation to NADH production. Since prior studies have suggested that reactive oxygen species (ROS) are important for TGFβ-mediated gene expression, we next examined the impact of lactate transport inhibition on cellular redox homeostasis. Consistent with an increase in intracellular lactate with MCT4 inhibition, we observed a concomitant increase in intracellular NADH/NAD^+^ (**Figure 7A**), while the NADPH/NADP^+^ ratio was unchanged (**Figure 7B**). Treatment-dependent increases in NADH/NAD^+^ corresponded to reductions in total ROS as measured by CellROX (**Figure 7C**). Notably, we did not observe TGFβ-dependent increases in total ROS production nor an impact of TGFβ or inhibitors on mitochondrial superoxide production (**Supplemental Figure 7A**). 
+
+Proline biosynthesis has been previousyl suggested as a mechanism by which NIH-3T3 fibroblasts prevent excessive ROS accumulation following TGFβ stimulation [@schworer2020]. 
+
 
 
 

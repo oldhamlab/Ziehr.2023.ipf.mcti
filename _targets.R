@@ -572,6 +572,32 @@ list(
     )
   ),
 
+  # ros ---------------------------------------------------------------------
+
+  tar_map(
+    values = list(
+      names = c("cellrox", "mitosox")
+    ),
+    names = names,
+    tar_target(
+      ros_file,
+      raw_data_path(stringr::str_c(names, ".csv")),
+      format = "file_fast"
+    ),
+    tar_target(
+      ros_raw,
+      readr::read_csv(ros_file, show_col_types = FALSE)
+    ),
+    tar_target(
+      ros_clean,
+      clean_ros(ros_raw)
+    )
+  ),
+  tar_target(
+    ros_clean,
+    dplyr::bind_rows(ros_clean_cellrox, ros_clean_mitosox)
+  ),
+
   # seahorse ----------------------------------------------------------------
 
   tar_target(
@@ -851,6 +877,11 @@ list(
     tar_target(
       metab_mcti_tar_lactate,
       plot_mois(metab_mcti_tar_treated, metab_mcti_tar_tt, "lactate"),
+      format = "rds"
+    ),
+    tar_target(
+      metab_mcti_tar_proline,
+      plot_mois(metab_mcti_tar_treated, metab_mcti_tar_tt, "proline"),
       format = "rds"
     ),
     NULL
@@ -1615,7 +1646,9 @@ list(
       nad_plot_nadh_ratio,
       nad_plot_nadp_norm,
       nad_plot_nadph_norm,
-      nad_plot_nadph_ratio
+      nad_plot_nadph_ratio,
+      patchwork::plot_spacer(), # CellROX
+      metab_mcti_tar_proline_intra
     ) |>
       write_figures("Figure 07"),
     format = "file"
