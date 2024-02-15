@@ -276,15 +276,29 @@ make_fig06 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10) {
     ggplot2::theme(legend.position = "bottom")
 }
 
-make_fig07 <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
-  ((p1 + p2 + p3 + p4 + p5 + p6) +
-     patchwork::plot_layout(guides = "collect")) +
-    p7 +
-    ((p8) + patchwork::plot_layout(guides = "keep")) +
+make_fig07 <- function(p1, p2, p3, p4) {
+  x <- p1 + p2 + p3 + patchwork::plot_layout(guides = "collect")
+  x - p4 +
+    theme_patchwork(
+      design = "aaab",
+      widths = ggplot2::unit(1.5, "in"),
+      heights = ggplot2::unit(1.5, "in"),
+      tags = list(c("A", "", "", "B"))
+    ) &
+    ggplot2::theme(
+      legend.position = "bottom",
+      legend.margin = ggplot2::margin(t = -10)
+    )
+}
+
+make_fig07s <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
+  p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 +
     theme_patchwork(
       design = "abc \n def \n gh#",
       widths = ggplot2::unit(1.5, "in"),
-      heights = ggplot2::unit(c(1.5), "in"),
+      heights = ggplot2::unit(1.5, "in"),
+      guides = "collect",
       tags = list(c("A", "", "", "B", "", "", "C", "D"))
-    )
+    ) &
+    ggplot2::theme(legend.position = "bottom")
 }

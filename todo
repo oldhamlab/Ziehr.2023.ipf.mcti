@@ -8,3 +8,4 @@
 - [x] generate ratio blot graphs and add to analysis
 - [ ] check if MCT1 siRNA overlaps with MCT4 sequence
 - [ ] update_geom_defaults so that labels match font family for plot
+- [ ] repeat MitoSOX staining x2 more

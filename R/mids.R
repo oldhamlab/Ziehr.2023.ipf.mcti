@@ -62,7 +62,28 @@ correct_mids <- function(mid, correction_matrices) {
     dplyr::mutate(data = purrr::map2(.data$matrix, .data$data, mmult)) |>
     tidyr::unnest(c("data")) |>
     dplyr::filter(.data$isotope %in% stringr::str_c("M", 0:6)) |>
-    dplyr::select(-"matrix")
+    dplyr::select(-"matrix") |>
+    dplyr::ungroup()
+}
+
+format_mids_all <- function(df) {
+  df |>
+    dplyr::group_by(tracer, condition, treatment, metabolite, isotope) |>
+    dplyr::summarize(
+      mean = mean(mid_corr),
+      se = sd(mid) / sqrt(dplyr::n())
+    ) |>
+    dplyr::group_by(tracer, condition, treatment, metabolite) |>
+    dplyr::mutate(
+      means = 1 - cumsum(mean) + mean,
+      ymin = means + se,
+      ymax = means - se,
+      group = stringr::str_c(condition, treatment, sep = "."),
+      group = factor(group, levels = c(
+        "Ctl.Veh", "Ctl.AZD", "Ctl.VB", "Ctl.AZD/VB",
+        "TGFβ.Veh", "TGFβ.AZD", "TGFβ.VB", "TGFβ.AZD/VB"
+      ))
+    )
 }
 
 plot_mids_all <- function(df, label) {
@@ -74,28 +95,55 @@ plot_mids_all <- function(df, label) {
       lac3 = expression(paste("[U-"^13, "C"[3], "]-lactate"))
     )
 
-  x <-
-    df |>
+  df |>
     dplyr::filter(tracer %in% label) |>
-    dplyr::group_by(condition, treatment, metabolite, isotope) |>
-    dplyr::summarize(
-      mean = mean(mid_corr),
-      se = sd(mid) / sqrt(dplyr::n())
-    ) |>
-    dplyr::group_by(condition, treatment, metabolite) |>
-    dplyr::mutate(
-      means = 1 - cumsum(mean) + mean,
-      ymin = means + se,
-      ymax = means - se,
-      group = stringr::str_c(condition, treatment, sep = "."),
-      group = factor(group, levels = c(
-        "Ctl.Veh", "Ctl.AZD", "Ctl.VB", "Ctl.AZD/VB",
-        "TGFβ.Veh", "TGFβ.AZD", "TGFβ.VB", "TGFβ.AZD/VB"
-      ))
-    )
-
-  ggplot2::ggplot(x) +
+    ggplot2::ggplot() +
     ggplot2::facet_wrap(~ metabolite) +
+    ggplot2::aes(
+      x = group,
+      y = mean,
+      fill = isotope
+    ) +
+    ggplot2::geom_col() +
+    ggplot2::geom_errorbar(
+      ggplot2::aes(
+        ymin = ymin,
+        ymax = ymax
+      ),
+      position = ggplot2::position_dodge(width = 0.75),
+      color = "grey50",
+      width = 0,
+      linewidth = 0.25
+    ) +
+    ggplot2::scale_fill_viridis_d() +
+    ggplot2::scale_y_continuous(
+      breaks = seq(0, 1, 0.2),
+      expand = ggplot2::expansion(c(0, 0))
+    ) +
+    ggplot2::labs(
+      x = NULL,
+      y = "Mole fraction",
+      fill = NULL,
+      title = title[[label]]
+    ) +
+    theme_plot() +
+    ggplot2::theme(
+      legend.position = "right",
+      axis.text.x = ggplot2::element_text(angle = 90, hjust = 1)
+    )
+}
+
+filter_mids <- function(df, label, metab, iso) {
+  df |>
+    dplyr::filter(tracer == label) |>
+    dplyr::filter(metabolite == metab) |>
+    dplyr::filter(isotope == iso) |>
+    dplyr::rename(group = "replicate") |>
+    dplyr::mutate(group = factor(.data$group))
+}
+
+plot_mids <- function(df, title = NULL) {
+  ggplot2::ggplot(df) +
     ggplot2::aes(
       x = group,
       y = mean,

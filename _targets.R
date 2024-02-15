@@ -1091,6 +1091,10 @@ list(
     mid_mcti_mids_corr,
     correct_mids(mid_mcti_mids, correction_matrices)
   ),
+  tar_target(
+    mid_mcti_stacked_data,
+    format_mids_all(mid_mcti_mids_corr)
+  ),
   tar_map(
     values = list(
       label = c("glc2", "gln5", "lac3", "glc6")
@@ -1098,7 +1102,7 @@ list(
     names = label,
     tar_target(
       mid_mcti_plot,
-      plot_mids_all(mid_mcti_mids_corr, label = label),
+      plot_mids_all(mid_mcti_stacked_data, label = label),
       format = "rds"
     ),
     tar_target(
@@ -1200,6 +1204,54 @@ list(
     ),
     NULL
   ),
+  tar_map(
+    values = list(
+      names = c("gln5_proline"),
+      tracer = c("gln5"),
+      metabolite = c("PRO"),
+      isotope = c("M5"),
+      ytitle = c("M5 Mole fraction"),
+      title = c("[U-^13^C~5~]-GLN → PRO")
+    ),
+    names = names,
+    tar_target(
+      mid_filter,
+      filter_mids(
+        mid_mcti_mids_corr,
+        tracer,
+        metabolite,
+        isotope
+      )
+    ),
+    tar_target(
+      mid_stats,
+      twofactor(
+        mid_filter,
+        "mid_corr",
+        mixed = FALSE,
+        comps = comps_azd_2
+      )
+    ),
+    tar_target(
+      mid_plot,
+      plot_two_factor(
+        mid_filter,
+        mid_stats,
+        x = "treatment",
+        y = "mid_corr",
+        ytitle = ytitle,
+        title = title
+      ) +
+        ggplot2::theme(
+          plot.title = ggtext::element_markdown(
+            margin = ggplot2::margin(b = -5)
+          )
+        ),
+      format = "rds"
+    ),
+    NULL
+  ),
+
 
   # rnaseq ------------------------------------------------------------------
 
@@ -1680,23 +1732,26 @@ list(
       nad_plot_nad_norm,
       nad_plot_nadh_norm,
       nad_plot_nadh_ratio,
-      nad_plot_nadp_norm,
-      nad_plot_nadph_norm,
-      nad_plot_nadph_ratio,
-      ros_plot_cellrox,
-      metab_mcti_tar_proline_intra
+      ros_plot_cellrox
     ) |>
       write_figures("Figure 07"),
     format = "file"
   ),
-  # tar_target(
-  #   fig07s,
-  #   make_fig07s(
-  #
-  #   ) |>
-  #     write_figures("Figure 07.supplement"),
-  #   format = "file"
-  # ),
+  tar_target(
+    fig07s,
+    make_fig07s(
+      nad_plot_nadp_norm,
+      nad_plot_nadph_norm,
+      nad_plot_nadph_ratio,
+      ros_plot_mitotracker,
+      ros_plot_mitosox,
+      ros_plot_ratio,
+      metab_mcti_tar_proline_intra,
+      mid_plot_gln5_proline
+    ) |>
+      write_figures("Figure 07.supplement"),
+    format = "file"
+  ),
 
   # manuscript --------------------------------------------------------------
 
