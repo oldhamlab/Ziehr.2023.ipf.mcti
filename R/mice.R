@@ -83,6 +83,15 @@ plot_wt_timeline <- function(df, stat) {
       linewidth = 0.1,
       linetype = 2
     ) +
+    ggbeeswarm::geom_quasirandom(
+      ggplot2::aes(group = .data$group),
+      pch = 1,
+      color = "black",
+      width = 0.05,
+      size = 0.5,
+      stroke = 0.25,
+      show.legend = FALSE
+    ) +
     ggplot2::geom_errorbar(
       ggplot2::aes(color = .data$group),
       stat = "summary",
@@ -107,15 +116,6 @@ plot_wt_timeline <- function(df, stat) {
       size = 1.5,
       color = "white",
       position = ggplot2::position_nudge(x = 1),
-      show.legend = FALSE
-    ) +
-    ggbeeswarm::geom_quasirandom(
-      ggplot2::aes(group = .data$group),
-      pch = 1,
-      color = "black",
-      width = 0.05,
-      size = 0.5,
-      stroke = 0.25,
       show.legend = FALSE
     ) +
     ggplot2::geom_text(

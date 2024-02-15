@@ -112,6 +112,7 @@ targets::tar_load(
     fig05,
     fig06,
     fig07,
+    fig08, 
     # fig10,
     # fig11,
     # resources_table,
@@ -207,6 +208,10 @@ Post-translational protein modification of histone lysine residues by lactylatio
 Lactate metabolism is closely coupled to cellular redox homeostasis through its metabolism by lactate dehydrogenases, which transfer electrons from lactate to NADH. Since prior studies have suggested that reactive oxygen species (ROS) are important for TGFβ-mediated gene expression [@jain2013, @schworer2020], we next examined the impact of lactate transport inhibition on cellular redox homeostasis. Consistent with an increase in intracellular lactate with MCT4 inhibition, we observed a concomitant increase in intracellular NADH/NAD^+^ (**Figure 7A**), which was associated with a reduction in total ROS as measured by the CellROX fluorescent probe (**Figure 7B**). By contrast, the NADPH/NADP^+^ was unchanged by either TGFβ or MCT inhibitors (**Supplemental Figure 7A**). Notably, we did not observe TGFβ-dependent increases in total ROS production nor an impact of TGFβ or inhibitors on mitochondrial superoxide production (**Supplemental Figure 7B**). 
 
 Proline biosynthesis has been previously suggested as a mechanism by which NIH-3T3 fibroblasts prevent excessive ROS accumulation following TGFβ stimulation [@schworer2020]. In this model, proline synthesis from glutamine consumes reducing equivalents from NADPH and NADH, thereby ameliorating reductive stress and decreasing ROS production. Compared to this prior study, we did not find that TGFβ increased proline in our primary lung fibroblasts (**Supplemental Figure 7C**). Overall, the fractional labeling of proline from [U-^13^C~5~]-glutamine was modest (~10%) compared to the 40% previously reported (**Supplemental Figure 7D**). While we observed trends toward increased proline production from glutamine with MCT4 inhibition, this mechanism seems unlikely to account for the effects of MCT inhibitors on ROS generation. 
+
+## MCT inhibition decreases experimental pulmonary fibrosis
+
+Based on our *in vitro* data suggesting an anti-fibrotic effect of lactate transporter inhibition, we next tested the efficacy of MCT inhibitors in the bleomycin-induced mouse model of pulmonary fibrosis. Mice received 1.2 U/kg bleomycin by intratracheal administration. After seven days, the animals began treatment with AZD3965 (100 mg/kg twice daily) or VB124 (30 mg/kg once daily) or vehicle by oral gavage (**Figure 8A**). We anticipated that dual inhibition would likely be toxic *in vivo* and did not assess the combination of inhibitors. Compared to vehicle, mice treated with VB124 had increased weight recovery 21 days after bleomycin administration (**Supplemental Figure 8**). Lung mechanics were improved by ~ 50% of baseline compared to vehicle controls following 14 days of MCT inhibitor treatment (**Figure 8B-C**). Consistent with improved elastance and compliance measures, histologic fibrosis severity assessed by Ashcroft scoring [@ashcroft1988] also improved. 
 
 
 \newpage

@@ -1542,7 +1542,7 @@ list(
       "dual-azd-sma-blot.png",      1,      0,      -0.05,  "sma_azd",
       "dual-ar-sma-blot.png",       1.2,    0.1,    -0.05,  "sma_ar",
       "dual-azd-contract.png",      1,      0,      -0.05,  "contraction",
-      "bleo-trichrome.png",         1,      0,      0,      "trichrome",
+      "bleo-trichrome.png",         1.1,    0,      0,      "trichrome",
       "bleo-timeline.png",          1,      0,      0,      "timeline",
       "dual-azd-smad3-blot.png",    1,      0,      -0.05,  "smad3_azd",
       "dual-azd-erk-blot.png",      1,      0,      -0.05,  "erk_azd",
@@ -1750,6 +1750,30 @@ list(
       mid_plot_gln5_proline
     ) |>
       write_figures("Figure 07.supplement"),
+    format = "file"
+  ),
+
+  # figure 8 ----------------------------------------------------------------
+
+  tar_target(
+    fig08,
+    make_fig08(
+      fig_img_timeline,
+      mice_vent_mcti_plot_cst,
+      mice_vent_mcti_plot_prime8,
+      fig_img_trichrome,
+      mice_mcti_plot_ashcroft,
+      mice_mcti_plot_ohp
+    ) |>
+      write_figures("Figure 08"),
+    format = "file"
+  ),
+  tar_target(
+    fig08s,
+    make_fig08s(
+      mice_wt_mcti_plot
+    ) |>
+      write_figures("Figure 08.supplement"),
     format = "file"
   ),
 

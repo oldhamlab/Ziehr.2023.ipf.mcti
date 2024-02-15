@@ -302,3 +302,24 @@ make_fig07s <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
     ) &
     ggplot2::theme(legend.position = "bottom")
 }
+
+make_fig08 <- function(p1, p2, p3, p4, p5, p6) {
+  design <- "abc \n def"
+  p1 + p2 + p3 + p4 + p5 + p6 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(c(2, 1.5, 1.5), "in"),
+      heights = ggplot2::unit(1.5, "in")
+    )
+}
+
+make_fig08s <- function(p1) {
+  design <- "a"
+  p1 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(4.5, "in"),
+      heights = ggplot2::unit(1.25, "in"),
+      tags = NULL
+    )
+}
