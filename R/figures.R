@@ -323,3 +323,78 @@ make_fig08s <- function(p1) {
       tags = NULL
     )
 }
+
+make_fig09 <- function(p1) {
+  design <- "aaa"
+  p1 + # p2 + p3 + p4 + p5 + p6 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(c(1.5), "in"),
+      heights = ggplot2::unit(1.5, "in")
+    )
+}
+
+make_fig09s1 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) {
+  # design <- "abc \n def \n ghi \n jkl"
+  # p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 +
+  #   theme_patchwork(
+  #     design = design,
+  #     widths = ggplot2::unit(2, "in"),
+  #     heights = ggplot2::unit(c(2, 2.5, 2, 2.5), "in")
+  #   )
+
+  design <- "ab \n cd \n ef"
+
+  extra <-
+    p1 + p2 + p5 + p6 + p9 + p10 +
+    patchwork::plot_annotation(
+      title = "Plasma",
+      theme = ggplot2::theme(
+        plot.title = ggplot2::element_text(
+          hjust = 0.5,
+          size = ggplot2::rel(0.8),
+          face = "bold"
+        )
+      )
+    ) +
+    theme_patchwork(
+      design = design,
+      tags = list(c("A", "B", "E", "F", "I", "J"))
+    )
+  intra <-
+    p3 + p4 + p7 + p8 + p11 + p12 +
+    patchwork::plot_annotation(
+      title = "Lung",
+      theme = ggplot2::theme(
+        plot.title = ggplot2::element_text(
+          hjust = 0.5,
+          size = ggplot2::rel(0.8),
+          face = "bold"
+        )
+      )
+    ) +
+    theme_patchwork(
+      design = design,
+      tags = list(c("C", "D", "G", "H", "K", "L"))
+    )
+
+  patchwork::wrap_elements(full = extra) +
+    patchwork::wrap_elements(full = intra) +
+    theme_patchwork(
+      design = "ab",
+      widths = ggplot2::unit(4, "in"),
+      heights = ggplot2::unit(6, "in"),
+      tags = NULL
+    )
+}
+
+make_fig09s2 <- function(p1, p2) {
+  design <- "aab"
+  p1 + p2 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(1.5, "in"),
+      heights = ggplot2::unit(2, "in")
+    )
+}
+

@@ -1,0 +1,380 @@
+---
+title: "MIMS Analysis"
+date-modified: today
+format: html
+excecute:
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+devtools::load_all()
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(targets)
+})
+
+here::i_am("analysis/mims.qmd")
+
+theme_set(ggthemes::theme_few())
+```
+
+```{r}
+#| label: data
+
+withr::with_dir(here::here(), {
+  mims <- tar_read(mims_clean)
+})
+
+df <- 
+  mims |> 
+  dplyr::mutate(
+    label = dplyr::case_when(
+      ion == "16O" ~ "O", 
+      ion == "12C14N" ~ "C^14^N", 
+      ion == "12C15N" ~ "C^15^N", 
+      ion == "12C15N/12C14N" ~ "C^15^N / C^14^N", 
+      ion == "12C21H" ~ "C~2~^1^H", 
+      ion == "12C22H" ~ "C~2~^2^H", 
+      ion == "12C22H/12C21H" ~ "C~2~^2^H / C~2~^1^H", 
+      ion == "31P" ~ "P", 
+      ion == "32S" ~ "S", 
+      ion == "31P/32S" ~ "P / S"
+    ), 
+    across(c(mean, stddev), \(x) ifelse(str_detect(ion, "/"), x / 10000, x)),
+    across(c(mean, stddev), \(x) ifelse(str_detect(ion, "N/"), x / 0.00368, x)),
+    across(c(mean, stddev), \(x) ifelse(str_detect(ion, "H/"), x / 0.000115, x)),
+  )
+```
+
+## Overview
+
+To further characterize the metabolic consequences of lactate transport inhibition *in vivo*, we performed multi-isotope imaging mass spectrometry of mouse lungs labeled with 6 doses of ^15^N-proline and ^2^H~7~-glucose over three days prior to euthanasia. We imaged one animal from Ctl, Bleo, AZD, and VB groups. For bleomcyin-treated animals, one fibrotic region and one region with more normal appearing alveolar structure were measured. Two planes of images were acquired. The 26 m/*z* ion was ^12^C^14^N in the first plane and ^12^C~2~^2^H in the second plane. 
+
+## Analysis
+
+Image data were analyzed using the OpenMIMS Image J plugin. For the initial analysis, regions-of-interest (ROIs) were drawn on the compressed images using the P/S signal, which highlights nuclei. These ROIs were background, nuclei, or lamella. Nuclei were subcategorized as alveolar (cells entirely within the alveoli, likely airway macrophages), airway (nuclei directly adjacent to an airway), AT2 (a large airway cell with lamella), and fibrosis (nuclei not adjacent to an airway). Putative lamellar bodies were characterized by high P and O and low S. I assume an isotopic enrichment of ^2^H to be 0.0115% and of ^15^N to be 0.368%. 
+
+
+## Plots
+
+```{r}
+#| label: nuclei-by-region
+
+df |> 
+  filter(feature == "nuclei") |> 
+  filter(ion %in% c("12C15N/12C14N", "12C22H/12C21H")) |> 
+  ggplot() +
+  facet_wrap(
+    facets = vars(label), 
+    scales = "free_y"
+  ) +
+  aes(
+    x = group, 
+    y = mean
+  ) +
+  geom_jitter(
+    aes(color = region), 
+    position = position_jitterdodge(dodge.width = 0.8, jitter.width = 0.3), 
+    alpha = 0.2
+  ) +
+  geom_crossbar(
+    aes(group = region), 
+    stat = "summary", 
+    fun = "mean", 
+    position = position_dodge(width = 0.8), 
+    width = 0.35
+  ) +
+  guides(
+    color = guide_legend(override.aes = list(alpha = 1))
+  ) + 
+  scale_color_brewer(
+    palette = "Set1", 
+    labels = list("Alveolar", "Fibrotic")
+  ) +
+  labs(
+    x = NULL, 
+    y = "Enrichment", 
+    color = NULL, 
+    title = "Nuclear isotope enrichment"
+  ) +
+  theme(
+    strip.text = ggtext::element_markdown(size = 10), 
+    legend.position = "bottom"
+  )
+```
+
+Across all nuclei, there is increased ^15^N signal associated with bleomycin compared to control. This would be consistent with expectation. There may be a trend toward decreased ^15^N nuclear signal with AZD and VB treatment. This would also be consistent with our expectation. Interestingly, bleomycin treatment decreases ^2^H signal in the fibrotic region while AZD and VB treatment increase this signal. Could this be consistent with rerouting of glucose carbons into oxidative and catabolic pathways rather than elimination as lactate, which would fit with our hypothesis? Regardles of the biological meaning, it does suggest a homeostatic metabolic reprogramming as AZD and VB increase glucose enrichment back toward control.
+
+```{r}
+#| label: nuclei-by-type
+
+df |> 
+  filter(feature == "nuclei") |> 
+  filter(ion %in% c("12C15N/12C14N", "12C22H/12C21H")) |> 
+  ggplot() +
+  facet_grid(
+    rows = vars(label), 
+    cols = vars(tag), 
+    scales = "free_y"
+  ) +
+  aes(
+    x = group, 
+    y = mean
+  ) +
+  geom_jitter(
+    aes(color = tag), 
+    position = position_jitterdodge(dodge.width = 0.8, jitter.width = 0.3), 
+    alpha = 0.2
+  ) +
+  geom_crossbar(
+    aes(group = tag), 
+    stat = "summary", 
+    fun = "mean", 
+    position = position_dodge(width = 0.8), 
+    width = 0.35
+  ) +
+  guides(
+    color = guide_legend(override.aes = list(alpha = 1))
+  ) + 
+  scale_color_brewer(
+    palette = "Set1"
+  ) +
+  labs(
+    x = NULL, 
+    y = "Enrichment", 
+    color = NULL, 
+    title = "Nuclear isotope enrichment"
+  ) +
+  theme(
+    strip.text.y = ggtext::element_markdown(size = 10), 
+    legend.position = "bottom"
+  )
+```
+
+When separating nuclear ROIs by their environment, different patterns emerge. For ^15^N, nuclei adjacent to the airways, including likely AT2 cells, and alveolar cells demonstrate increased uptake that is attenuated by AZD and VB. This pattern was attenuated or possibly reversed in cells within fibrotic areas. ^2^H uptake in airway, alveolar, and AT2 cell nuclei seems to increase with VB, while nuclei in fibrotic areas have increased labeling with either AZD or VB. 
+
+```{r}
+#| label: fibrosis-nuclei-by-type
+
+df |> 
+  filter(feature == "nuclei") |> 
+  filter(region == "fib") |> 
+  filter(ion %in% c("12C15N/12C14N", "12C22H/12C21H")) |> 
+  ggplot() +
+  facet_grid(
+    rows = vars(label), 
+    cols = vars(tag), 
+    scales = "free_y"
+  ) +
+  aes(
+    x = group, 
+    y = mean
+  ) +
+  geom_jitter(
+    aes(color = tag), 
+    position = position_jitterdodge(dodge.width = 0.8, jitter.width = 0.3), 
+    alpha = 0.2
+  ) +
+  geom_crossbar(
+    aes(group = tag), 
+    stat = "summary", 
+    fun = "mean", 
+    position = position_dodge(width = 0.8), 
+    width = 0.35
+  ) +
+  guides(
+    color = guide_legend(override.aes = list(alpha = 1))
+  ) + 
+  scale_color_brewer(
+    palette = "Set1"
+  ) +
+  labs(
+    x = NULL, 
+    y = "Enrichment", 
+    color = NULL, 
+    title = "Nuclear isotope enrichment"
+  ) +
+  theme(
+    strip.text.y = ggtext::element_markdown(size = 10), 
+    legend.position = "bottom"
+  )
+```
+
+These overall patterns appear preserved when only the more fibrotic section is considered. Importantly, these data suggest this general classification scheme (airway *v.* fibrosis) identifies cells with distinct metabolic phenotypes.
+
+```{r}
+#| label: nuclear-enrichment-correlation
+
+df |>
+  filter(feature == "nuclei") |> 
+  filter(ion %in% c("12C15N/12C14N", "12C22H/12C21H")) |> 
+  select(group:ion, mean) |> 
+  pivot_wider(
+    names_from = "ion", 
+    values_from = "mean"
+  ) |> 
+  ggplot() +
+  facet_wrap(
+    facets = vars(region), 
+    ncol = 1
+  ) +
+  aes(
+    x = `12C22H/12C21H`, 
+    y = `12C15N/12C14N`
+  ) +
+  geom_point(
+    aes(
+      color = tag
+    ), 
+    alpha = 0.25
+  ) +
+  geom_smooth(
+    aes(
+      color = tag
+    ), 
+    method = "lm", 
+    formula = "y ~ x", 
+    show.legend = FALSE
+  ) +
+  guides(
+    color = guide_legend(override.aes = list(alpha = 1))
+  ) + 
+  scale_color_brewer(
+    palette = "Set1"
+  ) +
+  labs(
+    x = "C~2~^2^H / C~2~^1^H", 
+    y = "C^15^N / C^14^N", 
+    color = NULL, 
+    title = "Nuclear isotope enrichment"
+  ) +
+  coord_fixed() +
+  theme(
+    axis.title.x = ggtext::element_markdown(size = 10), 
+    axis.title.y = ggtext::element_markdown(size = 10), 
+    legend.position = "bottom"
+  )
+```
+
+It appears that there is generally a correlation between ^2^H and ^15^N enrichment among all nuclei that is stronger in fibrotic (*fib*) than alveolar (*alv*) regions.
+
+```{r}
+#| label: nuclear-enrichment-correlation-disease
+
+df |>
+  filter(feature == "nuclei") |> 
+  filter(ion %in% c("12C15N/12C14N", "12C22H/12C21H")) |> 
+  select(group:ion, mean) |> 
+  pivot_wider(
+    names_from = "ion", 
+    values_from = "mean"
+  ) |> 
+  ggplot() +
+  # facet_wrap(
+  #   facets = vars(region), 
+  #   ncol = 1
+  # ) +
+  aes(
+    x = `12C22H/12C21H`, 
+    y = `12C15N/12C14N`
+  ) +
+  geom_point(
+    aes(
+      color = group
+    ), 
+    alpha = 0.25
+  ) +
+  geom_smooth(
+    aes(
+      color = group
+    ), 
+    method = "lm", 
+    formula = "y ~ x", 
+    show.legend = FALSE
+  ) +
+  guides(
+    color = guide_legend(override.aes = list(alpha = 1))
+  ) + 
+  scale_color_brewer(
+    palette = "Set1"
+  ) +
+  labs(
+    x = "C~2~^2^H / C~2~^1^H", 
+    y = "C^15^N / C^14^N", 
+    color = NULL, 
+    title = "Nuclear isotope enrichment"
+  ) +
+  coord_fixed() +
+  theme(
+    axis.title.x = ggtext::element_markdown(size = 10), 
+    axis.title.y = ggtext::element_markdown(size = 10), 
+    legend.position = "bottom"
+  )
+```
+
+Across treatment groups, it seems that there is a decrease in the slope associated with AZD and VB treatment, trending toward the control, suggesting decreasing correlation between isotope enrichment associated with treatment.
+
+```{r}
+#| label: lamella
+
+df |>
+  filter(feature == "lamella") |> 
+  ggplot() +
+  facet_wrap(
+    facets = vars(label),
+    scales = "free_y"
+  ) +
+  aes(
+    x = group, 
+    y = mean
+  ) +
+  geom_jitter(
+    aes(
+      color = group, 
+      shape = region
+    ), 
+    position = position_jitterdodge(dodge.width = 0.8, jitter.width = 0.3), 
+    alpha = 0.2
+  ) +
+  geom_crossbar(
+    aes(
+      group = region
+    ), 
+    stat = "summary", 
+    fun = "mean", 
+    position = position_dodge(width = 0.8), 
+    width = 0.35
+  ) +
+  guides(
+    color = guide_legend(override.aes = list(alpha = 1))
+  ) + 
+  scale_color_brewer(
+    palette = "Set1"
+  ) +
+  labs(
+    x = NULL, 
+    y = "Enrichment", 
+    color = NULL, 
+    shape = NULL, 
+    title = "Lamellar signal"
+  ) +
+  theme(
+    strip.text = ggtext::element_markdown(size = 10), 
+    legend.position = "bottom"
+  )
+
+```
+
+We noted many small circular features with intense O and P signal with decreased S signal that were adjacent to airways. We suspected these were lamellar bodies rich in phospholipids. As an identifiable feature, we included these ROIs and are noting some differences in signal intensities. These data raise a question about comparisons among absolute signal intensities across samples. For example, the fibrotic bleomycin signal is decreased across all samples, but the ratiometric values for isotope enrichment are similar. If we wanted to compare the P signal across samples, does it make sense to normalize this by the C^14^N signal?
+
+## To Do
+
+- [ ] Add ROIs for non-nuclear interstitium
+- [ ] Add ROIs for low P nuclei (appear to be ^15^N hotspots)
+- [ ] Calculate correlation between ^15^N and ^2^H enrichment
+- [ ] Identify regions of high and low relative enrichment
+
+

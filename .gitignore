@@ -13,11 +13,13 @@
 *.mzML
 *.tif
 ~$*
+*.nrrd
 
 analysis/figures
 analysis/carnival
 data-raw/glucose
 data-raw/lactate
+data-raw/mims/.tmp
 
 
 /.quarto/

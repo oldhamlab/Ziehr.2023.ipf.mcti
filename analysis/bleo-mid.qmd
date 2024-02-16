@@ -1,0 +1,520 @@
+---
+title: "Bleo ^13^C Tracing"
+format: 
+  html:
+    embed-resources: true 
+    echo: false
+    warning: false
+    toc: true
+    toc-depth: 3
+    toc-location: left
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(here)
+library(targets)
+library(tidyverse)
+devtools::load_all()
+
+i_am("analysis/bleo-mid.qmd")
+
+tar_config_set(store = here("_targets"))
+```
+
+## Overview
+
+Mice were treated with bleomycin on Day 1. Treatment with AZD3965 or VB124 began on Day 7. Mice were euthanized on Day 21. One hour before organ harvest, mice were injected with an intraperitoneal bolus of [U-^13^C~6~]-glucose. Lungs and plasma were collected and isotope enrichment was analyzed by LC-MS. The goal is to characterize changes in isotope labeling patterns in disease and with treatment.
+
+## Data
+
+```{r}
+#| label: data
+
+mids <- tar_read(mid_bleo_mids_corr)
+```
+
+
+### Are there significant impacts of bleomycin?
+
+This would be the first report of isotope labeling in the bleomycin model.
+
+```{r}
+#| label: overall-enrichment
+
+mids |> 
+  dplyr::filter(isotope == "M0") |> 
+  group_by(tissue, metabolite) |> 
+  nest() |> 
+  mutate(
+    model = purrr::map(data, \(x) lm(mid_corr ~ group, data = x)), 
+    stats = purrr::map(
+      model, 
+      \(x) emmeans::emmeans(x, ~ group) |> 
+        emmeans::contrast(method = comps_bleo_2, adjust = "dunnettx") |> 
+        broom::tidy()
+    )
+  ) |> 
+  unnest(c(stats)) |> 
+  select(tissue, group = contrast, metabolite, adj.p.value) |> 
+  arrange(adj.p.value) |> 
+  head()
+```
+
+Based on these data, there are no significantly different patterns of enrichment. This may be a function of relatively few mice (n = 3) and variability in tracer dose. 
+
+### Does labeling suggest differences in lactate fate?
+
+For these analyses, can look at product/substrate ratios for specific isotopes. This analysis may have more power because they are ratios. For the lung, 3PG M3 is produced primarily by glycolysis. Can look at the ratio of downstream isotope enrichment to 3PG.
+
+```{r}
+#| label: 3PG-ratios
+
+df <- 
+  mids |> 
+  filter(tissue == "lung") |> 
+  filter(
+    (metabolite == "3PG" & isotope == "M3") |
+      (metabolite == "CIT" & isotope == "M2") |
+      (metabolite == "LAC" & isotope == "M3")
+  ) |> 
+  group_by(id, group) |> 
+  summarize(
+    lac = mid_corr[metabolite == "LAC"] / mid_corr[metabolite == "3PG"], 
+    cit = mid_corr[metabolite == "CIT"] / mid_corr[metabolite == "3PG"]
+  ) |> 
+  pivot_longer(c("lac", "cit"), names_to = "ratio", values_to = "value") |> 
+  filter(!(id == "S17" & ratio == "cit"))
+
+ggplot(df) +
+  facet_wrap(vars(ratio)) +
+  aes(
+    x = group, 
+    y = value, 
+    fill = group
+  ) +
+  geom_bar(
+    stat = "summary", 
+    fun = "mean", 
+    position = position_dodge(), 
+    show.legend = FALSE
+  ) +
+  geom_point(
+    pch = 21, 
+    color = "white", 
+    show.legend = FALSE
+  ) +
+  geom_errorbar(
+    stat = "summary", 
+    fun.data = "mean_se", 
+    width = 0.2, 
+    linewidth = 0.25
+  ) +
+  scale_fill_manual(
+    values = clrs
+  )
+```
+
+The data demonstrate that M2 citrate labeling is ~ 80% of M3 3PG labeling, suggesting that most of the intracellular citrate is coming from 3PG from glycolysis. In addition, the M3 LAC / M3 3PG labeling ratio is greater than 1. This suggests an alternative source of labeled lactate other than glycolysis, which is likely plasma M3 lactate given the plasma levels. This is also consistent with the observation that this ratio is higher in AZD-treated animals where the plasma enrichment tended to be higher. 
+
+```{r}
+#| label: CIT-LAC
+
+df <- 
+  mids |> 
+  filter(tissue == "lung") |> 
+  filter(
+    (metabolite == "LAC" & isotope == "M3") |
+      (metabolite == "CIT" & isotope == "M2")
+  ) |> 
+  group_by(id, group) |> 
+  summarize(
+    cit = (1-mid_corr[metabolite == "CIT"]) / mid_corr[metabolite == "LAC"]
+  ) |> 
+  filter(!(id == "S17"))
+
+ggplot(df) +
+  aes(
+    x = group, 
+    y = cit, 
+    fill = group
+  ) +
+  geom_bar(
+    stat = "summary", 
+    fun = "mean", 
+    position = position_dodge(), 
+    show.legend = FALSE
+  ) +
+  geom_point(
+    pch = 21, 
+    color = "white", 
+    show.legend = FALSE
+  ) +
+  geom_errorbar(
+    stat = "summary", 
+    fun.data = "mean_se", 
+    width = 0.2, 
+    linewidth = 0.25
+  ) +
+  scale_fill_manual(
+    values = clrs
+  )
+```
+
+Looking at the ratio of M3 lactate to M2 citrate, there seems to be decreased oxidation in AZD-treated cells, possibly consistent with decreased uptake, while there was no difference with VB124. 
+
+### What about plasma normalization?
+
+```{r}
+#| label: plasma-GLC-3PG
+
+df <- 
+  mids |> 
+  filter(
+    (tissue == "plasma" & metabolite == "GLC" & isotope == "M6") |
+      (tissue == "lung" & metabolite == "3PG" & isotope == "M3")
+  ) |> 
+  group_by(id, group) |> 
+  summarize(
+    cit = (mid_corr[tissue == "lung"]) / mid_corr[tissue == "plasma"]
+  ) |> 
+  filter(!(id == "S17"))
+
+lm(cit ~ group, data = df) |> 
+  emmeans::emmeans(~ group) |> 
+  emmeans::contrast(method = comps_bleo_2, adjust = "dunnettx")
+
+ggplot(df) +
+  aes(
+    x = group, 
+    y = cit, 
+    fill = group
+  ) +
+  geom_bar(
+    stat = "summary", 
+    fun = "mean", 
+    position = position_dodge(), 
+    show.legend = FALSE
+  ) +
+  geom_point(
+    pch = 21, 
+    color = "white", 
+    show.legend = FALSE
+  ) +
+  geom_errorbar(
+    stat = "summary", 
+    fun.data = "mean_se", 
+    width = 0.2, 
+    linewidth = 0.25
+  ) +
+  scale_fill_manual(
+    values = clrs
+  )
+```
+
+If we normalize intracellular M3 3PG by extracellular M6 GLC, we see a decrease with AZD3965 and an increase with VB124. This may suggest a trend toward decreased glycolysis following AZD, but an increase following VB124. 
+
+```{r}
+#| label: plasma-lung-LAC
+
+df <- 
+  mids |> 
+  filter(
+    (tissue == "plasma" & metabolite == "LAC" & isotope == "M3") |
+      (tissue == "lung" & metabolite == "LAC" & isotope == "M3")
+  ) |> 
+  group_by(id, group) |> 
+  summarize(
+    ratio = (mid_corr[tissue == "lung"]) / mid_corr[tissue == "plasma"]
+  ) |> 
+  filter(id != "S17")
+
+lm(ratio ~ group, data = df) |> 
+  emmeans::emmeans(~ group) |> 
+  emmeans::contrast(method = comps_bleo_2, adjust = "dunnettx")
+
+ggplot(df) +
+  aes(
+    x = group, 
+    y = ratio, 
+    fill = group
+  ) +
+  geom_bar(
+    stat = "summary", 
+    fun = "mean", 
+    position = position_dodge(), 
+    show.legend = FALSE
+  ) +
+  geom_point(
+    pch = 21, 
+    color = "white", 
+    show.legend = FALSE
+  ) +
+  geom_errorbar(
+    stat = "summary", 
+    fun.data = "mean_se", 
+    width = 0.2, 
+    linewidth = 0.25
+  ) +
+  scale_fill_manual(
+    values = clrs
+  )
+```
+
+In these data, we see that AZD and VB seem to decrease the fraction of intracellular lactate from extracellular lactate. 
+
+```{r}
+#| label: normalize-plasma-GLC
+
+df <- 
+  mids |> 
+  filter(
+    (tissue == "lung" & metabolite == "3PG" & isotope == "M3") |
+      (tissue == "lung" & metabolite == "LAC" & isotope == "M3") |
+      (tissue == "plasma" & metabolite == "GLC" & isotope == "M6")
+  ) |> 
+  group_by(id, group) |> 
+  summarize(
+    lac = mid_corr[metabolite == "LAC"] / mid_corr[metabolite == "GLC"], 
+    pg = mid_corr[metabolite == "3PG"] / mid_corr[metabolite == "GLC"]
+  ) |> 
+  pivot_longer(c("lac", "pg"), names_to = "ratio", values_to = "value") |> 
+  filter(!(id == "S17" & ratio == "cit"))
+
+ggplot(df) +
+  facet_wrap(vars(ratio)) +
+  aes(
+    x = group, 
+    y = value, 
+    fill = group
+  ) +
+  geom_bar(
+    stat = "summary", 
+    fun = "mean", 
+    position = position_dodge(), 
+    show.legend = FALSE
+  ) +
+  geom_point(
+    pch = 21, 
+    color = "white", 
+    show.legend = FALSE
+  ) +
+  geom_errorbar(
+    stat = "summary", 
+    fun.data = "mean_se", 
+    width = 0.2, 
+    linewidth = 0.25
+  ) +
+  scale_fill_manual(
+    values = clrs
+  )
+```
+
+Normalizing by plasma tracer labeling suggests increased intracellular lactate from glucose in VB124-treated cells, this is likely consistent with increased glycolysis and decreased lactate efflux. In AZD-treated cells, there was a decrease in 3PG labeling from plasma glucose, suggesting decreased glycolysis?
+
+### Plasma Normalization by Mass
+
+If using a different compound, we would likely normalize the tissue concentration by the plasma concentration. We will explore those possibilities here. 
+
+```{r}
+#| label: plasma-tissue-LAC-mass
+
+df <- 
+  mids |> 
+  dplyr::filter(metabolite == "LAC" & isotope == "M3") |> 
+  dplyr::group_by(id, sample, group) |> 
+  dplyr::summarise(ratio = area[tissue == "lung"] / area[tissue == "plasma"]) |> 
+  dplyr::ungroup() |> 
+  dplyr::mutate(ratio_norm = ratio / mean(ratio[group == "Bleo"], na.rm = TRUE)) |> 
+  dplyr::group_by(group) |> 
+  wmo::remove_nested_outliers("ratio_norm", remove = TRUE) 
+
+lm(ratio_norm ~ group, data = df) |> 
+  emmeans::emmeans(~ group) |> 
+  emmeans::contrast(method = comps_bleo_2, adjust = "dunnettx")
+
+ggplot2::ggplot(df) +
+  aes(
+    x = group, 
+    y = ratio_norm, 
+    fill = group
+  ) +
+  geom_bar(
+    stat = "summary", 
+    fun = "mean", 
+    position = position_dodge(), 
+    show.legend = FALSE
+  ) +
+  geom_point(
+    pch = 21, 
+    color = "white", 
+    show.legend = FALSE
+  ) +
+  geom_errorbar(
+    stat = "summary", 
+    fun.data = "mean_se", 
+    width = 0.2, 
+    linewidth = 0.25
+  ) +
+  scale_fill_manual(
+    values = clrs
+  ) +
+  labs(
+    y = "Lung / Plasma M3 LAC"
+  )
+```
+
+```{r}
+#| label: plasma-tissue-GLC-LAC-mass
+
+df <- 
+  mids |> 
+  dplyr::filter(
+    (tissue == "lung" & metabolite == "LAC" & isotope == "M3") | 
+      (tissue == "plasma" & metabolite == "GLC" & isotope == "M6")
+    ) |> 
+  dplyr::group_by(id, sample, group) |> 
+  dplyr::summarise(ratio = area[tissue == "lung"] / area[tissue == "plasma"]) |> 
+  dplyr::ungroup() |> 
+  dplyr::mutate(ratio_norm = ratio / mean(ratio[group == "Bleo"], na.rm = TRUE)) |> 
+  dplyr::group_by(group) |> 
+  wmo::remove_nested_outliers("ratio_norm", remove = TRUE) 
+
+lm(ratio_norm ~ group, data = df) |> 
+  emmeans::emmeans(~ group) |> 
+  emmeans::contrast(method = comps_bleo_2, adjust = "dunnettx")
+
+ggplot2::ggplot(df) +
+  aes(
+    x = group, 
+    y = ratio_norm, 
+    fill = group
+  ) +
+  geom_bar(
+    stat = "summary", 
+    fun = "mean", 
+    position = position_dodge(), 
+    show.legend = FALSE
+  ) +
+  geom_point(
+    pch = 21, 
+    color = "white", 
+    show.legend = FALSE
+  ) +
+  geom_errorbar(
+    stat = "summary", 
+    fun.data = "mean_se", 
+    width = 0.2, 
+    linewidth = 0.25
+  ) +
+  scale_fill_manual(
+    values = clrs
+  ) +
+  labs(
+    y = "Lung M3 LAC / Plasma M6 GLC"
+  )
+```
+
+```{r}
+#| label: plasma-tissue-LAC-CIT-mass
+
+df <- 
+  mids |> 
+  dplyr::filter(
+    (tissue == "lung" & metabolite == "CIT" & isotope == "M2") | 
+      (tissue == "plasma" & metabolite == "LAC" & isotope == "M3")
+    ) |> 
+  dplyr::group_by(id, sample, group) |> 
+  dplyr::summarise(ratio = area[tissue == "lung"] / area[tissue == "plasma"]) |> 
+  dplyr::ungroup() |> 
+  dplyr::mutate(ratio_norm = ratio / mean(ratio[group == "Bleo"], na.rm = TRUE)) |> 
+  dplyr::group_by(group) |> 
+  wmo::remove_nested_outliers("ratio_norm", remove = TRUE) 
+
+lm(ratio_norm ~ group, data = df) |> 
+  emmeans::emmeans(~ group) |> 
+  emmeans::contrast(method = comps_bleo_2, adjust = "dunnettx")
+
+ggplot2::ggplot(df) +
+  aes(
+    x = group, 
+    y = ratio_norm, 
+    fill = group
+  ) +
+  geom_bar(
+    stat = "summary", 
+    fun = "mean", 
+    position = position_dodge(), 
+    show.legend = FALSE
+  ) +
+  geom_point(
+    pch = 21, 
+    color = "white", 
+    show.legend = FALSE
+  ) +
+  geom_errorbar(
+    stat = "summary", 
+    fun.data = "mean_se", 
+    width = 0.2, 
+    linewidth = 0.25
+  ) +
+  scale_fill_manual(
+    values = clrs
+  ) +
+  labs(
+    y = "Lung M2 CIT / Plasma M3 LAC"
+  )
+```
+
+```{r}
+#| label: plasma-tissue-GLC-CIT-mass
+
+df <- 
+  mids |> 
+  dplyr::filter(
+    (tissue == "lung" & metabolite == "CIT" & isotope == "M2") | 
+      (tissue == "plasma" & metabolite == "GLC" & isotope == "M6")
+    ) |> 
+  dplyr::group_by(id, sample, group) |> 
+  dplyr::summarise(ratio = area[tissue == "lung"] / area[tissue == "plasma"]) |> 
+  dplyr::ungroup() |> 
+  dplyr::mutate(ratio_norm = ratio / mean(ratio[group == "Bleo"], na.rm = TRUE)) |> 
+  dplyr::group_by(group) |> 
+  wmo::remove_nested_outliers("ratio_norm", remove = TRUE) 
+
+lm(ratio_norm ~ group, data = df) |> 
+  emmeans::emmeans(~ group) |> 
+  emmeans::contrast(method = comps_bleo_2, adjust = "dunnettx")
+
+ggplot2::ggplot(df) +
+  aes(
+    x = group, 
+    y = ratio_norm, 
+    fill = group
+  ) +
+  geom_bar(
+    stat = "summary", 
+    fun = "mean", 
+    position = position_dodge(), 
+    show.legend = FALSE
+  ) +
+  geom_point(
+    pch = 21, 
+    color = "white", 
+    show.legend = FALSE
+  ) +
+  geom_errorbar(
+    stat = "summary", 
+    fun.data = "mean_se", 
+    width = 0.2, 
+    linewidth = 0.25
+  ) +
+  scale_fill_manual(
+    values = clrs
+  ) +
+  labs(
+    y = "Lung M2 CIT / Plasma M6 GLC"
+  )
+```

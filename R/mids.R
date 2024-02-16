@@ -133,6 +133,59 @@ plot_mids_all <- function(df, label) {
     )
 }
 
+format_mids_bleo_all <- function(df) {
+  df |>
+    dplyr::group_by(tissue, group, metabolite, isotope) |>
+    dplyr::summarize(
+      mean = mean(mid_corr),
+      se = sd(mid) / sqrt(dplyr::n())
+    ) |>
+    dplyr::group_by(tissue, group, metabolite) |>
+    dplyr::mutate(
+      means = 1 - cumsum(mean) + mean,
+      ymin = means + se,
+      ymax = means - se
+    )
+}
+
+plot_mids_bleo_all <- function(df, source) {
+  df |>
+    dplyr::filter(tissue == source) |>
+    ggplot2::ggplot() +
+    ggplot2::facet_wrap(~ metabolite) +
+    ggplot2::aes(
+      x = group,
+      y = mean,
+      fill = isotope
+    ) +
+    ggplot2::geom_col() +
+    ggplot2::geom_errorbar(
+      ggplot2::aes(
+        ymin = ymin,
+        ymax = ymax
+      ),
+      position = ggplot2::position_dodge(width = 0.75),
+      color = "grey50",
+      width = 0,
+      linewidth = 0.25
+    ) +
+    ggplot2::scale_fill_viridis_d() +
+    ggplot2::scale_y_continuous(
+      breaks = seq(0, 1, 0.2),
+      expand = ggplot2::expansion(c(0, 0))
+    ) +
+    ggplot2::labs(
+      x = NULL,
+      y = "Mole fraction",
+      fill = NULL
+    ) +
+    theme_plot() +
+    ggplot2::theme(
+      legend.position = "right",
+      axis.text.x = ggplot2::element_text(angle = 90, hjust = 1)
+    )
+}
+
 filter_mids <- function(df, label, metab, iso) {
   df |>
     dplyr::filter(tracer == label) |>
@@ -397,20 +450,34 @@ format_bleo_mids <- function(files, mice) {
       mid
     ) |>
     dplyr::filter(!is.na(mid)) |>
+    dplyr::filter(metabolite != "SUC") |>
     dplyr::arrange(metabolite, group, sample) |>
     dplyr::group_by(dplyr::across("tissue":"metabolite"))
 }
 
 calc_mid_ratio <- function(df, top, bottom) {
-  tibble::as_tibble(top) |>
-    dplyr::mutate(ratio = "top") |>
-    dplyr::bind_rows(
-      tibble::as_tibble(bottom) |>
-        dplyr::mutate(ratio = "bottom")
-    ) |>
-    dplyr::left_join(df, by = c("tracer", "metabolite", "isotope")) |>
+  selectors <- names(top)
+  top <-
+    tibble::as_tibble(top) |>
+    dplyr::mutate(ratio = "top")
+  bottom <-
+    tibble::as_tibble(bottom) |>
+    dplyr::mutate(ratio = "bottom")
+  dplyr::bind_rows(top, bottom) |>
+    dplyr::left_join(df, by = selectors) |>
     tidyr::unite(metabolite, metabolite, isotope, sep = " ") |>
-    dplyr::group_by(tracer, sample, replicate, condition, treatment) |>
+    dplyr::group_by(
+      dplyr::across(
+        tidyselect::any_of(c(
+          "tracer",
+          "sample",
+          "replicate",
+          "condition",
+          "treatment",
+          "group"
+        ))
+      )
+    ) |>
     dplyr::summarise(
       metabolite = stringr::str_c(
         metabolite[ratio == "top"], " / ", metabolite[ratio == "bottom"]
@@ -418,13 +485,176 @@ calc_mid_ratio <- function(df, top, bottom) {
       value = mid_corr[ratio == "top"] / mid_corr[ratio == "bottom"]
     ) |>
     dplyr::select(
-      tracer,
-      metabolite,
-      sample,
-      group = replicate,
-      condition,
-      treatment,
-      value
+      tidyselect::any_of(c(
+        "tracer",
+        "metabolite",
+        "sample",
+        group = "replicate",
+        "group",
+        "condition",
+        "treatment",
+        "value"
+      ))
     ) |>
     dplyr::ungroup()
+}
+
+# plots -------------------------------------------------------------------
+
+make_mid_summary <- function(df) {
+  df |>
+    dplyr::group_by(tissue, group, metabolite, isotope) |>
+    dplyr::summarize(
+      mean = mean(mid_corr),
+      se = sd(mid_corr) / sqrt(dplyr::n())
+    ) |>
+    dplyr::group_by(tissue, group, metabolite) |>
+    dplyr::mutate(
+      means = 1 - cumsum(mean) + mean,
+      ymin = means + se,
+      ymax = means - se
+    ) |>
+    refactor()
+}
+
+# make_mid_summary <- function(df) {
+#   df |>
+#     dplyr::group_by(tissue, group, metabolite, isotope) |>
+#     dplyr::summarize(
+#       mean = mean(area),
+#       se = sd(area) / sqrt(dplyr::n())
+#     ) |>
+#     dplyr::group_by(tissue, group, metabolite) |>
+#     dplyr::mutate(
+#       means = sum(mean) - cumsum(mean) + mean,
+#       ymin = means + se,
+#       ymax = means - se
+#     ) |>
+#     refactor()
+# }
+
+plot_plasma_glucose <- function(mids) {
+  df <-
+    mids |>
+    dplyr::filter(tissue == "plasma") |>
+    dplyr::filter(id != "S17") |>
+    dplyr::filter(metabolite %in% c("GLC", "LAC"))
+
+  make_mid_summary(df) |>
+    ggplot2::ggplot() +
+    ggplot2::facet_wrap(
+      ggplot2::vars(metabolite),
+      scales = "free"
+    ) +
+    ggplot2::aes(
+      x = group,
+      y = mean
+    ) +
+    ggplot2::geom_col(
+      ggplot2::aes(fill = isotope),
+      color = "white",
+      width = 0.6,
+      linewidth = 0.5
+    ) +
+    # ggplot2::geom_errorbar(
+    #   ggplot2::aes(
+    #     ymin = ymin,
+    #     ymax = ymax
+    #   ),
+    #   position = ggplot2::position_dodge2(),
+    #   width = 0.8,
+    #   linewidth = 0.25
+    # ) +
+    ggplot2::scale_fill_viridis_d(
+      begin = 0,
+      end = 1,
+      direction = -1,
+      option = "viridis"
+    ) +
+    ggplot2::scale_y_continuous(
+      breaks = seq(0, 1, 0.2),
+      expand = ggplot2::expansion(c(0, 0))
+    ) +
+    ggplot2::labs(
+      x = NULL,
+      y = "Isotope fraction",
+      fill = NULL
+    ) +
+    ggplot2::coord_cartesian(
+      ylim = c(0, 1),
+      clip = "off"
+    ) +
+    theme_plot() +
+    ggplot2::theme(
+      legend.position = "right",
+      legend.key.size = ggplot2::unit(0.75, "lines")
+    ) +
+    NULL
+}
+
+plot_plasma_ratio <- function(mids) {
+  df <-
+    mids |>
+    dplyr::filter(tissue == "plasma") |>
+    dplyr::filter(id != "S17") |>
+    dplyr::filter(
+      (metabolite == "GLC" & isotope == "M6") |
+        (metabolite == "LAC" & isotope == "M3")
+    ) |>
+    dplyr::group_by(id, group) |>
+    dplyr::summarise(
+      ratio = mid_corr[metabolite == "LAC"] / mid_corr[metabolite == "GLC"]
+    )
+
+  df |>
+    ggplot2::ggplot() +
+    ggplot2::aes(
+      x = .data[["group"]],
+      y = .data[["ratio"]],
+      color = .data[["group"]],
+      fill = .data[["group"]]
+    ) +
+    ggplot2::geom_errorbar(
+      ggplot2::aes(color = .data$group),
+      stat = "summary",
+      fun.data = ggplot2::mean_se,
+      width = 0.1,
+      linewidth = 0.25,
+      position = ggplot2::position_nudge(x = 0.25),
+      show.legend = FALSE
+    ) +
+    ggplot2::geom_point(
+      ggplot2::aes(fill = .data$group),
+      stat = "summary",
+      fun = "mean",
+      pch = 21,
+      size = 1.5,
+      color = "white",
+      position = ggplot2::position_nudge(x = 0.25),
+      show.legend = FALSE
+    ) +
+    ggbeeswarm::geom_quasirandom(
+      pch = 1,
+      color = "black",
+      width = 0.05,
+      size = 0.5,
+      stroke = 0.25,
+      show.legend = FALSE
+    ) +
+    ggplot2::labs(
+      x = NULL,
+      y = "Plasma LAC M3 / GLC M6"
+    ) +
+    ggplot2::scale_color_manual(
+      values = clrs,
+      aesthetics = c("color", "fill")
+    ) +
+    ggplot2::scale_y_continuous(
+      breaks = scales::breaks_extended(n = 6, only.loose = TRUE),
+      expand = ggplot2::expansion(c(0, 0)),
+      limits = nice_limits
+    ) +
+    ggplot2::coord_cartesian(clip = "off") +
+    theme_plot() +
+    NULL
 }

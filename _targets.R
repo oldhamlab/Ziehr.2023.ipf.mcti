@@ -910,15 +910,16 @@ list(
         .id = "treatment"
       )
     ),
-    tar_target(
-      metab_mcti_tar_lactate,
-      plot_mois(metab_mcti_tar_treated, metab_mcti_tar_tt, "lactate"),
-      format = "rds"
-    ),
-    tar_target(
-      metab_mcti_tar_proline,
-      plot_mois(metab_mcti_tar_treated, metab_mcti_tar_tt, "proline"),
-      format = "rds"
+    tar_map(
+      values = list(
+        names = c("lactate", "proline")
+      ),
+      names = names,
+      tar_target(
+        metab_mcti_tar,
+        plot_mois(metab_mcti_tar_treated, metab_mcti_tar_tt, names),
+        format = "rds"
+      )
     ),
     NULL
   ),
@@ -1252,6 +1253,108 @@ list(
     NULL
   ),
 
+  # mid bleo ----------------------------------------------------------------
+
+  tar_target(
+    mid_bleo_files,
+    raw_data_path("bleo_.*_isotope_2022-11-22.xlsx"),
+    format = "file"
+  ),
+  tar_target(
+    mid_bleo_mids,
+    format_bleo_mids(mid_bleo_files, mice_raw)
+  ),
+  tar_target(
+    mid_bleo_mids_corr,
+    correct_mids(mid_bleo_mids, correction_matrices)
+  ),
+  tar_target(
+    mids_bleo_stacked_data,
+    format_mids_bleo_all(mid_bleo_mids_corr)
+  ),
+  tar_target(
+    mid_bleo_plasma_glucose_plot,
+    plot_plasma_glucose(mid_bleo_mids_corr),
+    format = "rds"
+  ),
+  tar_target(
+    mid_bleo_plasma_ratio,
+    plot_plasma_ratio(mid_bleo_mids_corr),
+    format = "rds"
+  ),
+  tar_map(
+    values = list(
+      source = c("plasma", "lung")
+    ),
+    names = source,
+    tar_target(
+      mids_bleo_plot,
+      plot_mids_bleo_all(mids_bleo_stacked_data, source),
+      format = "rds"
+    ),
+    tar_target(
+      mid_bleo_img,
+      write_plot(mids_bleo_plot, source, path = "analysis/figures/mids"),
+      format = "file_fast"
+    )
+  ),
+  tar_map(
+    values = list(
+      names = c(
+        "lac3_glc6",
+        "pg_glc6",
+        "cit2_glc6",
+        "lac3_pg",
+        "cit2_pg"
+      ),
+      top = alist(
+        list(tissue = "lung", metabolite = "LAC", isotope = "M3"),
+        list(tissue = "lung", metabolite = "3PG", isotope = "M3"),
+        list(tissue = "lung", metabolite = "CIT", isotope = "M2"),
+        list(tissue = "lung", metabolite = "LAC", isotope = "M3"),
+        list(tissue = "lung", metabolite = "CIT", isotope = "M2")
+      ),
+      bottom = alist(
+        list(tissue = "plasma", metabolite = "GLC", isotope = "M6"),
+        list(tissue = "plasma", metabolite = "GLC", isotope = "M6"),
+        list(tissue = "plasma", metabolite = "GLC", isotope = "M6"),
+        list(tissue = "lung", metabolite = "3PG", isotope = "M3"),
+        list(tissue = "lung", metabolite = "3PG", isotope = "M3")
+      ),
+      ytitle = c(
+        "LAC M3 / GLC M6",
+        "3PG M3 / GLC M6",
+        "CIT M2 / GLC M6",
+        "LAC M3 / 3PG M3",
+        "CIT M2 / 3PG M3"
+      )
+    ),
+    names = names,
+    tar_target(
+      mid_ratios,
+      calc_mid_ratio(mid_bleo_mids_corr, top, bottom) |>
+        dplyr::group_by(group) |>
+        wmo::remove_nested_outliers("value", remove = TRUE) |>
+        identity()
+    ),
+    tar_target(
+      mid_ratios_stats,
+      stats_histo(mid_ratios, "ratio") |>
+        dplyr::mutate(x = factor(group, levels = c("Ctl", "Bleo", "AZD", "VB")))
+    ),
+    tar_target(
+      mid_ratios_plots,
+      plot_one_factor(
+        mid_ratios,
+        mid_ratios_stats,
+        x = "group",
+        y = "value",
+        ytitle = ytitle
+      ),
+      format = "rds"
+    ),
+    NULL
+  ),
 
   # rnaseq ------------------------------------------------------------------
 
@@ -1514,6 +1617,18 @@ list(
     NULL
   ),
 
+  # mims --------------------------------------------------------------------
+
+  tar_target(
+    mims_files,
+    raw_data_path("_data.csv"),
+    format = "file"
+  ),
+  tar_target(
+    mims_clean,
+    clean_mims(mims_files)
+  ),
+
   # analysis ----------------------------------------------------------------
 
   tar_quarto(
@@ -1527,6 +1642,14 @@ list(
   tar_quarto(
     redox_analysis,
     path = "analysis/redox.qmd"
+  ),
+  tar_quarto(
+    bleo_mid_analysis,
+    path = "analysis/bleo-mid.qmd"
+  ),
+  tar_quarto(
+    mims_analysis,
+    path = "analysis/mims.qmd"
   ),
 
   # figure images -----------------------------------------------------------
@@ -1774,6 +1897,45 @@ list(
       mice_wt_mcti_plot
     ) |>
       write_figures("Figure 08.supplement"),
+    format = "file"
+  ),
+
+  # figure 9 ----------------------------------------------------------------
+
+  tar_target(
+    fig09,
+    make_fig09(
+      metab_bleo_lacate_plot
+    ) |>
+      write_figures("Figure 09"),
+    format = "file"
+  ),
+  tar_target(
+    fig09s1,
+    make_fig09s1(
+      metab_bleo_tar_vol_bleo_plasma,
+      msea_table_img_bleo_plasma,
+      metab_bleo_tar_vol_bleo_lung,
+      msea_table_img_bleo_lung,
+      metab_bleo_tar_vol_azd_plasma,
+      msea_table_img_azd_plasma,
+      metab_bleo_tar_vol_azd_lung,
+      msea_table_img_azd_lung,
+      metab_bleo_tar_vol_vb_plasma,
+      msea_table_img_vb_plasma,
+      metab_bleo_tar_vol_vb_lung,
+      msea_table_img_vb_lung
+    ) |>
+      write_figures("Figure 09.supplement.1"),
+    format = "file"
+  ),
+  tar_target(
+    fig09s2,
+    make_fig09s2(
+      mid_bleo_plasma_glucose_plot,
+      mid_bleo_plasma_ratio
+    ) |>
+      write_figures("Figure 09.supplement.2"),
     format = "file"
   ),
 
