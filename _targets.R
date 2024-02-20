@@ -25,6 +25,24 @@ tar_option_set(
 # source functions
 tar_source()
 
+# branching
+mims_values <-
+  tibble::tibble(
+    names = c(
+      "azd_alv_1",
+      "azd_fib_1",
+      "azd_fib_2",
+      "bleo_alv_1",
+      "bleo_fib_1",
+      "control_alv_1",
+      "vb_alv_1",
+      "vb_fib_1"
+    ),
+    files = purrr::map_chr(
+      names,
+      \(x) raw_data_path(stringr::str_c(x, ".+\\d\\.nrrd"))
+    )
+  )
 
 # targets -----------------------------------------------------------------
 
@@ -1628,6 +1646,33 @@ list(
     mims_clean,
     clean_mims(mims_files)
   ),
+  tar_map(
+    values = mims_values,
+    names = names,
+    tar_target(
+      mims_img,
+      read_mims(files)
+    ),
+    tar_target(
+      mims_ratios,
+      extract_ratios(mims_img, names)
+    )
+  ),
+  tar_target(
+    mims_ratios,
+    format_ratios(
+      list(
+        mims_ratios_azd_alv_1,
+        mims_ratios_azd_fib_1,
+        mims_ratios_azd_fib_2,
+        mims_ratios_bleo_alv_1,
+        mims_ratios_bleo_fib_1,
+        mims_ratios_control_alv_1,
+        mims_ratios_vb_alv_1,
+        mims_ratios_vb_fib_1
+      )
+    )
+  ),
 
   # analysis ----------------------------------------------------------------
 
@@ -1671,7 +1716,8 @@ list(
       "dual-azd-erk-blot.png",      1,      0,      -0.05,  "erk_azd",
       "dual-azd-hif1a-blot.png",    1,      0,      -0.05,  "hif_azd",
       "lactate-sma-blot.png",       1.2,    0,      -0.05,  "sma_lac",
-      "dual-azd-kla-h3.png",        1,      0,      0,      "azd_kla"
+      "dual-azd-kla-h3.png",        1,      0,      0,      "azd_kla",
+      "mims-panel.png",             1,      0,      0,      "mims"
     ),
     names = names,
     tar_target(
@@ -1905,7 +1951,8 @@ list(
   tar_target(
     fig09,
     make_fig09(
-      metab_bleo_lacate_plot
+      metab_bleo_lacate_plot,
+      fig_img_mims
     ) |>
       write_figures("Figure 09"),
     format = "file"

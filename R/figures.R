@@ -324,13 +324,13 @@ make_fig08s <- function(p1) {
     )
 }
 
-make_fig09 <- function(p1) {
-  design <- "aaa"
-  p1 + # p2 + p3 + p4 + p5 + p6 +
+make_fig09 <- function(p1, p2) {
+  design <- "aaa \n bbb"
+  p1 + p2 + # p3 + p4 + p5 + p6 +
     theme_patchwork(
       design = design,
       widths = ggplot2::unit(c(1.5), "in"),
-      heights = ggplot2::unit(1.5, "in")
+      heights = ggplot2::unit(c(1.5, 3), "in")
     )
 }
 

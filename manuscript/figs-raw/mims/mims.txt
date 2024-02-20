@@ -1,0 +1,12 @@
+MIMS Images
+
+1. Open non-interleaved file.
+2. Generate HSI images:
+- median filter ratio 3
+- scale only, no labels
+- 15N: ratio range 111, 37; RGB max 100
+- 2H: ratio range 10, 1; RBG max 100
+3. Generate 12C14N images for histology.
+- use "Auto" in "Process" tab to set contrast and brightness. 
+- convert to 16-bit images prior to saving
+4. Command + S to save these as .TIF files.
