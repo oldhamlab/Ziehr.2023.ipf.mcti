@@ -253,6 +253,29 @@
       ],
       "Hash": "0e5c84e543a3d04ce64c6f60ed46d7eb"
     },
+    "EBImage": {
+      "Package": "EBImage",
+      "Version": "4.44.0",
+      "Source": "Bioconductor",
+      "Requirements": [
+        "BiocGenerics",
+        "RCurl",
+        "abind",
+        "fftwtools",
+        "grDevices",
+        "graphics",
+        "htmltools",
+        "htmlwidgets",
+        "jpeg",
+        "locfit",
+        "methods",
+        "png",
+        "stats",
+        "tiff",
+        "utils"
+      ],
+      "Hash": "fc1e68389d23a251387bbebf965c8860"
+    },
     "GenomeInfoDb": {
       "Package": "GenomeInfoDb",
       "Version": "1.38.5",
@@ -378,6 +401,19 @@
         "R"
       ],
       "Hash": "470851b6d5d0ac559e9d01bb352b4021"
+    },
+    "RBioFormats": {
+      "Package": "RBioFormats",
+      "Version": "1.2.0",
+      "Source": "Bioconductor",
+      "Requirements": [
+        "EBImage",
+        "S4Vectors",
+        "methods",
+        "rJava",
+        "stats"
+      ],
+      "Hash": "4029ee65bdecb25c945fa7488e031e88"
     },
     "RColorBrewer": {
       "Package": "RColorBrewer",
@@ -823,14 +859,14 @@
     },
     "cli": {
       "Package": "cli",
-      "Version": "3.6.2",
+      "Version": "3.6.1",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "utils"
       ],
-      "Hash": "1216ac65ac55ec0058a6f75d7ca0fd52"
+      "Hash": "89e6d8219950eac806ae0c489052048a"
     },
     "clipr": {
       "Package": "clipr",
@@ -1284,7 +1320,7 @@
     },
     "fansi": {
       "Package": "fansi",
-      "Version": "1.0.6",
+      "Version": "1.0.5",
       "Source": "Repository",
       "Repository": "RSPM",
       "Requirements": [
@@ -1292,7 +1328,7 @@
         "grDevices",
         "utils"
       ],
-      "Hash": "962174cf2aeb5b9eea581522286a911f"
+      "Hash": "3e8583a60163b4bc1a80016e63b9959e"
     },
     "farver": {
       "Package": "farver",
@@ -1317,6 +1353,16 @@
         "R"
       ],
       "Hash": "8c406b7284bbaef08e01c6687367f195"
+    },
+    "fftwtools": {
+      "Package": "fftwtools",
+      "Version": "0.9-11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "272f106d02a91c8319a39dfa0045916b"
     },
     "fgsea": {
       "Package": "fgsea",
@@ -1917,9 +1963,9 @@
     },
     "htmlwidgets": {
       "Package": "htmlwidgets",
-      "Version": "1.6.4",
+      "Version": "1.6.2",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "grDevices",
         "htmltools",
@@ -1928,7 +1974,7 @@
         "rmarkdown",
         "yaml"
       ],
-      "Hash": "04291cc45198225444a397606810ac37"
+      "Hash": "a865aa85bcb2697f47505bfd70422471"
     },
     "httpuv": {
       "Package": "httpuv",
@@ -2368,6 +2414,18 @@
         "tools"
       ],
       "Hash": "18e9c28c1d3ca1560ce30658b22ce104"
+    },
+    "mims": {
+      "Package": "mims",
+      "Version": "0.0.0.9000",
+      "Source": "Local",
+      "RemoteType": "local",
+      "RemoteUrl": "~/Dropbox (Partners HealthCare)/_pkgs/mims",
+      "Requirements": [
+        "EBImage",
+        "RBioFormats"
+      ],
+      "Hash": "2f4384d4b1ab87c9954291645803b1de"
     },
     "miniUI": {
       "Package": "miniUI",
@@ -2909,6 +2967,17 @@
       ],
       "Hash": "79e1cff980960b566ddc4ddb1a49a13d"
     },
+    "rJava": {
+      "Package": "rJava",
+      "Version": "1.0-11",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R",
+        "methods"
+      ],
+      "Hash": "524167e771b81342f8dd7a891ed3afa8"
+    },
     "ragg": {
       "Package": "ragg",
       "Version": "1.2.7",
@@ -3445,16 +3514,16 @@
     },
     "stringi": {
       "Package": "stringi",
-      "Version": "1.8.3",
+      "Version": "1.8.2",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "stats",
         "tools",
         "utils"
       ],
-      "Hash": "058aebddea264f4c99401515182e656a"
+      "Hash": "e68c45f81639001af5f1b15cd3599bbd"
     },
     "stringr": {
       "Package": "stringr",
@@ -3700,6 +3769,16 @@
         "xml2"
       ],
       "Hash": "c328568cd14ea89a83bd4ca7f54ae07e"
+    },
+    "tiff": {
+      "Package": "tiff",
+      "Version": "0.1-12",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "74b5f7f00e466398fdc0af8889add582"
     },
     "timechange": {
       "Package": "timechange",
@@ -3999,10 +4078,10 @@
     },
     "yaml": {
       "Package": "yaml",
-      "Version": "2.3.8",
+      "Version": "2.3.7",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "29240487a071f535f5e5d5a323b7afbd"
+      "Repository": "RSPM",
+      "Hash": "0d0056cc5383fbc240ccd0cb584bf436"
     },
     "zip": {
       "Package": "zip",
