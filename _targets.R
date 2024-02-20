@@ -29,18 +29,52 @@ tar_source()
 mims_values <-
   tibble::tibble(
     names = c(
-      "azd_alv_1",
-      "azd_fib_1",
-      "azd_fib_2",
-      "bleo_alv_1",
-      "bleo_fib_1",
-      "control_alv_1",
-      "vb_alv_1",
-      "vb_fib_1"
+      "azd_1_alv_1",
+      "azd_1_fib_1",
+      "azd_1_fib_2",
+      "azd_2_fib_1",
+      "azd_3_fib_1",
+      "azd_3_fib_2",
+      "azd_3_fib_3",
+      "azd_3_fib_4",
+      "azd_3_fib_5",
+      "azd_3_fib_6",
+      "azd_3_fib_7",
+      "azd_3_fib_8",
+      "azd_3_fib_9",
+      "bleo_1_alv_1",
+      "bleo_1_fib_1",
+      "bleo_2_fib_1",
+      "bleo_2_fib_2",
+      "bleo_3_fib_1",
+      "bleo_3_fib_2",
+      "bleo_3_fib_3",
+      "bleo_3_fib_4",
+      "bleo_3_fib_5",
+      "bleo_3_fib_6",
+      "bleo_3_fib_7",
+      "control_1_alv_1",
+      "control_2_alv_1",
+      "control_2_alv_2",
+      "control_3_alv_1",
+      "control_3_alv_2",
+      "control_3_alv_3",
+      "vb_1_alv_1",
+      "vb_1_fib_1",
+      "vb_2_fib_1",
+      "vb_3_fib_1",
+      "vb_3_fib_2",
+      "vb_3_fib_3",
+      "vb_3_fib_4",
+      "vb_3_fib_5",
+      "vb_3_fib_6",
+      "vb_3_fib_7",
+      "vb_3_fib_8",
+      "vb_3_fib_9"
     ),
     files = purrr::map_chr(
       names,
-      \(x) raw_data_path(stringr::str_c(x, ".+\\d\\.nrrd"))
+      \(x) raw_data_path(stringr::str_c(x, ".+(\\d|r)\\.nrrd"))
     )
   )
 
@@ -1653,26 +1687,27 @@ list(
       mims_img,
       read_mims(files)
     ),
-    tar_target(
-      mims_ratios,
-      extract_ratios(mims_img, names)
-    )
+    # tar_target(
+    #   mims_ratios,
+    #   extract_ratios(mims_img, names)
+    # )
+    NULL
   ),
-  tar_target(
-    mims_ratios,
-    format_ratios(
-      list(
-        mims_ratios_azd_alv_1,
-        mims_ratios_azd_fib_1,
-        mims_ratios_azd_fib_2,
-        mims_ratios_bleo_alv_1,
-        mims_ratios_bleo_fib_1,
-        mims_ratios_control_alv_1,
-        mims_ratios_vb_alv_1,
-        mims_ratios_vb_fib_1
-      )
-    )
-  ),
+  # tar_target(
+  #   mims_ratios,
+  #   format_ratios(
+  #     list(
+  #       mims_ratios_azd_alv_1,
+  #       mims_ratios_azd_fib_1,
+  #       mims_ratios_azd_fib_2,
+  #       mims_ratios_bleo_alv_1,
+  #       mims_ratios_bleo_fib_1,
+  #       mims_ratios_control_alv_1,
+  #       mims_ratios_vb_alv_1,
+  #       mims_ratios_vb_fib_1
+  #     )
+  #   )
+  # ),
 
   # analysis ----------------------------------------------------------------
 

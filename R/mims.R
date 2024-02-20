@@ -45,14 +45,25 @@ clean_mims <- function(files) {
 
 read_mims <- function(file) {
   img <- mims::mims_read(file)
+  symbols <- img@metadata$globalMetadata$symbols
+  empty <- EBImage::Image(NA, dim(img)[1:2])
+  n_ratio <- h_ratio <- c_ratio <- empty
 
-  n_ratio <- mims::mims_ratio(img, "12C15N", "12C14N")
-  h_ratio <- mims::mims_ratio(img, "12C22H", "12C21H")
+  if ("12C15N" %in% symbols) {
+    n_ratio <- mims::mims_ratio(img, "12C15N", "12C14N")[,,1]
+  }
+  if ("12C22H" %in% symbols) {
+    h_ratio <- mims::mims_ratio(img, "12C22H", "12C21H")[,,1]
+  }
+  if ("12C13C" %in% symbols) {
+    c_ratio <- mims::mims_ratio(img, "12C13C", "12C2")[,,1]
+  }
 
-  idx <- which(img@metadata$globalMetadata$symbols == "12C14N")
+  idx <- which(symbols == "12C14N")
   mims::mims_sum_frames(img, idx) |>
-    EBImage::abind(n_ratio[,,1], along = 3) |>
-    EBImage::abind(h_ratio[,,1], along = 3)
+    EBImage::abind(n_ratio, along = 3) |>
+    EBImage::abind(h_ratio, along = 3) |>
+    EBImage::abind(c_ratio, along = 3)
 }
 
 extract_ratios <- function(img, nm) {
