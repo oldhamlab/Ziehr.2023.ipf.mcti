@@ -50,13 +50,16 @@ read_mims <- function(file) {
   n_ratio <- h_ratio <- c_ratio <- empty
 
   if ("12C15N" %in% symbols) {
-    n_ratio <- mims::mims_ratio(img, "12C15N", "12C14N")[,,1]
+    n_ratio <-
+      mims::mims_ratio(img, "12C15N", "12C14N")[,,1]
   }
   if ("12C22H" %in% symbols) {
-    h_ratio <- mims::mims_ratio(img, "12C22H", "12C21H")[,,1]
+    h_ratio <-
+      mims::mims_ratio(img, "12C22H", "12C21H")[,,1]
   }
   if ("12C13C" %in% symbols) {
-    c_ratio <- mims::mims_ratio(img, "12C13C", "12C2")[,,1]
+    c_ratio <-
+      mims::mims_ratio(img, "12C13C", "12C2")[,,1]
   }
 
   idx <- which(symbols == "12C14N")
@@ -76,19 +79,26 @@ extract_ratios <- function(img, nm) {
 
   n_ratio <- img[,,2][mask]
   h_ratio <- img[,,3][mask]
+  c_ratio <- img[,,4][mask]
   tibble::tibble(
     name = nm,
     n_ratio = n_ratio,
-    h_ratio = h_ratio
+    h_ratio = h_ratio,
+    c_ratio = c_ratio
   )
 }
 
 format_ratios <- function(x) {
-  dplyr::bind_rows(x) |>
-    tidyr::separate(name, c("group", "region", "replicate"), sep = "_") |>
+  x |>
+    tidyr::separate(
+      name,
+      c("group", "animal", "region", "replicate"),
+      sep = "_"
+    ) |>
     dplyr::mutate(
-      n_ratio_norm = n_ratio / 0.0037,
-      h_ratio_norm = h_ratio / 0.0001,
+      n_ratio_norm = n_ratio / (0.368/99.632),
+      h_ratio_norm = h_ratio / (0.0115/99.9885),
+      c_ratio_norm = c_ratio / (1.07/98.93),
       group = toupper(group),
       region = factor(
         region,
@@ -96,6 +106,69 @@ format_ratios <- function(x) {
         labels = c("Alveolar", "Fibrotic")
       )
     ) |>
+    tidyr::pivot_longer(
+      -c("group":"replicate"),
+      names_to = c("element", ".value"),
+      names_pattern = c("(\\w)_(.+)"),
+      cols_vary = "slowest"
+    ) |>
+    dplyr::filter(!is.na(.data$ratio)) |>
+    dplyr::filter(.data$ratio > 0) |>
+    dplyr::mutate(
+      tracer = dplyr::case_when(
+        element == "n" ~ "proline",
+        element == "h" & animal != 1 ~ "lactate",
+        element == "h" & animal == 1 ~ "glucose",
+        element == "c" ~ "glucose"
+      ),
+      .after = "element"
+    ) |>
     refactor() |>
     dplyr::mutate(group = forcats::fct_drop(group))
+}
+
+average_mims <- function(x) {
+  x |>
+    dplyr::group_by(dplyr::across(c("group":"tracer"))) |>
+    dplyr::summarise(
+      count = dplyr::n(),
+      ratio_mean = mean(ratio, trim = 0.1),
+      ratio_sd = sd(ratio),
+      ratio_norm_mean = mean(ratio_norm, trim = 0.1),
+      ratio_norm_sd = sd(ratio_norm)
+    ) |>
+    refactor()
+}
+
+summarize_mims <- function(x) {
+  df <-
+    x |>
+    dplyr::filter(tracer != "lactate") |>
+    dplyr::group_by(group, animal, tracer) |>
+    dplyr::summarise(value = sum(count * ratio_norm_mean) / sum(count)) |>
+    dplyr::group_by(tracer) |>
+    dplyr::mutate(
+      tracer = factor(
+        tracer,
+        levels = c("proline", "glucose"),
+        labels = c("Proline", "Glucose")
+      ),
+      measurement = "tracing",
+
+      value = (value - 1) / mean(value[group == "Ctl"] - 1)
+    ) |>
+    normalize("value", "animal") |>
+    dplyr::arrange(tracer, group, animal)
+}
+
+stats_mims <- function(x) {
+  x |>
+    dplyr::group_by(tracer) |>
+    tidyr::nest() |>
+    dplyr::mutate(stats = purrr::map(
+      data,
+      \(x) stats_histo(x, measure = "tracing", mixed = TRUE)
+    )) |>
+    tidyr::unnest(c(stats)) |>
+    refactor()
 }

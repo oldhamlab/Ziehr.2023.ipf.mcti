@@ -252,8 +252,14 @@ format_mice_col <- function(df, column = "Ashcroft_avg") {
     )
 }
 
-stats_histo <- function(df, measure) {
-    stats::lm(value ~ group, data = df) |>
+stats_histo <- function(df, measure, mixed = FALSE) {
+  if (mixed) {
+    m <- lmerTest::lmer(value ~ group + (1 | animal), data = df)
+  } else {
+    m <- stats::lm(value ~ group, data = df)
+  }
+
+  m |>
     emmeans::emmeans(~ group) |>
     emmeans::contrast(
       method = list(

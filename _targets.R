@@ -25,58 +25,6 @@ tar_option_set(
 # source functions
 tar_source()
 
-# branching
-mims_values <-
-  tibble::tibble(
-    names = c(
-      "azd_1_alv_1",
-      "azd_1_fib_1",
-      "azd_1_fib_2",
-      "azd_2_fib_1",
-      "azd_3_fib_1",
-      "azd_3_fib_2",
-      "azd_3_fib_3",
-      "azd_3_fib_4",
-      "azd_3_fib_5",
-      "azd_3_fib_6",
-      "azd_3_fib_7",
-      "azd_3_fib_8",
-      "azd_3_fib_9",
-      "bleo_1_alv_1",
-      "bleo_1_fib_1",
-      "bleo_2_fib_1",
-      "bleo_2_fib_2",
-      "bleo_3_fib_1",
-      "bleo_3_fib_2",
-      "bleo_3_fib_3",
-      "bleo_3_fib_4",
-      "bleo_3_fib_5",
-      "bleo_3_fib_6",
-      "bleo_3_fib_7",
-      "control_1_alv_1",
-      "control_2_alv_1",
-      "control_2_alv_2",
-      "control_3_alv_1",
-      "control_3_alv_2",
-      "control_3_alv_3",
-      "vb_1_alv_1",
-      "vb_1_fib_1",
-      "vb_2_fib_1",
-      "vb_3_fib_1",
-      "vb_3_fib_2",
-      "vb_3_fib_3",
-      "vb_3_fib_4",
-      "vb_3_fib_5",
-      "vb_3_fib_6",
-      "vb_3_fib_7",
-      "vb_3_fib_8",
-      "vb_3_fib_9"
-    ),
-    files = purrr::map_chr(
-      names,
-      \(x) raw_data_path(stringr::str_c(x, ".+(\\d|r)\\.nrrd"))
-    )
-  )
 
 # targets -----------------------------------------------------------------
 
@@ -1681,33 +1629,144 @@ list(
     clean_mims(mims_files)
   ),
   tar_map(
-    values = mims_values,
+    values = list(
+      names = c(
+        "azd_1_alv_1",
+        "azd_1_fib_1",
+        "azd_1_fib_2",
+        "azd_2_fib_1",
+        "azd_3_fib_1",
+        "azd_3_fib_2",
+        "azd_3_fib_3",
+        "azd_3_fib_4",
+        "azd_3_fib_5",
+        "azd_3_fib_6",
+        "azd_3_fib_7",
+        "azd_3_fib_8",
+        "azd_3_fib_9",
+        "bleo_1_alv_1",
+        "bleo_1_fib_1",
+        "bleo_2_fib_1",
+        "bleo_2_fib_2",
+        "bleo_3_fib_1",
+        "bleo_3_fib_2",
+        "bleo_3_fib_3",
+        "bleo_3_fib_4",
+        "bleo_3_fib_5",
+        "bleo_3_fib_6",
+        "bleo_3_fib_7",
+        "control_1_alv_1",
+        "control_2_alv_1",
+        "control_2_alv_2",
+        "control_3_alv_1",
+        "control_3_alv_2",
+        "control_3_alv_3",
+        "vb_1_alv_1",
+        "vb_1_fib_1",
+        "vb_2_fib_1",
+        "vb_3_fib_1",
+        "vb_3_fib_2",
+        "vb_3_fib_3",
+        "vb_3_fib_4",
+        "vb_3_fib_5",
+        "vb_3_fib_6",
+        "vb_3_fib_7",
+        "vb_3_fib_8",
+        "vb_3_fib_9"
+      )
+    ),
     names = names,
     tar_target(
-      mims_img,
-      read_mims(files)
+      mims_files,
+      raw_data_path(stringr::str_c(names, ".+(\\d|r)\\.nrrd"))
     ),
-    # tar_target(
-    #   mims_ratios,
-    #   extract_ratios(mims_img, names)
-    # )
+    tar_target(
+      mims_img,
+      read_mims(mims_files)
+    ),
+    tar_target(
+      mims_ratios,
+      extract_ratios(mims_img, names) |>
+        format_ratios()
+    ),
+    tar_target(
+      mims_averages,
+      average_mims(mims_ratios)
+    ),
     NULL
   ),
-  # tar_target(
-  #   mims_ratios,
-  #   format_ratios(
-  #     list(
-  #       mims_ratios_azd_alv_1,
-  #       mims_ratios_azd_fib_1,
-  #       mims_ratios_azd_fib_2,
-  #       mims_ratios_bleo_alv_1,
-  #       mims_ratios_bleo_fib_1,
-  #       mims_ratios_control_alv_1,
-  #       mims_ratios_vb_alv_1,
-  #       mims_ratios_vb_fib_1
-  #     )
-  #   )
-  # ),
+  tar_target(
+    mims_averages,
+    dplyr::bind_rows(
+      mims_averages_azd_1_alv_1,
+      mims_averages_azd_1_fib_1,
+      mims_averages_azd_1_fib_2,
+      mims_averages_azd_2_fib_1,
+      mims_averages_azd_3_fib_1,
+      mims_averages_azd_3_fib_2,
+      mims_averages_azd_3_fib_3,
+      mims_averages_azd_3_fib_4,
+      mims_averages_azd_3_fib_5,
+      mims_averages_azd_3_fib_6,
+      mims_averages_azd_3_fib_7,
+      mims_averages_azd_3_fib_8,
+      mims_averages_azd_3_fib_9,
+      mims_averages_bleo_1_alv_1,
+      mims_averages_bleo_1_fib_1,
+      mims_averages_bleo_2_fib_1,
+      mims_averages_bleo_2_fib_2,
+      mims_averages_bleo_3_fib_1,
+      mims_averages_bleo_3_fib_2,
+      mims_averages_bleo_3_fib_3,
+      mims_averages_bleo_3_fib_4,
+      mims_averages_bleo_3_fib_5,
+      mims_averages_bleo_3_fib_6,
+      mims_averages_bleo_3_fib_7,
+      mims_averages_control_1_alv_1,
+      mims_averages_control_2_alv_1,
+      mims_averages_control_2_alv_2,
+      mims_averages_control_3_alv_1,
+      mims_averages_control_3_alv_2,
+      mims_averages_control_3_alv_3,
+      mims_averages_vb_1_alv_1,
+      mims_averages_vb_1_fib_1,
+      mims_averages_vb_2_fib_1,
+      mims_averages_vb_3_fib_1,
+      mims_averages_vb_3_fib_2,
+      mims_averages_vb_3_fib_3,
+      mims_averages_vb_3_fib_4,
+      mims_averages_vb_3_fib_5,
+      mims_averages_vb_3_fib_6,
+      mims_averages_vb_3_fib_7,
+      mims_averages_vb_3_fib_8,
+      mims_averages_vb_3_fib_9
+    )
+  ),
+  tar_target(
+    mims_summary,
+    summarize_mims(mims_averages)
+  ),
+  tar_target(
+    mims_stats,
+    stats_mims(mims_summary)
+  ),
+  tar_target(
+    mims_plot,
+    plot_mice(
+      mims_summary,
+      stats = mims_stats,
+      measure = "tracing",
+      x = "group",
+      y = "value_corr",
+      ytitle = "Relative isotope enrichment"
+    ) +
+      ggplot2::facet_wrap(
+        facets = ggplot2::vars(tracer),
+        scales = "free_y",
+        nrow = 1
+      ),
+    format = "rds"
+  ),
 
   # analysis ----------------------------------------------------------------
 
@@ -1752,7 +1811,7 @@ list(
       "dual-azd-hif1a-blot.png",    1,      0,      -0.05,  "hif_azd",
       "lactate-sma-blot.png",       1.2,    0,      -0.05,  "sma_lac",
       "dual-azd-kla-h3.png",        1,      0,      0,      "azd_kla",
-      "mims-panel.png",             1,      0,      0,      "mims"
+      "mims-panel.png",             1.05,   0.05,      0,      "mims"
     ),
     names = names,
     tar_target(
@@ -1987,7 +2046,8 @@ list(
     fig09,
     make_fig09(
       metab_bleo_lacate_plot,
-      fig_img_mims
+      fig_img_mims,
+      mims_plot
     ) |>
       write_figures("Figure 09"),
     format = "file"
