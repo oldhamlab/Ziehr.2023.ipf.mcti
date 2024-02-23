@@ -1768,6 +1768,44 @@ list(
     format = "rds"
   ),
 
+  # VB253 -------------------------------------------------------------------
+
+  tar_target(
+    vb_invitro_sma_file,
+    raw_data_path("invitro_sma.csv"),
+    format = "file"
+  ),
+  tar_target(
+    vb_invitro_sma_data,
+    read_vb_invitro_sma(vb_invitro_sma_file)
+  ),
+  tar_map(
+    values = list(
+      type = c("IPF", "Ctl"),
+      names = c("ipf", "ctl")
+    ),
+    names = names,
+    tar_target(
+      vb_invitro_sma_plot,
+      plot_vb_invitro_sma(vb_invitro_sma_data, type),
+      format = "rds"
+    )
+  ),
+  tar_target(
+    vb_invitro_smad_file,
+    raw_data_path("invitro_smad3.csv"),
+    format = "file"
+  ),
+  tar_target(
+    vb_invitro_smad_data,
+    read_vb_invitro_sma(vb_invitro_smad_file)
+  ),
+  tar_target(
+    vb_invitro_smad_plot,
+    plot_vb_invitro_sma(vb_invitro_smad_data, "IPF", "Nuclear Smad3"),
+    format = "rds"
+  ),
+
   # analysis ----------------------------------------------------------------
 
   tar_quarto(
@@ -2078,6 +2116,25 @@ list(
       mid_bleo_plasma_ratio
     ) |>
       write_figures("Figure 09.supplement.2"),
+    format = "file"
+  ),
+
+  # figure 10 ---------------------------------------------------------------
+
+  tar_target(
+    fig10,
+    make_fig10(
+      vb_invitro_sma_plot_ipf
+    ) |>
+      write_figures("Figure 10"),
+    format = "file"
+  ),
+  tar_target(
+    fig10s,
+    make_fig10s(
+      vb_invitro_smad_plot
+    ) |>
+      write_figures("Figure 10.supplement"),
     format = "file"
   ),
 
