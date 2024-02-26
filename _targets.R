@@ -1601,7 +1601,7 @@ list(
     ),
     tar_target(
       mice_mcti_stats,
-      stats_histo(mice_mcti, measure = names)
+      stats_histo(mice_mcti, measure = names, comps = rlang::sym("comps_bleo_2"))
     ),
     tar_target(
       mice_mcti_plot,
@@ -1785,10 +1785,18 @@ list(
       names = c("ipf", "ctl")
     ),
     names = names,
-    tar_target(
-      vb_invitro_sma_plot,
-      plot_vb_invitro_sma(vb_invitro_sma_data, type),
-      format = "rds"
+    tar_map(
+      values = list(
+        y = c("sma_norm", "nuclei_norm"),
+        ytitle = c("α-SMA fold change", "Nuclei fold change"),
+        names = c("sma", "nuclei")
+      ),
+      names = names,
+      tar_target(
+        vb_invitro_plot,
+        plot_vb_invitro_sma(vb_invitro_sma_data, type, y, ytitle),
+        format = "rds"
+      )
     )
   ),
   tar_target(
@@ -1802,8 +1810,52 @@ list(
   ),
   tar_target(
     vb_invitro_smad_plot,
-    plot_vb_invitro_sma(vb_invitro_smad_data, "IPF", "Nuclear Smad3"),
+    plot_vb_invitro_sma(vb_invitro_smad_data, "IPF", ytitle = "Nuclear Smad3"),
     format = "rds"
+  ),
+  tar_target(
+    vb_mice_file,
+    raw_data_path("vb_mice.csv"),
+    format = "file"
+  ),
+  tar_target(
+    vb_mice_data,
+    read_vb_mice(vb_mice_file)
+  ),
+  tar_map(
+    values =
+      tibble::tribble(
+        ~ages,   ~measure,   ~ytitle,                       ~comps,
+        "young", "ashcroft", "Ashcroft score",              rlang::sym("comps_bleo_3"),
+        "young", "sma",      "α-SMA area",                  rlang::sym("comps_bleo_3"),
+        "young", "Penh",     "Penh",                        rlang::sym("comps_bleo_4"),
+        "old",   "ashcroft", "Ashcroft score",              rlang::sym("comps_bleo_4"),
+        "old",   "sma",      "α-SMA area",                  rlang::sym("comps_bleo_4"),
+        "old",   "lactate",  "Lactate (nmol / mg protein)", rlang::sym("comps_bleo_4")
+      ) |>
+      tidyr::unite(names, ages, measure, remove = FALSE),
+    names = names,
+    tar_target(
+      vb_mice,
+      dplyr::filter(vb_mice_data, age == ages, measurement == measure)
+    ),
+    tar_target(
+      vb_mice_stats,
+      stats_histo(vb_mice, measure = names, comps = comps) |>
+        dplyr::mutate(measurement = measure)
+    ),
+    tar_target(
+      vb_mice_plot,
+      plot_mice(
+        vb_mice,
+        vb_mice_stats,
+        ytitle = ytitle,
+        measure = measure,
+        y = "value"
+      ),
+      format = "rds"
+    ),
+    NULL
   ),
 
   # analysis ----------------------------------------------------------------
@@ -1849,7 +1901,8 @@ list(
       "dual-azd-hif1a-blot.png",    1,      0,      -0.05,  "hif_azd",
       "lactate-sma-blot.png",       1.2,    0,      -0.05,  "sma_lac",
       "dual-azd-kla-h3.png",        1,      0,      0,      "azd_kla",
-      "mims-panel.png",             1.05,   0.05,      0,      "mims"
+      "mims-panel.png",             1.05,   0.05,   0,      "mims",
+      "vb-bleo-timeline.png",       1,      0,      0,      "vb_timeline"
     ),
     names = names,
     tar_target(
@@ -2124,19 +2177,41 @@ list(
   tar_target(
     fig10,
     make_fig10(
-      vb_invitro_sma_plot_ipf
+      vb_invitro_plot_sma_ipf,
+      vb_invitro_plot_nuclei_ipf,
+      fig_img_vb_timeline,
+      vb_mice_plot_young_Penh,
+      patchwork::plot_spacer(),
+      vb_mice_plot_young_ashcroft,
+      vb_mice_plot_young_sma +
+        ggplot2::scale_y_continuous(
+          labels = scales::label_percent(),
+          breaks = scales::breaks_extended(n = 6, only.loose = TRUE),
+          expand = ggplot2::expansion(c(0, 0)),
+          limits = nice_limits
+        ),
+      patchwork::plot_spacer(),
+      vb_mice_plot_old_ashcroft,
+      vb_mice_plot_old_sma +
+        ggplot2::scale_y_continuous(
+          labels = scales::label_percent(),
+          breaks = scales::breaks_extended(n = 6, only.loose = TRUE),
+          expand = ggplot2::expansion(c(0, 0)),
+          limits = nice_limits
+        ),
+      vb_mice_plot_old_lactate
     ) |>
       write_figures("Figure 10"),
     format = "file"
   ),
-  tar_target(
-    fig10s,
-    make_fig10s(
-      vb_invitro_smad_plot
-    ) |>
-      write_figures("Figure 10.supplement"),
-    format = "file"
-  ),
+  # tar_target(
+  #   fig10s,
+  #   make_fig10s(
+  #     vb_invitro_smad_plot
+  #   ) |>
+  #     write_figures("Figure 10.supplement"),
+  #   format = "file"
+  # ),
 
   # manuscript --------------------------------------------------------------
 

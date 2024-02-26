@@ -63,5 +63,5 @@ tar_read(nad_plot_nadh_norm)
 #| fig-width: 4
 #| fig-height: 2.5
 
-tar_read(nad_plot_ratio)
+tar_read(nad_plot_nadh_ratio)
 ```

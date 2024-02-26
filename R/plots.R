@@ -221,7 +221,8 @@ clrs <- c(
   "Ctl\nAZD/VB"   = "#FABFD2",
   "TGFβ\nAZD/VB"  = "#D37295",
   "VB253"         = "#E15759",
-  "Nintedanib"    = "#499894",
+  "NIN"           = "#499894",
+  "PFD"           = "#B07AA1",
   NULL
 )
 
