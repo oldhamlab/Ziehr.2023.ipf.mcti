@@ -19,6 +19,19 @@ comps_bleo_2 <- list(
   "VB" =  c(0, -1, 0, 1)
 )
 
+comps_bleo_3 <- list(
+  # "Ctl" =           c(1, -1, 0, 0),
+  "VB253" =         c(0, -1, 1, 0),
+  "Pirfenidone" =   c(0, -1, 0, 1)
+)
+
+comps_bleo_4 <- list(
+  # "Ctl" =           c(1, -1, 0, 0, 0),
+  "VB253" =         c(0, -1, 1, 0, 0),
+  "Nintedanib" =    c(0, -1, 0, 1, 0),
+  "Pirfenidone" =   c(0, -1, 0, 0, 1)
+)
+
 comps_nsaid <- list(
   "DIC.Ctl" =  c(-1, 0, 1, 0, 0, 0, 0, 0),
   "DIC.TGFβ" = c(0, -1, 0, 1, 0, 0, 0, 0),

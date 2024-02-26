@@ -252,7 +252,7 @@ format_mice_col <- function(df, column = "Ashcroft_avg") {
     )
 }
 
-stats_histo <- function(df, measure, mixed = FALSE) {
+stats_histo <- function(df, measure, mixed = FALSE, comps = comps_bleo_2) {
   if (mixed) {
     m <- lmerTest::lmer(value ~ group + (1 | animal), data = df)
   } else {
@@ -262,17 +262,14 @@ stats_histo <- function(df, measure, mixed = FALSE) {
   m |>
     emmeans::emmeans(~ group) |>
     emmeans::contrast(
-      method = list(
-        Ctl = c(-1, 1, 0, 0),
-        AZD = c(0, -1, 1, 0),
-        VB =  c(0, -1, 0, 1)
-      ),
+      method = comps,
       adjust = "dunnettx"
     ) |>
     tibble::as_tibble() |>
     dplyr::rename(group = .data$contrast) |>
     dplyr::mutate(measurement = measure) |>
-    annot_stats()
+    annot_stats() |>
+    refactor()
 }
 
 
@@ -287,7 +284,8 @@ plot_mice <- function(
     y = "value",
     ytitle = NULL
 ) {
-  df |>
+  p <-
+    df |>
     dplyr::filter(measurement == measure) |>
     ggplot2::ggplot() +
     ggplot2::aes(
@@ -323,15 +321,6 @@ plot_mice <- function(
       stroke = 0.25,
       show.legend = FALSE
     ) +
-    ggplot2::geom_text(
-      data = dplyr::filter(stats, measurement == measure),
-      ggplot2::aes(
-        y = y,
-        vjust = vjust,
-        label = label
-      ),
-      color = "black"
-    ) +
     ggplot2::labs(
       x = NULL,
       y = ytitle
@@ -348,4 +337,19 @@ plot_mice <- function(
     ggplot2::coord_cartesian(clip = "off") +
     theme_plot() +
     NULL
+
+  if (!is.null(stats)) {
+    p <-
+      p +
+      ggplot2::geom_text(
+        data = dplyr::filter(stats, measurement == measure),
+        ggplot2::aes(
+          y = y,
+          vjust = vjust,
+          label = label
+        ),
+        color = "black"
+      )
+  }
+  p
 }

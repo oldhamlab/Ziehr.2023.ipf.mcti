@@ -21,14 +21,24 @@ manuscript_path <- function(nm) {
   list_files(nm = nm, path = "manuscript")
 }
 
+# plot_image <- function(img, scale = 1, hjust = 0, vjust = 0) {
+#   cowplot::ggdraw() +
+#     cowplot::draw_image(
+#       magick::image_read(img),
+#       scale = scale,
+#       hjust = hjust,
+#       vjust = vjust
+#     )  +
+#     theme_plot() +
+#     ggplot2::theme(
+#       panel.border = ggplot2::element_blank(),
+#       axis.line = ggplot2::element_blank()
+#     )
+# }
+
 plot_image <- function(img, scale = 1, hjust = 0, vjust = 0) {
-  cowplot::ggdraw() +
-    cowplot::draw_image(
-      magick::image_read(img),
-      scale = scale,
-      hjust = hjust,
-      vjust = vjust
-    )  +
+  png::readPNG(img, native = TRUE) |>
+    patchwork::wrap_elements(plot = _) +
     theme_plot() +
     ggplot2::theme(
       panel.border = ggplot2::element_blank(),
@@ -137,6 +147,7 @@ refactor <- function(df) {
       "TGFβ\nAZD/VB" = "TGFβ\nAZD/VB",
       "Ctl" = "Ctl",
       "Ctl" = "CONTROL",
+      "Ctl" = "Veh",
       "TGFβ" = "TGFβ",
       "IPF" = "IPF",
       "Bleo" = "Bleo",
@@ -154,6 +165,9 @@ refactor <- function(df) {
       "Ctl\nVB" = "control\nVB124",
       "Ctl\nVB" = "control\nVB",
       "VB" = "VB",
+      "VB253" = "VB253",
+      "NIN" = "Nintedanib",
+      "PFD" = "Pirfenidone",
       "Ctl\nAZD/VB" = "control\nAZD/VB",
       "Ctl\nAZD/VB" = "control\nDual",
       "Ctl\nMed" = "Ctl\nMed",

@@ -29,17 +29,24 @@ clean_mims <- function(files) {
       names_to = "measurement",
       values_to = "value"
     ) |>
-    tidyr::separate_wider_delim("measurement", names = c("ion", "measurement"), delim = " ") |>
+    tidyr::separate_wider_delim(
+      "measurement",
+      names = c("ion", "measurement"),
+      delim = " "
+    ) |>
     tidyr::pivot_wider(
       names_from = "measurement",
       values_from = "value"
     ) |>
     tidyr::separate_wider_delim(
       cols = file,
-      names = c("group", "region", "image", "date", "sample"),
+      names = c("group", "replicate", "region", "image", "date", "sample"),
       delim = "_"
     ) |>
-    dplyr::mutate(group = toupper(group)) |>
+    dplyr::mutate(
+      replicate = factor(replicate),
+      group = toupper(group)
+    ) |>
     refactor()
 }
 

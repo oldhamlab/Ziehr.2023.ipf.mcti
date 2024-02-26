@@ -398,19 +398,86 @@ make_fig09s2 <- function(p1, p2) {
     )
 }
 
-make_fig10 <- function(p1, p2) {
-  design <- "ab"
-  p1 + p2 +
+make_fig10 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11) {
+  # design <- "abcc \n defg \n hijk"
+  # p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 +
+  #   theme_patchwork(
+  #     design = design,
+  #     widths = ggplot2::unit(1.5, "in"),
+  #     heights = ggplot2::unit(1.5, "in")
+  #   )
+
+  top <-
+    ((p1 + p2) +
+       patchwork::plot_layout(guides = "collect") &
+       ggplot2::theme(
+         legend.position = "bottom",
+         legend.box.margin = ggplot2::margin(t = -10)
+       )) -
+    p3 +
     theme_patchwork(
-      design = design,
-      widths = ggplot2::unit(1.5, "in"),
-      heights = ggplot2::unit(1.5, "in")
+      # design = "abc",
+      widths = c(2, 2),
+      tags = list(c("A", "B", "C")),
+      guides = "collect"
+    ) &
+    ggplot2::theme(legend.position = "bottom")
+
+  mid <-
+    p4 + p5 + p6 + p7 +
+    patchwork::plot_annotation(
+      title = "Young mice",
+      theme = ggplot2::theme(
+        plot.title = ggplot2::element_text(
+          hjust = 0.5,
+          size = ggplot2::rel(0.8),
+          face = "bold"
+        )
+      )
+    ) +
+    theme_patchwork(
+      design = "abcd",
+      tags = list(c("D", "E", "F", "G"))
+    )
+
+  bot <-
+    p8 + p9 + p10 + p11 +
+    patchwork::plot_annotation(
+      title = "Aged mice",
+      theme = ggplot2::theme(
+        plot.title = ggplot2::element_text(
+          hjust = 0.5,
+          size = ggplot2::rel(0.8),
+          face = "bold"
+        )
+      )
+    ) +
+    theme_patchwork(
+      design = "abcd",
+      tags = list(c("H", "I", "J", "K"))
+    )
+
+  patchwork::wrap_elements(full = top) +
+    patchwork::wrap_elements(full = mid) +
+    patchwork::wrap_elements(full = bot) +
+    theme_patchwork(
+      design = "a \n b \n c",
+      widths = ggplot2::unit(7.5, "in"),
+      heights = ggplot2::unit(2, "in"),
+      tags = NULL
     )
 }
 
-make_fig10s <- function(p1) {
-  design <- "a"
-  p1 +
+
+
+
+
+
+
+
+make_fig10s <- function(p1, p2) {
+  design <- "ab"
+  p1 + p2 +
     theme_patchwork(
       design = design,
       widths = ggplot2::unit(1.5, "in"),

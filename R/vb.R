@@ -29,11 +29,20 @@ read_vb_invitro_sma <- function(file) {
       tidyselect::any_of(c("sma", "sma_norm", "nuclei", "nuclei_norm")), mean
     )) |>
     dplyr::mutate(
-      drug = factor(drug, levels = c("VB253", "Nintedanib"))
+      drug = factor(
+        drug,
+        levels = c("VB253", "Nintedanib"),
+        labels = c("VB253", "NIN")
+      )
     )
 }
 
-plot_vb_invitro_sma <- function(df, source = "IPF", ytitle = "α-SMA fold change") {
+plot_vb_invitro_sma <- function(
+    df,
+    source = "IPF",
+    y = "sma_norm",
+    ytitle = "α-SMA fold change"
+) {
   df |>
     dplyr::filter(type == source) |>
     dplyr::group_by(dose) |>
@@ -41,11 +50,12 @@ plot_vb_invitro_sma <- function(df, source = "IPF", ytitle = "α-SMA fold change
     ggplot2::ggplot() +
     ggplot2::aes(
       x = dose,
-      y = sma_norm,
+      y = .data[[y]],
       color = drug
     ) +
     ggplot2::geom_smooth(
       method = drc::drm,
+      formula = y ~ x,
       method.args = list(
         fct = drc::L.4()
       ),
@@ -94,4 +104,15 @@ plot_vb_invitro_sma <- function(df, source = "IPF", ytitle = "α-SMA fold change
     ) +
     ggplot2::coord_cartesian(clip = "off") +
     theme_plot()
+}
+
+read_vb_mice <- function(file) {
+  readr::read_csv(file, show_col_types = FALSE) |>
+    refactor() |>
+    tidyr::pivot_longer(
+      c("ashcroft", "sma", "Penh", "lactate"),
+      names_to = "measurement",
+      values_to = "value"
+    ) |>
+    dplyr::filter(!is.na(value))
 }
