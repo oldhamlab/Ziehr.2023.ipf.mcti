@@ -113,8 +113,8 @@ targets::tar_load(
     fig06,
     fig07,
     fig08, 
-    # fig10,
-    # fig11,
+    fig09, 
+    fig10,
     # resources_table,
     NULL
   )

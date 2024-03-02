@@ -1902,7 +1902,9 @@ list(
       "lactate-sma-blot.png",       1.2,    0,      -0.05,  "sma_lac",
       "dual-azd-kla-h3.png",        1,      0,      0,      "azd_kla",
       "mims-panel.png",             1.05,   0.05,   0,      "mims",
-      "vb-bleo-timeline.png",       1,      0,      0,      "vb_timeline"
+      "vb-bleo-timeline.png",       1,      0,      0,      "vb_timeline",
+      "bleo-vb-young-sma.png",      1,      0,      0,      "vb_young_sma",
+      "bleo-vb-aged-sma.png",        1,      0,      0,     "vb_aged_sma"
     ),
     names = names,
     tar_target(
@@ -2181,8 +2183,8 @@ list(
       vb_invitro_plot_nuclei_ipf,
       fig_img_vb_timeline,
       vb_mice_plot_young_Penh,
-      patchwork::plot_spacer(),
       vb_mice_plot_young_ashcroft,
+      fig_img_vb_young_sma,
       vb_mice_plot_young_sma +
         ggplot2::scale_y_continuous(
           labels = scales::label_percent(),
@@ -2190,8 +2192,8 @@ list(
           expand = ggplot2::expansion(c(0, 0)),
           limits = nice_limits
         ),
-      patchwork::plot_spacer(),
       vb_mice_plot_old_ashcroft,
+      fig_img_vb_aged_sma,
       vb_mice_plot_old_sma +
         ggplot2::scale_y_continuous(
           labels = scales::label_percent(),
