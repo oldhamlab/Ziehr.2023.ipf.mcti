@@ -1542,7 +1542,7 @@ list(
     format = "rds"
   ),
 
-  # mice_vent ---------------------------------------------------------------
+  # mice vent ---------------------------------------------------------------
 
   tar_target(
     mice_vent,
@@ -1601,7 +1601,7 @@ list(
     ),
     tar_target(
       mice_mcti_stats,
-      stats_histo(mice_mcti, measure = names, comps = rlang::sym("comps_bleo_2"))
+      stats_histo(mice_mcti, measure = names, comps = comps_bleo_2)
     ),
     tar_target(
       mice_mcti_plot,
@@ -2206,14 +2206,14 @@ list(
       write_figures("Figure 10"),
     format = "file"
   ),
-  # tar_target(
-  #   fig10s,
-  #   make_fig10s(
-  #     vb_invitro_smad_plot
-  #   ) |>
-  #     write_figures("Figure 10.supplement"),
-  #   format = "file"
-  # ),
+  tar_target(
+    fig10s,
+    make_fig10s(
+      vb_invitro_smad_plot
+    ) |>
+      write_figures("Figure 10.supplement"),
+    format = "file"
+  ),
 
   # manuscript --------------------------------------------------------------
 

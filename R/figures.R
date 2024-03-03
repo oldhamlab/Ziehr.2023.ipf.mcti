@@ -469,18 +469,13 @@ make_fig10 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11) {
 }
 
 
-
-
-
-
-
-
-make_fig10s <- function(p1, p2) {
-  design <- "ab"
-  p1 + p2 +
+make_fig10s <- function(p1) {
+  design <- "a"
+  p1 +
     theme_patchwork(
       design = design,
       widths = ggplot2::unit(1.5, "in"),
-      heights = ggplot2::unit(1.5, "in")
+      heights = ggplot2::unit(1.5, "in"),
+      tags = NULL
     )
 }

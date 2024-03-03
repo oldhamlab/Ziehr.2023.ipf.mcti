@@ -266,7 +266,7 @@ stats_histo <- function(df, measure, mixed = FALSE, comps = comps_bleo_2) {
       adjust = "dunnettx"
     ) |>
     tibble::as_tibble() |>
-    dplyr::rename(group = .data$contrast) |>
+    dplyr::rename(group = "contrast") |>
     dplyr::mutate(measurement = measure) |>
     annot_stats() |>
     refactor()
