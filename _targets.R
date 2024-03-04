@@ -896,7 +896,7 @@ list(
       ),
       tar_target(
         msea_table_img,
-        plot_table(msea_table_file),
+        plot_image(msea_table_file),
         format = "rds"
       ),
       NULL
@@ -1035,7 +1035,7 @@ list(
       ),
       tar_target(
         msea_table_img,
-        plot_table(msea_table_file),
+        plot_image(msea_table_file),
         format = "rds"
       ),
       NULL
@@ -1451,7 +1451,7 @@ list(
     ),
     tar_target(
       gsea_table_img,
-      plot_table(gsea_table_file),
+      plot_image(gsea_table_file),
       format = "rds"
     ),
     tar_target(
