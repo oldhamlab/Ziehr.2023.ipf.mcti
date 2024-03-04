@@ -236,7 +236,7 @@ make_fig04s <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13) 
     theme_patchwork(
       design = "ab \n c#",
       widths = ggplot2::unit(4, "in"),
-      heights = ggplot2::unit(c(6, 3), "in"),
+      heights = ggplot2::unit(c(7, 3), "in"),
       tags = NULL
     )
 }
