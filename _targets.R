@@ -1252,6 +1252,20 @@ list(
     ),
     NULL
   ),
+  tar_target(
+    mid_tgf_plot,
+    plot_tgf_mids(mid_mcti_mids_corr) +
+      theme_patchwork(
+        widths = ggplot2::unit(7.5, "in"),
+        heights = ggplot2::unit(11, "in"),
+        tags = NULL
+      ),
+    format = "rds"
+  ),
+  tar_target(
+    mid_tgf_plot_img,
+    write_figures(mid_tgf_plot, "Figure 04.supplement.2")
+  ),
 
   # mid bleo ----------------------------------------------------------------
 
@@ -2032,7 +2046,7 @@ list(
       msea_table_img_vb_intra,
       mid_mcti_moi_plot_gln5
     ) |>
-      write_figures("Figure 04.supplement"),
+      write_figures("Figure 04.supplement.1"),
     format = "file"
   ),
 
