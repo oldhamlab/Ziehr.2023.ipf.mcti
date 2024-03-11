@@ -658,3 +658,87 @@ plot_plasma_ratio <- function(mids) {
     theme_plot() +
     NULL
 }
+
+plot_tgf_mids <- function(df) {
+  metab <- c(
+    "FBP",
+    "6PG",
+    "PYR",
+    "LAC",
+    "CIT",
+    "2OG",
+    "SUC",
+    "MAL",
+    "ASP",
+    "ALA",
+    "SER",
+    "GLY",
+    "GLN",
+    "GLU",
+    "PRO"
+  )
+
+  x <-
+    df |>
+    dplyr::filter(tracer != "glc2") |>
+    dplyr::filter(treatment == "Veh") |>
+    dplyr::filter(metabolite %in% metab) |>
+    dplyr::mutate(
+      metabolite = factor(metabolite, levels = metab),
+      tracer = factor(
+        tracer,
+        levels = c("glc6", "lac3", "gln5"),
+        labels = c(
+          "[U-^13^C~6~]-glucose",
+          "[U-^13^C~3~]-lactate",
+          "[U-^13^C~5~]-glutamine"
+        )
+      )
+    )
+
+  stats <-
+    x |>
+    dplyr::group_by(tracer, metabolite) |>
+    tidyr::nest() |>
+    dplyr::mutate(
+      stats = purrr::map(data, \(x) {
+        stats::lm(mid_corr ~ condition * isotope, data = x) |>
+          emmeans::emmeans(~ condition * isotope) |>
+          emmeans::contrast(
+            method = "pairwise",
+            by = "isotope",
+            adjust = "mvt"
+          ) |>
+          broom::tidy() |>
+          dplyr::select("isotope", "p.value")
+      })
+    ) |>
+    tidyr::unnest(c(stats)) |>
+    dplyr::mutate(
+      condition = NA
+    ) |>
+    annot_stats()
+
+  plot_two_factor(
+    df = x,
+    stats = stats,
+    x = "isotope",
+    y = "mid_corr",
+    ytitle = "Mole fraction"
+  ) +
+    ggplot2::facet_grid(
+      cols = ggplot2::vars(tracer),
+      rows = ggplot2::vars(metabolite)
+    ) +
+    ggplot2::scale_y_continuous(
+      breaks = seq(0, 1, by = 0.25),
+      expand = ggplot2::expansion(c(0, 0.15)),
+      limits = nice_limits
+    ) +
+    ggplot2::theme(
+      strip.text = ggtext::element_markdown(),
+      panel.grid.major.y = ggplot2::element_line(linewidth = 0.05),
+      legend.position = "bottom"
+    ) +
+    NULL
+}
