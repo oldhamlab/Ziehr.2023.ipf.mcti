@@ -479,3 +479,12 @@ make_fig10s <- function(p1) {
       tags = NULL
     )
 }
+
+create_resources <- function(path) {
+  readr::read_csv(path, show_col_types = FALSE) |>
+    flextable::flextable() |>
+    flextable::bold(part = "header", bold = TRUE) |>
+    flextable::font(fontname = "Calibri", part = "all") |>
+    flextable::fontsize(size = 9, part = "all") |>
+    flextable::set_table_properties(layout = "autofit")
+}

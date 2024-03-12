@@ -125,7 +125,9 @@ plot_wt_timeline <- function(df, stat) {
         x = 14.5,
         y = y,
         vjust = vjust
-      )
+      ),
+      size = 10 / ggplot2::.pt,
+      family = "Calibri"
     ) +
     ggplot2::labs(
       x = "Time (d)",
@@ -348,7 +350,9 @@ plot_mice <- function(
           vjust = vjust,
           label = label
         ),
-        color = "black"
+        color = "black",
+        size = 10 / ggplot2::.pt,
+        family = "Calibri"
       )
   }
   p

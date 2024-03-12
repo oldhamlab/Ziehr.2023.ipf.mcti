@@ -293,7 +293,8 @@ plot_one_factor <- function(
           vjust = .data[["vjust"]],
           label = .data[["label"]]
         ),
-        size = 12 / ggplot2::.pt,
+        size = 10 / ggplot2::.pt,
+        family = "Calibri",
         color = "black",
         show.legend = FALSE
       )
@@ -380,7 +381,8 @@ plot_two_factor <- function(
           label = .data[["label"]],
           vjust = .data[["vjust"]]
         ),
-        size = 12 / ggplot2::.pt,
+        size = 10 / ggplot2::.pt,
+        family = "Calibri",
         color = "black",
         show.legend = FALSE
       ) +
@@ -392,7 +394,8 @@ plot_two_factor <- function(
           vjust = .data[["vjust"]],
           color = .data[["condition"]]
         ),
-        size = 12 / ggplot2::.pt,
+        size = 10 / ggplot2::.pt,
+        family = "Calibri",
         position = ggplot2::position_dodge(width = dodge_width),
         show.legend = FALSE
       )
