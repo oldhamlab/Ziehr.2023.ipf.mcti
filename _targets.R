@@ -1256,8 +1256,8 @@ list(
     mid_tgf_plot,
     plot_tgf_mids(mid_mcti_mids_corr) +
       theme_patchwork(
-        widths = ggplot2::unit(7.5, "in"),
-        heights = ggplot2::unit(11, "in"),
+        widths = ggplot2::unit(6, "in"),
+        heights = ggplot2::unit(10, "in"),
         tags = NULL
       ),
     format = "rds"
@@ -2227,6 +2227,18 @@ list(
     ) |>
       write_figures("Figure 10.supplement"),
     format = "file"
+  ),
+
+  # resources ---------------------------------------------------------------
+
+  tar_target(
+    resources_file,
+    manuscript_path("resources.csv"),
+    format = "file"
+  ),
+  tar_target(
+    resources_table,
+    create_resources(resources_file)
   ),
 
   # manuscript --------------------------------------------------------------

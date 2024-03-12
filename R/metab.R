@@ -456,6 +456,8 @@ plot_mois <- function(se, tt, moi){
         vjust = .data$vjust
       ),
       color = "black",
+      size = 10 / ggplot2::.pt,
+      family = "Calibri",
       inherit.aes = FALSE
     ) +
     ggplot2::scale_fill_manual(values = clrs) +
@@ -698,6 +700,8 @@ plot_bleo_lactate <- function(x) {
         vjust = vjust,
         label = label
       ),
+      size = 10 / ggplot2::.pt,
+      family = "Calibri",
       color = "black"
     ) +
     ggplot2::labs(

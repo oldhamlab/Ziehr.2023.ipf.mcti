@@ -226,6 +226,8 @@ plot_seahorse_atp_bars <- function(x, stats) {
         y = .data$y.stat,
         label = .data$label
       ),
+      size = 10 / ggplot2::.pt,
+      family = "Calibri",
       nudge_y = 2
     ) +
     ggplot2::labs(
@@ -300,6 +302,7 @@ plot_seahorse_pheno <- function(x) {
       nudge_x = 0.5,
       nudge_y = -0.5,
       color = "black",
+      family = "Calibri",
       size = 1.75,
       show.legend = FALSE
     ) +
