@@ -1256,8 +1256,8 @@ list(
     mid_tgf_plot,
     plot_tgf_mids(mid_mcti_mids_corr) +
       theme_patchwork(
-        widths = ggplot2::unit(6, "in"),
-        heights = ggplot2::unit(10, "in"),
+        widths = ggplot2::unit(5.5, "in"),
+        heights = ggplot2::unit(9, "in"),
         tags = NULL
       ),
     format = "rds"
