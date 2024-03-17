@@ -438,7 +438,7 @@ The authors confirm contribution to the paper as follows: designed research stud
 
 # Acknowledgements
 
-Research reported in this publication was supported by the National Heart Lung and Blood Institute of the National Institutes of Health under award number R01GM987654 (to W.M.O.), and by the Brigham and Women's Hospital Research Institute. The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health. VB124 was a gift from Vettore, LLC. 
+The authors thank Louise Trakimas and the HMS Electron Microscopy Facility for MIMS sample preparation and consultation. Research reported in this publication was supported by the National Heart Lung and Blood Institute of the National Institutes of Health under award number R01GM987654 (to W.M.O.), and by the Brigham and Women's Hospital Research Institute. The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health. VB124 was a gift from Vettore, LLC. 
 
 \newpage
 
