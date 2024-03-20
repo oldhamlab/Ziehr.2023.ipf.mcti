@@ -12,15 +12,15 @@ authors:
   affiliations:
   - ref: bwh
   - ref: hms
+- name: K. Mark Parnell
+  affiliations:
+  - ref: vettore
 - name: Nathan M. Krah
   affiliations:
   - ref: utah_gen
 - name: Kevin J. Leahy 
   affiliations:
   - ref: bwh
-- name: K. Mark Parnell
-  affiliations:
-  - ref: vettore
 - name: Christelle Guillermier
   affiliations:
   - ref: bwh
@@ -74,10 +74,10 @@ affiliations:
   name: Department of Medicine, Massachusetts General Hospital, Boston, MA
 - id: hms
   name: Department of Medicine, Harvard Medical School, Boston, MA
-- id: utah_gen
-  name: Department of Human Genetics, University of Utah, Salt Lake City, UT
 - id: vettore
   name: Vettore Biosciences, San Francisco, CA
+- id: utah_gen
+  name: Department of Human Genetics, University of Utah, Salt Lake City, UT
 - id: umd
   name: Department of Medicine, University of Maryland School of Medicine, Baltimore, MA
 - id: ihc
@@ -385,9 +385,6 @@ For metabolomic profiling, the following mobile phase gradient was used: 0 min, 
 ### Stable isotope quantification
 
 Metabolites were measured using the following mobile phase gradient: 0 min, 80% B; 5 min, 80% B; 30 min, 20% B; 31 min, 80% B; 42 min, 80% B. The mass spectrometer was operated in selected ion monitoring mode with an m/*z* window width of 9.0 centered at 1.003355-times half the number of carbon atoms in the target metabolite. The resolution was set at 70,000 and AGC target was 1×10^5^ ions. Peak areas were corrected for quadrupole bias as in Kim *et al.* [-@kim2015]. Raw mass isotopomer distributions were corrected for natural isotope abundance using a custom R package (mzrtools, github.com/oldhamlab/mzrtools) employing the method of Fernandez, *et al.* [-@fernandez1996]. 
-
-\newpage
-
 ## RNA-seq transcriptomics
 
 RNA was collected from LFs treated with TGFβ and MCT inhibitors as described above. Four biological replicates were analyzed. Library construction and sequencing was performed by BGI Genomics using 100 bp paired end analysis and a read depth of 50 M reads per sample. Sequences were mapped to the human GRCh38 primary assembly and counts summarized using salmon [@patro2017]. Differentially expressed genes were identified using DESeq2 [@love2014]. Gene set enrichment was performed using the fgsea R package [@korotkevich2021]. 
