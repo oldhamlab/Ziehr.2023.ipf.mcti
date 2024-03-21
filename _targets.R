@@ -1518,7 +1518,7 @@ list(
 
   tar_target(
     mice_file,
-    raw_data_path("mice.csv"),
+    raw_data_path("^mice.csv"),
     format = "file"
   ),
   tar_target(
