@@ -9,4 +9,3 @@ if (interactive()) {
   # suppressMessages(require(conflicted))
 }
 
-source("renv/activate.R")
