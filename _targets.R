@@ -942,13 +942,13 @@ list(
   ),
   tar_map(
     values = list(
-      names = c("lung", "plasma"),
+      source = c("lung", "plasma"),
       input = rlang::syms(c(
         "metab_bleo_lung_tar_file",
         "metab_bleo_plasma_tar_file"
       ))
     ),
-    names = names,
+    names = source,
     tar_target(
       metab_bleo_tar_raw,
       format_metab_targeted(input)
@@ -1029,7 +1029,7 @@ list(
         write_table(
           metab_bleo_tar_msea_table,
           path = "analysis/figures/msea/",
-          filename
+          stringr::str_c(filename, "_", source)
         ),
         format = "file"
       ),
@@ -1263,8 +1263,8 @@ list(
     format = "rds"
   ),
   tar_target(
-    mid_tgf_plot_img,
-    write_figures(mid_tgf_plot, "Figure 04.supplement.2")
+    fig05s,
+    write_figures(mid_tgf_plot, "SF_05")
   ),
 
   # mid bleo ----------------------------------------------------------------
@@ -1772,7 +1772,7 @@ list(
       measure = "tracing",
       x = "group",
       y = "value_corr",
-      ytitle = "Relative isotope enrichment"
+      ytitle = "Isotope enrichment\n(normalized)"
     ) +
       ggplot2::facet_wrap(
         facets = ggplot2::vars(tracer),
@@ -1909,7 +1909,7 @@ list(
       "dual-ar-sma-blot.png",       1.2,    0.1,    -0.05,  "sma_ar",
       "dual-azd-contract.png",      1,      0,      -0.05,  "contraction",
       "bleo-trichrome.png",         1.1,    0,      0,      "trichrome",
-      "bleo-timeline.png",          1,      0,      0,      "timeline",
+      "mct-bleo-timeline.png",          1,      0,      0,  "timeline",
       "dual-azd-smad3-blot.png",    1,      0,      -0.05,  "smad3_azd",
       "dual-azd-erk-blot.png",      1,      0,      -0.05,  "erk_azd",
       "dual-azd-hif1a-blot.png",    1,      0,      -0.05,  "hif_azd",
@@ -1918,7 +1918,8 @@ list(
       "mims-panel.png",             1.05,   0.05,   0,      "mims",
       "vb-bleo-timeline.png",       1,      0,      0,      "vb_timeline",
       "bleo-vb-young-sma.png",      1,      0,      0,      "vb_young_sma",
-      "bleo-vb-aged-sma.png",        1,      0,      0,     "vb_aged_sma"
+      "bleo-vb-aged-sma.png",       1,      0,      0,      "vb_aged_sma",
+      "glucose-tracer.png",         1,      0,      0,      "tracer"
     ),
     names = names,
     tar_target(
@@ -1928,7 +1929,7 @@ list(
     ),
     tar_target(
       fig_img,
-      plot_image(fig_img_file, scale = scale, hjust = hjust, vjust = vjust),
+      plot_image(fig_img_file),
       format = "rds"
     ),
     NULL
@@ -1946,7 +1947,7 @@ list(
       fig_img_mct_tgfb,
       blot_plot_fig_tgfb
     ) |>
-      write_figures("Figure 01"),
+      write_figures("F_01"),
     format = "file"
   ),
 
@@ -1963,22 +1964,13 @@ list(
       blot_plot_fig_azd +
         ggplot2::guides(fill = "none"),
       fig_img_contraction,
-      contraction_plot
+      contraction_plot,
+      rnaseq_pca_plot,
+      gsea_dot_plot,
+      deg_vol_dual,
+      edge_plot
     ) |>
-      write_figures("Figure 02"),
-    format = "file"
-  ),
-  tar_target(
-    fig02s,
-    make_fig02s(
-      pg_plot_sirna,
-      fig_img_sma_ar,
-      blot_plot_fig_ar +
-        ggplot2::guides(fill = "none"),
-      pg_plot_azd,
-      pg_plot_ar
-    ) |>
-      write_figures("Figure 02.supplement"),
+      write_figures("F_02"),
     format = "file"
   ),
 
@@ -1993,18 +1985,7 @@ list(
       seahorse_mcti_atp_bars,
       seahorse_mcti_atp_pheno
     ) |>
-      write_figures("Figure 03"),
-    format = "file"
-  ),
-  tar_target(
-    fig03s,
-    make_fig03s(
-      plate_plot_lactate_ar,
-      plate_plot_glucose_azd,
-      seahorse_mcti_summary_plot,
-      seahorse_mcti_stress_plot
-    ) |>
-      write_figures("Figure 03.supplement"),
+      write_figures("F_03"),
     format = "file"
   ),
 
@@ -2023,30 +2004,16 @@ list(
       metab_mcti_tar_lactate_intra,
       metab_mcti_tar_vol_dual_intra,
       msea_table_img_dual_intra,
+      fig_img_tracer,
       mid_mcti_moi_plot_glc6,
-      mid_mcti_moi_plot_lac3
+      mid_mcti_moi_plot_lac3,
+      nad_plot_nad_norm,
+      nad_plot_nadh_norm,
+      nad_plot_nadh_ratio,
+      ros_plot_cellrox,
+      ros_plot_ratio
     ) |>
-      write_figures("Figure 04"),
-    format = "file"
-  ),
-  tar_target(
-    fig04s,
-    make_fig04s(
-      metab_mcti_tar_vol_tgfb_extra,
-      msea_table_img_tgfb_extra,
-      metab_mcti_tar_vol_tgfb_intra,
-      msea_table_img_tgfb_intra,
-      metab_mcti_tar_vol_azd_extra,
-      msea_table_img_azd_extra,
-      metab_mcti_tar_vol_azd_intra,
-      msea_table_img_azd_intra,
-      metab_mcti_tar_vol_vb_extra,
-      msea_table_img_vb_extra,
-      metab_mcti_tar_vol_vb_intra,
-      msea_table_img_vb_intra,
-      mid_mcti_moi_plot_gln5
-    ) |>
-      write_figures("Figure 04.supplement.1"),
+      write_figures("F_04"),
     format = "file"
   ),
 
@@ -2055,22 +2022,12 @@ list(
   tar_target(
     fig05,
     make_fig05(
-      rnaseq_pca_plot,
-      gsea_dot_plot,
-      deg_vol_dual,
-      edge_plot
+      fig_img_smad3_azd,
+      blot_plot_fig_psmad3,
+      fig_img_erk_azd,
+      blot_plot_fig_perk
     ) |>
-      write_figures("Figure 05"),
-    format = "file"
-  ),
-  tar_target(
-    fig05s,
-    make_fig05s(
-      deg_vol_tgfb,
-      deg_vol_azd,
-      deg_vol_vb
-    ) |>
-      write_figures("Figure 05.supplement"),
+      write_figures("F_05"),
     format = "file"
   ),
 
@@ -2079,18 +2036,14 @@ list(
   tar_target(
     fig06,
     make_fig06(
-      fig_img_sma_lac,
-      blot_plot_lactate_sma,
-      fig_img_hif_azd,
-      blot_plot_six_hif1a,
-      fig_img_smad3_azd,
-      blot_plot_fig_psmad3,
-      fig_img_erk_azd,
-      blot_plot_fig_perk,
-      fig_img_azd_kla,
-      blot_plot_lactyl_kla_h3
+      fig_img_timeline,
+      mice_vent_mcti_plot_cst,
+      mice_vent_mcti_plot_prime8,
+      fig_img_trichrome,
+      mice_mcti_plot_ashcroft,
+      mice_mcti_plot_ohp
     ) |>
-      write_figures("Figure 06"),
+      write_figures("F_06"),
     format = "file"
   ),
 
@@ -2099,96 +2052,15 @@ list(
   tar_target(
     fig07,
     make_fig07(
-      nad_plot_nad_norm,
-      nad_plot_nadh_norm,
-      nad_plot_nadh_ratio,
-      ros_plot_cellrox
-    ) |>
-      write_figures("Figure 07"),
-    format = "file"
-  ),
-  tar_target(
-    fig07s,
-    make_fig07s(
-      nad_plot_nadp_norm,
-      nad_plot_nadph_norm,
-      nad_plot_nadph_ratio,
-      ros_plot_mitotracker,
-      ros_plot_mitosox,
-      ros_plot_ratio,
-      metab_mcti_tar_proline_intra,
-      mid_plot_gln5_proline
-    ) |>
-      write_figures("Figure 07.supplement"),
-    format = "file"
-  ),
-
-  # figure 8 ----------------------------------------------------------------
-
-  tar_target(
-    fig08,
-    make_fig08(
-      fig_img_timeline,
-      mice_vent_mcti_plot_cst,
-      mice_vent_mcti_plot_prime8,
-      fig_img_trichrome,
-      mice_mcti_plot_ashcroft,
-      mice_mcti_plot_ohp
-    ) |>
-      write_figures("Figure 08"),
-    format = "file"
-  ),
-  tar_target(
-    fig08s,
-    make_fig08s(
-      mice_wt_mcti_plot
-    ) |>
-      write_figures("Figure 08.supplement"),
-    format = "file"
-  ),
-
-  # figure 9 ----------------------------------------------------------------
-
-  tar_target(
-    fig09,
-    make_fig09(
       metab_bleo_lacate_plot,
       fig_img_mims,
       mims_plot
     ) |>
-      write_figures("Figure 09"),
-    format = "file"
-  ),
-  tar_target(
-    fig09s1,
-    make_fig09s1(
-      metab_bleo_tar_vol_bleo_plasma,
-      msea_table_img_bleo_plasma,
-      metab_bleo_tar_vol_bleo_lung,
-      msea_table_img_bleo_lung,
-      metab_bleo_tar_vol_azd_plasma,
-      msea_table_img_azd_plasma,
-      metab_bleo_tar_vol_azd_lung,
-      msea_table_img_azd_lung,
-      metab_bleo_tar_vol_vb_plasma,
-      msea_table_img_vb_plasma,
-      metab_bleo_tar_vol_vb_lung,
-      msea_table_img_vb_lung
-    ) |>
-      write_figures("Figure 09.supplement.1"),
-    format = "file"
-  ),
-  tar_target(
-    fig09s2,
-    make_fig09s2(
-      mid_bleo_plasma_glucose_plot,
-      mid_bleo_plasma_ratio
-    ) |>
-      write_figures("Figure 09.supplement.2"),
+      write_figures("F_07"),
     format = "file"
   ),
 
-  # figure 10 ---------------------------------------------------------------
+  # figure 8 ----------------------------------------------------------------
 
   tar_target(
     fig10,
@@ -2217,15 +2089,156 @@ list(
         ),
       vb_mice_plot_old_lactate
     ) |>
-      write_figures("Figure 10"),
+      write_figures("F_10"),
     format = "file"
   ),
+
+  # figure 1S ---------------------------------------------------------------
+
+  tar_target(
+    fig01s,
+    make_fig01s(
+      pg_plot_sirna,
+      fig_img_sma_ar,
+      blot_plot_fig_ar +
+        ggplot2::guides(fill = "none"),
+      pg_plot_azd,
+      pg_plot_ar
+    ) |>
+      write_figures("SF_01"),
+    format = "file"
+  ),
+
+  # figure 2S ---------------------------------------------------------------
+
+  tar_target(
+    fig02s,
+    make_fig02s(
+      deg_vol_tgfb,
+      deg_vol_azd,
+      deg_vol_vb
+    ) |>
+      write_figures("SF_02"),
+    format = "file"
+  ),
+
+  # figure 3S ---------------------------------------------------------------
+
+  tar_target(
+    fig03s,
+    make_fig03s(
+      plate_plot_lactate_ar,
+      plate_plot_glucose_azd,
+      seahorse_mcti_summary_plot,
+      seahorse_mcti_stress_plot
+    ) |>
+      write_figures("SF_03"),
+    format = "file"
+  ),
+
+  # figure 4S ---------------------------------------------------------------
+
+  tar_target(
+    fig04s,
+    make_fig04s(
+      metab_mcti_tar_vol_tgfb_extra,
+      msea_table_img_tgfb_extra,
+      metab_mcti_tar_vol_tgfb_intra,
+      msea_table_img_tgfb_intra,
+      metab_mcti_tar_vol_azd_extra,
+      msea_table_img_azd_extra,
+      metab_mcti_tar_vol_azd_intra,
+      msea_table_img_azd_intra,
+      metab_mcti_tar_vol_vb_extra,
+      msea_table_img_vb_extra,
+      metab_mcti_tar_vol_vb_intra,
+      msea_table_img_vb_intra,
+      mid_mcti_moi_plot_gln5
+    ) |>
+      write_figures("SF_04"),
+    format = "file"
+  ),
+
+  # figure 6S ---------------------------------------------------------------
+
+  tar_target(
+    fig06s,
+    make_fig06s(
+      nad_plot_nadp_norm,
+      nad_plot_nadph_norm,
+      nad_plot_nadph_ratio,
+      ros_plot_mitotracker,
+      metab_mcti_tar_proline_intra,
+      mid_plot_gln5_proline
+    ) |>
+      write_figures("SF_06"),
+    format = "file"
+  ),
+
+  # figure 7S ---------------------------------------------------------------
+
+  tar_target(
+    fig07s,
+    make_fig07s(
+      fig_img_sma_lac,
+      blot_plot_lactate_sma,
+      fig_img_hif_azd,
+      blot_plot_six_hif1a
+    ) |>
+      write_figures("SF_07"),
+    format = "file"
+  ),
+
+  # figure 8S ---------------------------------------------------------------
+
+  tar_target(
+    fig08s,
+    make_fig08s(
+      mice_wt_mcti_plot
+    ) |>
+      write_figures("SF_08"),
+    format = "file"
+  ),
+
+  # figure 9S ---------------------------------------------------------------
+
+  tar_target(
+    fig09s,
+    make_fig09s(
+      metab_bleo_tar_vol_bleo_plasma,
+      msea_table_img_bleo_plasma,
+      metab_bleo_tar_vol_bleo_lung,
+      msea_table_img_bleo_lung,
+      metab_bleo_tar_vol_azd_plasma,
+      msea_table_img_azd_plasma,
+      metab_bleo_tar_vol_azd_lung,
+      msea_table_img_azd_lung,
+      metab_bleo_tar_vol_vb_plasma,
+      msea_table_img_vb_plasma,
+      metab_bleo_tar_vol_vb_lung,
+      msea_table_img_vb_lung
+    ) |>
+      write_figures("SF_09"),
+    format = "file"
+  ),
+  # tar_target(
+  #   fig09s2,
+  #   make_fig09s2(
+  #     mid_bleo_plasma_glucose_plot,
+  #     mid_bleo_plasma_ratio
+  #   ) |>
+  #     write_figures("Figure 09.supplement.2"),
+  #   format = "file"
+  # ),
+
+  # figure 10S --------------------------------------------------------------
+
   tar_target(
     fig10s,
     make_fig10s(
       vb_invitro_smad_plot
     ) |>
-      write_figures("Figure 10.supplement"),
+      write_figures("SF_10"),
     format = "file"
   ),
 

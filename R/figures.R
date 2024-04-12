@@ -16,7 +16,7 @@ theme_patchwork <- function(
     ),
     patchwork::plot_annotation(
       tag_levels = tags,
-      theme = ggplot2::theme(plot.margin = ggplot2::margin(5, 5, 5, 5))
+      theme = ggplot2::theme(plot.margin = ggplot2::margin(rep(3, 4)))
     )
   )
 }
@@ -45,7 +45,8 @@ write_figures <- function(plot, filename, path = "manuscript/figs") {
     path = path,
     width = overall_width,
     height = overall_height,
-    units = "in"
+    units = "in",
+    res = 220
   )
 
   if (file.exists("Rplots.pdf")) unlink("Rplots.pdf")
@@ -54,46 +55,49 @@ write_figures <- function(plot, filename, path = "manuscript/figs") {
 }
 
 make_fig01 <- function(p1, p2, p3, p4, p5, p6) {
+  figs <- plot_scale(p1, p3, p5)
   design <- "ab \n cd \n ef"
-  p1 + p2 + p3 + p4 + p5 + p6 +
+  figs[[1]] + p2 + figs[[2]] + p4 + figs[[3]] + p6 +
     theme_patchwork(
       design = design,
-      widths = ggplot2::unit(c(1, 1.75), "in"),
-      heights = ggplot2::unit(1, "in")
+      widths = ggplot2::unit(c(1.5, 2), "in"),
+      heights = ggplot2::unit(1.5, "in"),
+      tags = list(c("A", "", "B", "", "C", ""))
     )
 }
 
-make_fig02 <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
-  design <- "
-  abcd
-  abcd
-  efgh
-  ef##
-  "
+make_fig02 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) {
+  figs <- plot_scale(p1, p3, p5)
 
-  p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 +
+  col1 <-
+    figs[[1]] + p2 + figs[[2]] + p4 + figs[[3]] + p6 + p7 + p8 +
     theme_patchwork(
-      design = design,
-      widths = ggplot2::unit(c(1.5, 1.75, 1.5, 1.75), "in"),
-      heights = ggplot2::unit(c(0.75, 0.75, 1, 0.5), "in"),
-      guides = "collect"
+      design = "ab \n cd \n ef \n gh",
+      widths = c(1.75, 1.5),
+      heights = c(2, 2, 2, 1),
+      guides = "collect",
+      tags = list(c("A", "", "B", "", "C", "", "D", ""))
     ) &
     ggplot2::theme(
       legend.position = "bottom"
     )
-}
 
-make_fig02s <- function(p1, p2, p3, p4, p5) {
-  design <- "a# \n bc \n de"
-  p1 + p2 + p3 + p4 + p5 +
+  col2 <-
+    p9 + p10 + p11 + p12 +
     theme_patchwork(
-      design = design,
-      widths = ggplot2::unit(c(1.5, 1.5), "in"),
-      heights = ggplot2::unit(1, "in"),
-      guides = "collect"
-    ) &
-    ggplot2::theme(
-      legend.position = "bottom"
+      design = "ab \n cb \n dd",
+      widths = c(2, 1.5),
+      heights = c(2, 2, 2),
+      tags = list(c("E", "F", "G", "H"))
+    )
+
+  patchwork::wrap_elements(full = col1) +
+    patchwork::wrap_elements(full = col2) +
+    theme_patchwork(
+      design = "ab",
+      widths = ggplot2::unit(c(4, 6), "in"),
+      heights = ggplot2::unit(8, "in"),
+      tags = NULL
     )
 }
 
@@ -114,6 +118,147 @@ make_fig03 <- function(p1, p2, p3, p4, p5) {
     )
 }
 
+make_fig04 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15, p16) {
+  figs <- plot_scale(p4, p8)
+
+  design <- "abcd"
+  extra <-
+    p1 + p2 + p3 + figs[[1]] +
+    patchwork::plot_annotation(
+      title = "Extracellular",
+      theme = ggplot2::theme(
+        plot.title = ggplot2::element_text(
+          hjust = 0.5,
+          face = "bold",
+          size = ggplot2::rel(1)
+        )
+      )
+    ) +
+    theme_patchwork(
+      design = design,
+      tags = list(c("A", "B", "C", "D")),
+      widths = c(1, 1, 1, 1)
+    )
+
+  intra <-
+    p5 + p6 + p7 + figs[[2]] +
+    patchwork::plot_annotation(
+      title = "Intracellular",
+      theme = ggplot2::theme(
+        plot.title = ggplot2::element_text(
+          hjust = 0.5,
+          face = "bold",
+          size = ggplot2::rel(1)
+        )
+      )
+    ) +
+    theme_patchwork(
+      design = design,
+      tags = list(c("E", "F", "G", "H")),
+      widths = c(1, 1, 1, 1)
+    )
+
+  mids <-
+    p9 + p10 + p11 +
+    patchwork::plot_layout(guides = "collect") +
+    theme_patchwork(
+      design = "abc",
+      widths = c(0.4, 1, 1),
+      tags = list(c("I", "J", "K"))
+    ) &
+    ggplot2::theme(
+      legend.position = "bottom",
+      legend.margin = ggplot2::margin(t = -5)
+    )
+
+  ros <-
+    ((p12 + p13 + p14) + patchwork::plot_layout(guides = "collect")) +
+    p15 + p16 +
+    theme_patchwork(
+      design = "abcde",
+      tags = list(c("L", "", "", "M", "N"))
+    ) &
+    ggplot2::theme(
+      legend.position = "bottom",
+      legend.margin = ggplot2::margin(t = -10)
+    )
+
+  patchwork::wrap_elements(full = extra) +
+    patchwork::wrap_elements(full = intra) +
+    patchwork::wrap_elements(full = mids) +
+    patchwork::wrap_elements(full = ros) +
+    theme_patchwork(
+      design = "a \n b \n c \n d",
+      widths = ggplot2::unit(9.5, "in"),
+      heights = ggplot2::unit(c(3, 3, 3, 2), "in"),
+      tags = NULL
+    )
+}
+
+make_fig05 <- function(p1, p2, p3, p4) {
+  figs <- plot_scale(p1, p3)
+  design <- "ac \n bd"
+  figs[[1]] + p2 + figs[[2]] + p4 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(1.5, "in"),
+      heights = ggplot2::unit(c(1, 2), "in"),
+      guides = "collect",
+      tags = list(c("A", "", "B", ""))
+    ) &
+    ggplot2::theme(legend.position = "bottom")
+}
+
+make_fig06 <- function(p1, p2, p3, p4, p5, p6) {
+  design <- "abc \n def"
+  p1 + p2 + p3 + p4 + p5 + p6 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(c(2, 1.5, 1.5), "in"),
+      heights = ggplot2::unit(1.5, "in")
+    )
+}
+
+make_fig07 <- function(p1, p2, p3) {
+  design <- "aaa \n bbb \n cc#"
+  p1 + p2 + p3 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(c(1.25), "in"),
+      heights = ggplot2::unit(c(1, 3, 1), "in")
+    )
+}
+
+make_fig01s <- function(p1, p2, p3, p4, p5) {
+  design <- "a# \n bc \n de"
+  p1 + p2 + p3 + p4 + p5 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(c(1.5, 1.5), "in"),
+      heights = ggplot2::unit(1.5, "in"),
+      guides = "collect",
+      tags = list(c("A", "B", "", "C", "D"))
+    ) &
+    ggplot2::theme(
+      legend.position = "bottom"
+    )
+}
+
+make_fig02s <- function(p1, p2, p3) {
+  design <- "abc"
+  p1 + p2 + p3 +
+    theme_patchwork(
+      design = design,
+      widths = ggplot2::unit(2, "in"),
+      heights = ggplot2::unit(2, "in")
+    ) &
+    ggplot2::theme(
+      legend.position = "bottom"
+    )
+}
+
+
+
 make_fig03s <- function(p1, p2, p3, p4) {
   design <- "abc \n ddd \n eee"
 
@@ -128,71 +273,15 @@ make_fig03s <- function(p1, p2, p3, p4) {
     )
 }
 
-make_fig04 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10) {
-  design <- "abcd"
-  extra <-
-    p1 + p2 + p3 + p4 +
-    patchwork::plot_annotation(
-      title = "Extracellular",
-      theme = ggplot2::theme(
-        plot.title = ggplot2::element_text(
-          hjust = 0.5,
-          face = "bold",
-          size = ggplot2::rel(1)
-        )
-      )
-    ) +
-    theme_patchwork(
-      design = design,
-      tags = list(c("A", "B", "C", "D")),
-      widths = ggplot2::unit(2, "in"),
-      heights = ggplot2::unit(2, "in")
-    )
 
-  intra <-
-    p5 + p6 + p7 + p8 +
-    patchwork::plot_annotation(
-      title = "Intracellular",
-      theme = ggplot2::theme(
-        plot.title = ggplot2::element_text(
-          hjust = 0.5,
-          face = "bold",
-          size = ggplot2::rel(1)
-        )
-      )
-    ) +
-    theme_patchwork(
-      design = design,
-      tags = list(c("E", "F", "G", "H")),
-      widths = ggplot2::unit(2, "in"),
-      heights = ggplot2::unit(2, "in")
-    )
-
-  mids <-
-    p9 + p10 +
-    patchwork::plot_layout(guides = "collect") +
-    theme_patchwork(
-      design = "ab",
-      tags = list(c("I", "J"))
-    ) &
-    ggplot2::theme(legend.position = "bottom")
-
-  patchwork::wrap_elements(full = extra) +
-    patchwork::wrap_elements(full = intra) +
-    patchwork::wrap_elements(full = mids) +
-    theme_patchwork(
-      design = "a \n b \n c",
-      widths = ggplot2::unit(9.5, "in"),
-      heights = ggplot2::unit(3.5, "in"),
-      tags = NULL
-    )
-}
 
 make_fig04s <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13) {
+  figs <- plot_scale(p2, p4, p6, p8, p10, p12)
+
   design <- "ab \n cd \n ef"
 
   extra <-
-    p1 + p2 + p5 + p6 + p9 + p10 +
+    p1 + figs[[1]] + p5 + figs[[3]] + p9 + figs[[5]] +
     patchwork::plot_annotation(
       title = "Extracellular",
       theme = ggplot2::theme(
@@ -205,10 +294,11 @@ make_fig04s <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13) 
     ) +
     theme_patchwork(
       design = design,
+      widths = c(1, 0.8, 1, 0.8),
       tags = list(c("A", "B", "E", "F", "I", "J"))
     )
   intra <-
-    p3 + p4 + p7 + p8 + p11 + p12 +
+    p3 + figs[[2]] + p7 + figs[[4]] + p11 + figs[[6]] +
     patchwork::plot_annotation(
       title = "Intracellular",
       theme = ggplot2::theme(
@@ -221,6 +311,7 @@ make_fig04s <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13) 
     ) +
     theme_patchwork(
       design = design,
+      widths = c(1, 0.8, 1, 0.8),
       tags = list(c("C", "D", "G", "H", "K", "L"))
     )
   mids <-
@@ -236,80 +327,40 @@ make_fig04s <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13) 
     theme_patchwork(
       design = "ab \n c#",
       widths = ggplot2::unit(4, "in"),
-      heights = ggplot2::unit(c(7, 3), "in"),
+      heights = ggplot2::unit(c(7.5, 3), "in"),
       tags = NULL
     )
 }
 
-make_fig05 <- function(p1, p2, p3, p4) {
-  design <- "ab \n cb \n dd"
-  p1 + p2 + p3 + p4 +
+make_fig06s <- function(p1, p2, p3, p4, p5, p6) {
+  p1 + p2 + p3 + p4 + p5 + p6 +
     theme_patchwork(
-      design = design,
-      widths = ggplot2::unit(c(2, 1.5), "in"),
-      heights = ggplot2::unit(c(2, 2, 2), "in")
-    )
-}
-
-make_fig05s <- function(p1, p2, p3) {
-  design <- "abc"
-  p1 + p2 + p3 +
-    theme_patchwork(
-      design = design,
-      widths = ggplot2::unit(2, "in"),
-      heights = ggplot2::unit(2, "in")
-    ) &
-    ggplot2::theme(
-      legend.position = "bottom"
-    )
-}
-
-make_fig06 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10) {
-  design <- "abcd \n efgh \n ij##"
-  p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 +
-    theme_patchwork(
-      design = design,
-      widths = ggplot2::unit(1.5, "in"),
-      heights = ggplot2::unit(c(1, 2, 1), "in"),
-      guides = "collect"
-    ) &
-    ggplot2::theme(legend.position = "bottom")
-}
-
-make_fig07 <- function(p1, p2, p3, p4) {
-  x <- p1 + p2 + p3 + patchwork::plot_layout(guides = "collect")
-  x - p4 +
-    theme_patchwork(
-      design = "aaab",
-      widths = ggplot2::unit(1.5, "in"),
-      heights = ggplot2::unit(1.5, "in"),
-      tags = list(c("A", "", "", "B"))
-    ) &
-    ggplot2::theme(
-      legend.position = "bottom",
-      legend.margin = ggplot2::margin(t = -10)
-    )
-}
-
-make_fig07s <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
-  p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 +
-    theme_patchwork(
-      design = "abc \n def \n gh#",
+      design = "abc \n def",
       widths = ggplot2::unit(1.5, "in"),
       heights = ggplot2::unit(1.5, "in"),
       guides = "collect",
-      tags = list(c("A", "", "", "B", "", "", "C", "D"))
+      tags = list(c("A", "", "", "B", "C", "D"))
     ) &
-    ggplot2::theme(legend.position = "bottom")
+    ggplot2::theme(
+      legend.position = "bottom",
+      legend.margin = ggplot2::margin(t = -5)
+    )
 }
 
-make_fig08 <- function(p1, p2, p3, p4, p5, p6) {
-  design <- "abc \n def"
-  p1 + p2 + p3 + p4 + p5 + p6 +
+make_fig07s <- function(p1, p2, p3, p4) {
+  figs <- plot_scale(p1, p3)
+  design <- "ac \n bd"
+  figs[[1]] + p2 + figs[[2]] + p4 +
     theme_patchwork(
       design = design,
-      widths = ggplot2::unit(c(2, 1.5, 1.5), "in"),
-      heights = ggplot2::unit(1.5, "in")
+      widths = ggplot2::unit(1.5, "in"),
+      heights = ggplot2::unit(1, "in"),
+      guides = "collect",
+      tags = list(c("A", "", "B", ""))
+    ) &
+    ggplot2::theme(
+      legend.position = "bottom",
+      legend.margin = ggplot2::margin(t = -5)
     )
 }
 
@@ -324,29 +375,16 @@ make_fig08s <- function(p1) {
     )
 }
 
-make_fig09 <- function(p1, p2, p3) {
-  design <- "aaa \n bbb \n cc#"
-  p1 + p2 + p3 +
-    theme_patchwork(
-      design = design,
-      widths = ggplot2::unit(c(1.25), "in"),
-      heights = ggplot2::unit(c(1.5, 3, 1.5), "in")
-    )
-}
 
-make_fig09s1 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) {
-  # design <- "abc \n def \n ghi \n jkl"
-  # p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 + p12 +
-  #   theme_patchwork(
-  #     design = design,
-  #     widths = ggplot2::unit(2, "in"),
-  #     heights = ggplot2::unit(c(2, 2.5, 2, 2.5), "in")
-  #   )
+
+make_fig09s <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) {
+  figs <- plot_scale(p2, p4, p6, p8, p10, p12)
+  # figs <- list(p2, p4, p6, p8, p10, p12)
 
   design <- "ab \n cd \n ef"
 
   extra <-
-    p1 + p2 + p5 + p6 + p9 + p10 +
+    p1 + figs[[1]] + p5 + figs[[3]] + p9 + figs[[5]] +
     patchwork::plot_annotation(
       title = "Plasma",
       theme = ggplot2::theme(
@@ -359,10 +397,11 @@ make_fig09s1 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) {
     ) +
     theme_patchwork(
       design = design,
+      # widths = c(1, 0.8, 1, 0.8),
       tags = list(c("A", "B", "E", "F", "I", "J"))
     )
   intra <-
-    p3 + p4 + p7 + p8 + p11 + p12 +
+    p3 + figs[[2]] + p7 + figs[[4]] + p11 + figs[[6]] +
     patchwork::plot_annotation(
       title = "Lung",
       theme = ggplot2::theme(
@@ -375,6 +414,7 @@ make_fig09s1 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) {
     ) +
     theme_patchwork(
       design = design,
+      # widths = c(1, 0.8, 1, 0.8),
       tags = list(c("C", "D", "G", "H", "K", "L"))
     )
 
@@ -383,7 +423,7 @@ make_fig09s1 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) {
     theme_patchwork(
       design = "ab",
       widths = ggplot2::unit(4, "in"),
-      heights = ggplot2::unit(6, "in"),
+      heights = ggplot2::unit(7, "in"),
       tags = NULL
     )
 }

@@ -580,5 +580,8 @@ plot_msea_table <- function(
     gt::cols_align("center", c(.data$NES)) |>
     gtExtras::gt_theme_538() |>
     gt::opt_table_font(font = "Calibri") |>
-    gt::tab_options(table_body.border.bottom.color = "black")
+    gt::tab_options(
+      table.width = 350,
+      table_body.border.bottom.color = "black"
+    )
 }

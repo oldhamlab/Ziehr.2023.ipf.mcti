@@ -706,7 +706,7 @@ plot_bleo_lactate <- function(x) {
     ) +
     ggplot2::labs(
       x = NULL,
-      y = "Lactate"
+      y = "Lactate (normalized)"
     ) +
     ggplot2::scale_color_manual(
       values = clrs,

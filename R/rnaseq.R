@@ -92,7 +92,7 @@ plot_rnaseq_pca <- function(pca_data) {
     ggplot2::coord_fixed(clip = "off") +
     ggplot2::theme(
       legend.position = "bottom",
-      legend.key.size = ggplot2::unit(1, units = "lines"),
+      # legend.key.size = ggplot2::unit(1, units = "lines"),
       legend.margin = ggplot2::margin(t = -60),
       legend.text.align = 0
     )
