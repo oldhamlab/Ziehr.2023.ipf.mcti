@@ -303,7 +303,7 @@ plot_seahorse_pheno <- function(x) {
       nudge_y = -0.5,
       color = "black",
       family = "Calibri",
-      size = 1.75,
+      size = 2,
       show.legend = FALSE
     ) +
     ggplot2::scale_fill_manual(

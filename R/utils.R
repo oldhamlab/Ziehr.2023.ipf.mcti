@@ -36,14 +36,84 @@ manuscript_path <- function(nm) {
 #     )
 # }
 
-plot_image <- function(img, scale = 1, hjust = 0, vjust = 0) {
-  png::readPNG(img, native = TRUE) |>
-    patchwork::wrap_elements(plot = _) +
-    theme_plot() +
-    ggplot2::theme(
-      panel.border = ggplot2::element_blank(),
-      axis.line = ggplot2::element_blank()
-    )
+# plot_image <- function(img, scale = 1, hjust = 0, vjust = 0) {
+#   png::readPNG(img, native = TRUE) |>
+#     patchwork::wrap_elements(plot = _) +
+#     theme_plot() +
+#     ggplot2::theme(
+#       panel.border = ggplot2::element_blank(),
+#       axis.line = ggplot2::element_blank()
+#     )
+# }
+
+plot_image <- function(x) {
+
+  path <- NULL
+
+  if (is.character(x) && file.exists(x)) {
+    path <- x
+    img <- magick::image_read(x)
+  } else {
+    img <- x
+  }
+
+  x_dim <- magick::image_info(img)$width
+  y_dim <- magick::image_info(img)$height
+  max_dim <- max(x_dim, y_dim)
+  aspect_ratio <- y_dim / x_dim
+
+  fig <-
+    patchwork::wrap_elements(
+      full =
+        ggplot2::ggplot() +
+        ggplot2::annotation_custom(
+          grid::rasterGrob(
+            image = img,
+            interpolate = TRUE,
+            width = ggplot2::unit(1, "npc"),
+            height = ggplot2::unit(1, "npc")
+          )
+        ) +
+        ggplot2::theme(
+          panel.border = ggplot2::element_blank(),
+          axis.line = ggplot2::element_blank(),
+          aspect.ratio = aspect_ratio
+        )
+    ) +
+    theme_plot()
+
+  fig$fig_data <- list(
+    path = path,
+    aspect_ratio = aspect_ratio,
+    x_dim = x_dim,
+    y_dim = y_dim
+  )
+
+  fig
+}
+
+plot_scale <- function(...) {
+  figs <- list(...)
+
+  max_x <- max(purrr::map_dbl(figs, \(x) x$fig_data$x_dim))
+  max_y <- max(purrr::map_dbl(figs, \(x) x$fig_data$y_dim))
+
+  purrr::map(
+    figs,
+    \(x) {
+      img <- magick::image_read(x$fig_data$path)
+      x_dim <- x$fig_data$x_dim
+      y_dim <- x$fig_data$y_dim
+      border <- paste0((max_x - x_dim) / 2, "x", (max_y - y_dim) / 2)
+      img <-
+        magick::image_border(
+          img,
+          color = "white",
+          geometry = border
+        )
+      plot_image(img)
+    }
+  )
 }
 
 plot_path <- function(nm) {
