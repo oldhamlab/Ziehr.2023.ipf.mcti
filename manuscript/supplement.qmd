@@ -60,11 +60,11 @@ affiliations:
 - id: hms
   name: Department of Medicine, Harvard Medical School, Boston, MA
 - id: utah_gen
-  name: Department of Human Genetics, University of Utah, Salt Lake City, UT
+  name: Department of Internal Medicine, University of Utah, Salt Lake City, UT
 - id: vettore
   name: Vettore Biosciences, San Francisco, CA
 - id: tj
-  name: Department of Pathology, Anatomy & Cell Biology, Thomas Jefferson University, Philadelphia, PA
+  name: Department of Pathology and Genomic Medicine, Thomas Jefferson University, Philadelphia, PA
 - id: mgh_path
   name: Department of Pathology, Massachusetts General Hospital, Boston, MA
 - id: utah_biochem
@@ -80,9 +80,9 @@ format:
     fig-align: center
     
 bibliography: 
-- library.bib
+- supp.bib
 - pkgs.bib
-csl: jci.csl
+csl: stm.csl
 
 crossref: 
   fig-title: ""
@@ -97,12 +97,13 @@ filters:
 #| include: false
 
 # ensure refs are up-to-date
-targets::tar_load(refs)
+targets::tar_load(refs_supp)
 targets::tar_load(pkg_citations)
 
 # ensure figures are up-to-date
 targets::tar_load(
   c(
+    resources_table, 
     fig01s,
     fig02s, 
     fig03s, 
@@ -122,7 +123,122 @@ targets::tar_load(
 
 # Materials and Methods
 
+## Key Resources
+
+```{r}
+#| results: asis
+#| tbl-cap: "Key Resources Table"
+
+flextable::flextable_to_rmd(resources_table)
+```
+
 \newpage 
+
+## Chemicals
+
+Recombinant human TGF-β1 was purchased commercially , dissolved in 10 mM citric acid, pH 3.0, filtered, and diluted to 10 μg/mL in PBS with 0.1% BSA prior to aliquoting and storing at -80 °C. AZD3965 (100 nM; Medkoo) and AR-C155858 (200 nM; Tocris) were purchased from commercial vendors. VB124 (10 μM) was a gift from Vettore, LLC. The drugs were prepared in DMSO and used at the indicated doses unless otherwise indicated. These doses were chosen based on prior reports and their target affinities. 
+
+## Human lung tissue and fibroblasts
+
+Human IPF lung samples were obtained at the time of lung transplant. Control samples were prepared from non-fibrotic and unaffected border regions of lung nodule biopsy specimens or from failed donor controls. To isolate human lung fibroblasts, lung tissue was minced, digested with liberase and DNase, and passed through a sterile 70 μm filter. The filtrate was centrifuged at 300 ×*g* and washed once with RPMI medium (Lonza). Cells were plated in DMEM (Lonza) supplemented with 10% FBS, penicillin, and streptomycin. After two passages, medium was changed to FGM-2 (Lonza).
+
+## Bleomycin model
+
+C57Bl6/N mice aged 10-12 weeks were anesthetized with ketamine (90 mg/kg) and xylazine (5 mg/kg) and administered 1.2 U/kg bleomycin in PBS (Fresenius Kabi) intratracheally. Control animals received an equivalent volume of PBS. For drug treatments, AZD3965 (100 mg/kg twice daily) and VB124 (30 mg/kg daily) were prepared in 0.5% methylcellulose and 0.1% Tween-20 with sonication and administered by oral gavage every day beginning on day 7 following bleomycin. Control animals received vehicle alone twice daily. After 21 d, lung function measurements were performed. Animals were euthanized and plasma samples were obtained by right ventricular puncture and collected in EDTA-coated tubes. The lungs were dissected and perfused with PBS. The right lung was isolated while the left lung was inflated to 20 cmH~2~O prior to fixation. The right lungs were snap frozen. 
+
+Lung physiology measurements were performed as previously described [@lee2021]. Briefly, animals were anesthetized with pentobarbital (100 μg/g; Covetrus, Portland, ME) and tracheally cannulated for pulmonary function measurements using a flexiVent (SCIREQ). Animals were ventilated for 3-5 min with 150 breaths per minute at 10 mL/kg and 3 cmH~2~O positive end-expiratory pressure. After two total lung capacity maneuvers to prevent atelectasis and standardize volume history, respiratory elastance was measured using two Prime-8 maneuvers; values reported are the average of these two maneuvers. A pressure-volume loop was then generated, and static compliance was calculated using the Salazar-Knowles equation.
+
+Histologic fibrosis severity was assessed by Ashcroft scoring of trichrome-stained lung sections in a blinded fashion by an experienced lung pathologist [@hubner2008]. The average of twenty 10× fields is reported for each animal.
+
+Lung hydroxyproline content was determined as described previously [@tager2008]. The four lobes of the R lung were homogenized in PBS with Halt protease inhibitors (Thermo) and hydrolyzed in 6 N HCl at 120 °C for 12 h, with an aliquot added to 1.4% chloramine-T, 10% 1-propanol, and 0.5 M sodium acetate, pH 6.0. After incubating 20 min at room temperature, 1 ml of Ehrlich's solution (1 M p-value-dimethylaminobenzaldehyde in 70% 1-propanol and 20% perchloric acid) was added. Samples were incubated at 65 °C for 15 minutes. Absorbance was measured at 550 nm and hydroxyproline content was interpolated from a standard curve.
+
+## Myofibroblast differentiation *in vitro*
+
+Normal lung fibroblasts were purchased commercially (Lonza). All fibroblasts were cultured in FGM-2 medium (Lonza). Passages 3-8 were used for experiments. Myofibroblast differentiation was induced *in vitro* using recombinant human TGF-β1 (2 ng/mL) (Peprotech) for 48 h following 24 h serum starvation unless otherwise indicated. 
+
+## Isotope labeling
+
+Cells were seeded and serum starved in MCDB131 medium lacking glucose, glutamine, and phenol red (genDEPOT) which was supplemented with naturally labeled glucose (8 mM), glutamine (1 mM), and lactate (2 mM) ("light" labeling medium). The concentrations of glucose and glutamine match the concentrations of these substrates determined in standard (FGM-2) growth medium. After 24 h, cells were washed with PBS and the medium was changed to "heavy" labeling medium containing [1,2-^13^C~2~]-glucose, [U-^13^C~6~]-glucose, [U-^13^C~5~]-glutamine, or [U-^13^C~2~]-lactate (Cambridge Isotope Labs) along with TGFβ and MCT inhibitors for 48 h. Cell lysates were prepared for metabolomics as described below.  
+
+## Immunoblotting
+
+Human and mouse lung samples were mechanically homogenized in RIPA lysis buffer containing Halt Protease Inhibitor Cocktail (Thermo). Cells were washed with one volume of PBS and collected by scraping in PBS. Cell suspensions were centrifuged at 5,000 ×*g* for 5 min at 4 °C. Pellets were lysed in buffer containing Tris 10 mM, pH 7.4, NaCl 150 mM, EDTA 1 mM, EGTA 1 mM, Triton X-100 1% v/v, NP-40 0.5% v/v, and protease inhibitors. Protein concentrations were determined by BCA Protein Assay (Thermo). Lysates were normalized for protein concentration and subjected to SDS-PAGE separation on stain-free tris-glycine gels (Bio-Rad), cross-linked and imaged with the Chemidoc system (Bio-Rad), transferred to PVDF membranes with the Trans-Blot Turbo transfer system (Bio-Rad), imaged, blocked in 5% blocking buffer (Bio-Rad), blotted in primary and secondary antibodies, and developed using WesternBright ECL (Advansta). Band signal intensity was normalized to total protein per lane as determined from the stain-free gel or membrane images using Image Lab software (Bio-Rad). 
+
+## RNA interference
+
+Lung fibroblasts were reverse transfected with ON-TARGETplus SMARTpool siRNA (Dharmacon) targeting MCT1 or MCT4 using Lipofectamine RNAiMAX (Thermo). A non-targeting siRNA pool was used a transfection control (Dharmacon). For combined siMCT1 and siMCT4 treatment, the total siRNA dose was kept constant. After 24 h, cells were serum starved for an additional 24 h prior to treatment with TGFβ. 
+
+## Gel contraction assay
+
+Lung fibroblasts in FBM and neutralized collagen solution (TeloCol-3, Advanced Biomatrix) were combined 1:2 to yield 100,000 cells/mL and 1.8 mg/mL collagen. This solution was added to 24-well plates (0.5 mL) and allowed to harden for 10 min at 37 °C prior to the addition of 1 mL FBM. Cells were serum starved overnight prior to releasing the gels and treating them with TGFβ and MCT inhibitors in triplicate. Images were acquired after 24 and 48 h using a ChemiDoc imager (Bio-Rad). Gel areas were measured using Image Lab software (Bio-Rad). Data are expressed as the ratio of TGFβ-treated gel area to control gel area. 
+
+## Cell count
+
+Cell counts were estimated from total DNA quantified using the Quant-iT PicoGreen dsDNA Assay Kit (Thermo) as described previously [@copeland2023].
+
+## Lactate assay
+
+Lactate was determined using an enzymatic cycling assay resulting in the reduction of resazurin to the fluorescent chemical resorufin. Medium samples were diluted 1:10 in PBS. Samples were combined with a solution of diaphorase (125 mU), lactate dehydrogenase, NAD (250 μM), and resazurin (25 μM) in Tris buffer (100 mM, pH 8.5) then incubated for 30 min at room temperature. Resorufin fluorescence was measured using a SpectraMax i3x microplate reader (Molecular Devices) and lactate concentration was interpolated from a standard curve. Data were normalized to estimated cell count.
+
+## Glucose assay
+
+Medium samples were diluted 10-fold in PBS. Glucose concentration was determined using the Glucose Colorimetric Assay Kit (Cayman) according to the manufacturer's protocol. Standards were prepared in PBS.  
+
+## Seahorse assays
+
+Lung fibroblasts were seeded in Seahorse assay plates at a density of 20,000 cells per well. On the following day, the cells were serum starved for 24 h prior to treatment with TGFβ and MCT inhibitors for 48 h. On the day of the assay, the medium was exchanged to Seahorse DMEM without phenol red supplemented with 5 mM HEPES, 10 mM glucose, 2 mM glutamine, and 1 mM pyruvate. OCR and extracellular acidification rates (ECAR) were measured at baseline and following the sequential injections of oligomycin (1 μM final), FCCP (2 μM final), and rotenone plus antimycin A (0.5 μM final each) using an XFe24 bioanalyzer (Agilent). At the end of the assay, cells were stained for 30 min with the fluorescent dye Nuclear Green LCS1 (10 μM; Abcam). Stained cells were quantified using a SpectraMax MiniMax 300 Imaging Cytometer (Molecular Devices) and these cell counts were used to normalize the rate data. Proton efflux rate (PER) was calculated from the ECAR and buffer capacity of the medium. PER from glycolysis was determined by subtracting the contribution of oxidative phosphorylation to total PER using the empirically measured CO~2~ correction factor of 0.41. ATP from glycolysis was assumed to be equal to basal glycolytic PER. ATP from oxidative phosphorylation was assumed to be 2 × 2.75 × oligomycin-sensitive OCR [@mookerjee2017]. 
+
+## Metabolomics
+
+Metabolomics data acquisition and analysis were performed as described previously [@copeland2023].
+
+### Metabolite extraction
+
+Extracellular metabolites were obtained by mixing conditioned medium 1:4 with 100% MeOH precooled to -80 °C. Intracellular metabolites were obtained after washing cells with 2 volumes of ice-cold PBS and floating on liquid nitrogen. Plates were stored at -80 °C until extraction. Metabolites were extracted with 1 mL 80% MeOH pre-cooled to -80 °C. Mouse plasma and lung homogenates were mixed 1:4 with 100% MeOH precooled to -80 °C. Samples were extracted at -80 °C for 4 h. Insoluble material from these samples was removed by centrifugation at 21,000 ×*g* for 15 min at 4 °C. The supernatant was evaporated to dryness at 42 °C using a SpeedVac concentrator (Thermo Savant). Samples were resuspended in 35 μL 20 mM ammonium phosphate in LC-MS-grade water prior to analysis.
+
+### Acquisition parameters
+
+LC-MS analysis was performed on a Vanquish ultra-high-performance liquid chromatography system coupled to a Q Exactive orbitrap mass spectrometer by a HESI-II electrospray ionization probe (Thermo). External mass calibration was performed weekly. Metabolite samples (2.5 μL) were separated using a ZIC-pHILIC stationary phase (2.1 × 150 mm, 5 μm) (Merck). The autosampler temperature was 4 °C and the column compartment was maintained at 25 °C. Mobile phase A was 20 mM ammonium carbonate, 0.1% ammonium hydroxide, and 5 μM medronic acid. Mobile phase B was acetonitrile. The flow rate was 0.1 mL/min. Solvent was introduced to the mass spectrometer *via* electrospray ionization with the following source parameters: sheath gas 40, auxiliary gas 15, sweep gas 1, spray voltage +3.0 kV for positive mode and -3.1 kV for negative mode, capillary temperature 275 °C, S-lens RF level 40, and probe temperature 350 °C. Data were acquired and peaks integrated using TraceFinder 4.1 (Thermo). 
+
+### Metabolomic profiling
+
+For metabolomic profiling, the following mobile phase gradient was used: 0 min, 80% B; 20 min, 20% B; 20.5 min, 80% B; 28 min, 80% B; 42 min, 80% B. The mass spectrometer was operated in polarity switching full scan mode from 70-1000 m/*z*. Resolution was set to 70,000 and the AGC target was 1×10^6^ ions. Peak identifications were based on an in-house library of authentic metabolite standards previously analyzed utilizing this method. For metabolomics studies, pooled quality control (QC) samples were injected at the beginning, end, and between every four samples of the run. Raw peak areas for each metabolite were corrected for instrument drift using a cubic spline model of QC peak areas. Low quality features were removed on the basis of a relative standard deviation greater than 0.2 in the QC samples and a dispersion ratio greater than 0.4 [@broadhurst2018]. Missing values were imputed using random forest. Sample peak areas were normalized using probabilistic quotient normalization [@dieterle2006]. Differentially regulated metabolites were identified using limma [@ritchie2015]. Exploratory data analysis and review of PCA plots suggested orthogonal effects of TGFβ and MCT inhibitor treatment. For this reason, differentially regulated metabolites were determined based on the main effects of TGFβ or MCT inhibitor. Metabolite set enrichment analysis was performed using the fgsea package [@korotkevich2021] with KEGG metabolite pathways [@kanehisa2000]. 
+
+### Stable isotope quantification
+
+Metabolites were measured using the following mobile phase gradient: 0 min, 80% B; 5 min, 80% B; 30 min, 20% B; 31 min, 80% B; 42 min, 80% B. The mass spectrometer was operated in selected ion monitoring mode with an m/*z* window width of 9.0 centered at 1.003355-times half the number of carbon atoms in the target metabolite. The resolution was set at 70,000 and AGC target was 1×10^5^ ions. Peak areas were corrected for quadrupole bias as in Kim *et al.* [-@kim2015]. Raw mass isotopomer distributions were corrected for natural isotope abundance using a custom R package (mzrtools, github.com/oldhamlab/mzrtools) employing the method of Fernandez, *et al.* [-@fernandez1996]. 
+
+## RNA-seq transcriptomics
+
+RNA was collected from LFs treated with TGFβ and MCT inhibitors as described above. Four biological replicates were analyzed. Library construction and sequencing was performed by BGI Genomics using 100 bp paired end analysis and a read depth of 50 M reads per sample. Sequences were mapped to the human GRCh38 primary assembly and counts summarized using salmon [@patro2017]. Differentially expressed genes were identified using DESeq2 [@love2014]. Gene set enrichment was performed using the fgsea R package [@korotkevich2021]. 
+
+## Pyridine dinucleotide measurements
+
+Cellular NAD^+^ and NADH were measured using an enzymatic fluorometric cycling assay as previously described [@oldham2015; @copeland2023]. Samples for NADP^+^ and NADPH quantification were similarly prepared and analyzed using the luminescence-based NADP/NADPH-Glo assay (Promega).
+
+## Reactive oxygen species
+
+Intracellular and mitochondrial ROS were measured using the fluorescent probes CellROX Deep Red (1 μM) and MitoSOX Green (2 μM), respectively. Mitochondria were also labeled with MitoTracker (200 nM). Briefly, lung fibroblasts were seeded in a 24-well plate and serum starved for 24 h prior to treatment with TGFβ, with or without MCT inhibitors, for 3 hours. This was followed by staining with the specified probes for 30 min at 37 °C. The cells were then harvested and analyzed using the CytoFLEX flow cytometry analyzer (Beckman Coulter). The mean fluorescence intensity of DAPI-negative cells was analyzed using FlowJo V10.8.1.
+
+## Multi-isotope imaging mass spectrometry
+
+For multi-isotope imaging mass spectrometry, mice received five intraperitoneal doses of 250 μL of [^2^H~7~]-glucose or [U-^13^C~6~]-glucose (200 mg/mL) and [^15^N]-proline (20 mg/mL) every 12 h prior to euthanasia on day 21 after bleomycin. Perfused and inflated lungs were fixed with formaldehyde/glutaraldehyde 2.5% in sodium cacodylate buffer, pH 7.4, embedded in EPON, section to 0.5 μm, mounted on silicon wafers, and gold coated. Sections were analyzed with the NanoSIMS 50L (CAMECA) housed in the Brigham and Women’s Hospital Center for NanoImaging, using previously developed analytical protocols [@wertheim2023; @guillermier2017a]. The instrument was tuned to simultaneously acquire images of ^12^C~2~^1^H, ^12^C^14^N, ^12^C~2~^2^H, and ^12^C^15^N secondary ions. Spatial distribution visualization and quantification of ^15^N-proline and ^2^H-glucose labeling was derived from ^12^C^15^N/^12^C^14^N and ^12^C~2~^2^H/^12^C~2~^1^H ratios, respectively, using an open source plugin to ImageJ, OpenMIMS 3.0 (github.com/BWHCNI/OpenMIMS).
+Ratio images are presented visually as hue saturation intensity images, with the blue lower bound of the scale set to the natural background ratio and the red upper bound of the scale set such that within tissue labeling differences are visually apparent. Changes to the scaling modify the visual appearance but not affect the quantitative data. Quantification of isotopic enrichment was based on a pixel ratio analysis of several MIMS images acquired per animal. Specifically, image masks were generated by Otsu thresholding the ^12^C^14^N to exclude background regions. The ratio of "heavy" to "light" ion intensities in tissue regions was calculated. Pixel ratios equal to zero were excluded. The average of the remaining pixel ratios was then averaged to provide a mean tissue isotope enrichment value for the image. 
+
+## VB253
+
+VB253 was developed by Vettore, LLC as a more potent small molecule inhibitor of MCT4. Experiments involving VB253 were conducted by several contract research organizations under the supervision of Vettore, LLC. These experiments were completed independently of the other studies presented in the manuscript and offer independent validation of the antifibrotic effects of MCT4 inhibition in cells and mice. 
+
+*Nathan, Mark, and Jared. Add the names of the CROs that did the experiments? I think the aSMA/Smad3/nuclei experiments will need a description. The others are pretty similar to what is described above.*
+
+\newpage
+
+# References and Notes
+
+::: {#refs}
+:::
+
+\newpage
 
 # Figures
 
@@ -132,7 +248,7 @@ targets::tar_load(
 
 \newpage
 
-![**Fig. S3. Lactate transport inhibition alters cellular bioenergetics.** (**A**) Extracellular lactate was determined following TGFβ in the presence of MCT1/2 inhibitor AR-C155858 (AR), MCT4 inhibitor VB124 (VB), or both (N = 3-13 biological replicates, \* p-value < 0.05, *black* compares TGFβ *v.* Ctl, *colored* compares Drug *v.* Veh). (**B**) Extracellular glucose was determined following TGFβ in the presence of MCT1 inhibitor AZD3965 (AZD), VB, or both (N = 5 biological replicates). (**C**) Summary data from Seahorse extracellular flux analysis. (**D**) Cell bioenergetic stress testing results from Seahorse analysis. Glycolytic capacity measures the increase in proton efflux rate following oligomycin treatment. Spare respiratory capacity measures the increase in oxygen consumption rate (OCR) following FCCP treatment compared to basal OCR. Coupling efficiency measures the proportion of basal OCR that contributes to ATP production (*i.e.,* the percentage inhibited by oligomycin). The spare respiratory capacity decreases following MCT inhibition, indicating a larger fraction of total respiratory capacity was utilized in the basal state in cells treated with MCT inhibitors (N = 4 biological replicates, \* p-value < 0.05 compared to TGFβ/Veh). Summary data are mean ± SEM.](figs/SF_03.png)
+![**Fig. S3. Lactate transport inhibition alters cellular bioenergetics.** (**A**) Extracellular lactate was determined 48 h following TGFβ in the presence of MCT1/2 inhibitor AR-C155858 (AR), MCT4 inhibitor VB124 (VB), or both (N = 3-13 biological replicates, \* p-value < 0.05, *black* compares TGFβ *v.* Ctl, *colored* compares Drug *v.* Veh). (**B**) Extracellular glucose was determined 48 h following TGFβ in the presence of MCT1 inhibitor AZD3965 (AZD), VB, or both (N = 5 biological replicates). (**C**) Summary data from Seahorse extracellular flux analysis. (**D**) Cell bioenergetic stress testing results from Seahorse analysis. Glycolytic capacity measures the increase in proton efflux rate following oligomycin treatment. Spare respiratory capacity measures the increase in oxygen consumption rate (OCR) following FCCP treatment compared to basal OCR. Coupling efficiency measures the proportion of basal OCR that contributes to ATP production (*i.e.,* the percentage inhibited by oligomycin). The spare respiratory capacity decreases following MCT inhibition, indicating a larger fraction of total respiratory capacity was utilized in the basal state in cells treated with MCT inhibitors (N = 4 biological replicates, \* p-value < 0.05 compared to TGFβ/Veh). Summary data are mean ± SEM.](figs/SF_03.png)
 
 \newpage
 

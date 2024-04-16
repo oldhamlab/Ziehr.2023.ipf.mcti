@@ -10,8 +10,6 @@ antibody,anti-Smad3,abcam,ab40854,1:2000 WB
 antibody,anti-pSmad3,abcam,ab52903,1:2000 WB
 antibody,anti-ERK,Cell Signaling Technologies,4696S,1:2000 WB
 antibody,anti-pERK,Cell Signaling Technologies,4370S,1:2000 WB
-antibody,anti-Kla,PTM Biolabs,PTM-1401,1:1000 WB
-antibody,anti-H3,,,
 siRNA,siMCT1,Dharmacon,L-007402-00-0005,
 siRNA,siMCT4,Dharmacon,L-005126-02-0005,
 siRNA,siCTL,Dharmacon,D-001810-10-05,

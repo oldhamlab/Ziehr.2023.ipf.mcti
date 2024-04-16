@@ -534,7 +534,7 @@ plot_msea_table <- function(
     dplyr::select("pathway", "NES") |>
     dplyr::mutate(
       pathway = stringr::str_replace(.data$pathway, " - Homo.*$", ""),
-      pathway = stringr::str_replace(.data$pathway, "_", "")
+      pathway = stringr::str_replace_all(.data$pathway, "_", " ")
     )
 
   y <-
