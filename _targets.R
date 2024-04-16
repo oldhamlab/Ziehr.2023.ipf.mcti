@@ -2063,8 +2063,8 @@ list(
   # figure 8 ----------------------------------------------------------------
 
   tar_target(
-    fig10,
-    make_fig10(
+    fig08,
+    make_fig08(
       vb_invitro_plot_sma_ipf,
       vb_invitro_plot_nuclei_ipf,
       fig_img_vb_timeline,
@@ -2089,7 +2089,7 @@ list(
         ),
       vb_mice_plot_old_lactate
     ) |>
-      write_figures("F_10"),
+      write_figures("F_08"),
     format = "file"
   ),
 
@@ -2272,11 +2272,20 @@ list(
     format = "file"
   ),
   tar_target(
-    refs,
+    refs_ms,
     rbbt::bbt_update_bib(
       path = "manuscript/manuscript.qmd",
       ignore = c("R-base"),
-      path_bib = "manuscript/library.bib"
+      path_bib = "manuscript/ms.bib"
+    ),
+    cue = tar_cue("always")
+  ),
+  tar_target(
+    refs_supp,
+    rbbt::bbt_update_bib(
+      path = "manuscript/supplement.qmd",
+      ignore = c("R-base"),
+      path_bib = "manuscript/supp.bib"
     ),
     cue = tar_cue("always")
   ),
