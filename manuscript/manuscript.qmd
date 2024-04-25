@@ -8,59 +8,74 @@ authors:
   - ref: bwh
   - ref: mgh
   - ref: hms
+  email: dziehr@mgb.org
 - name: Fei Li
   affiliations:
   - ref: bwh
   - ref: hms
+  email: feli@bwh.harvard.edu
 - name: K. Mark Parnell
   affiliations:
   - ref: vettore
+  email: markparnell1@gmail.com
 - name: Nathan M. Krah
   affiliations:
   - ref: utah_gen
   - ref: utah_biochem
+  email: Nathan.Krah@hci.utah.edu
 - name: Kevin J. Leahy 
   affiliations:
   - ref: bwh
+  email: kjleahy@bwh.harvard.edu
 - name: Christelle Guillermier
   affiliations:
   - ref: bwh
   - ref: hms
+  email: cguillermier@bwh.harvard.edu
 - name: Jack Varon
   affiliations: 
   - ref: bwh
   - ref: hms
+  email: varon.jack@gmail.com
 - name: Rebecca M. Baron
   affiliations:
   - ref: bwh
   - ref: hms
+  email: rbaron@bwh.harvard.edu
 - name: Bradley A. Maron
   affiliations:
   - ref: umd
   - ref: ihc
+  email: BMaron@som.umaryland.edu
 - name: Nancy J. Philp
   affiliations:
   - ref: tj
+  email: Nancy.Philp@jefferson.edu
 - name: Lida P. Hariri
   affiliations: 
   - ref: hms
   - ref: mgh_path
+  email: lhariri@mgh.harvard.edu
 - name: Edy Y. Kim
   affiliations:
   - ref: bwh
   - ref: hms
+  email: ekim11@bwh.harvard.edu
 - name: Matthew L. Steinhauser
   affiliations:
   - ref: pitt
   - ref: upmc
+  email: msteinhauser@pitt.edu
 - name: Rachel S. Knipe
   affiliations:
   - ref: mgh
   - ref: hms
+  email: rknipe@mgh.harvard.edu
 - name: Jared Rutter
   affiliations:
   - ref: utah_biochem
   - ref: utah_hhmi
+  email: rutter@biochem.utah.edu
 - name: William M. Oldham
   affiliations:
   - ref: bwh
@@ -327,7 +342,7 @@ The authors thank Louise Trakimas and the HMS Electron Microscopy Facility for M
 
 ## Funding
 
-* National Institutes of Health grant R01GM987654 (WMO)
+* National Institutes of Health grant R01HL167718 (WMO)
 * Brigham and Women's Hospital Research Institute (WMO)
 * American Lung Association grant DA-827785 (EYK)
 * BWH Bell Family Award (EYK)
