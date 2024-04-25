@@ -6,18 +6,27 @@ subtitle: "Lactate transport inhibition therapeutically reprograms fibroblast
 authors:
 - name: David R. Ziehr
   affiliations: 
+  - ref: bwh
   - ref: mgh
+  - ref: hms
+- name: Fei Li
+  affiliations:
   - ref: bwh
   - ref: hms
-- name: Nathan M. Krah
-  affiliations:
-  - ref: utah_gen
-- name: Kevin Leahy 
-  affiliations:
-  - ref: bwh
 - name: K. Mark Parnell
   affiliations:
   - ref: vettore
+- name: Nathan M. Krah
+  affiliations:
+  - ref: utah_gen
+  - ref: utah_biochem
+- name: Kevin J. Leahy 
+  affiliations:
+  - ref: bwh
+- name: Christelle Guillermier
+  affiliations:
+  - ref: bwh
+  - ref: hms
 - name: Jack Varon
   affiliations: 
   - ref: bwh
@@ -26,6 +35,10 @@ authors:
   affiliations:
   - ref: bwh
   - ref: hms
+- name: Bradley A. Maron
+  affiliations:
+  - ref: umd
+  - ref: ihc
 - name: Nancy J. Philp
   affiliations:
   - ref: tj
@@ -37,6 +50,10 @@ authors:
   affiliations:
   - ref: bwh
   - ref: hms
+- name: Matthew L. Steinhauser
+  affiliations:
+  - ref: pitt
+  - ref: upmc
 - name: Rachel S. Knipe
   affiliations:
   - ref: mgh
@@ -53,22 +70,30 @@ authors:
   corresponding: true
     
 affiliations:
+- id: bwh
+  name: Department of Medicine, Brigham and Women's Hospital, Boston, MA
 - id: mgh
   name: Department of Medicine, Massachusetts General Hospital, Boston, MA
-- id: bwh
-  name: Department of Medicine, Brigham and Women's Hospital and Harvard Medical School, Boston, MA
 - id: hms
   name: Department of Medicine, Harvard Medical School, Boston, MA
-- id: utah_gen
-  name: Department of Internal Medicine, University of Utah, Salt Lake City, UT
 - id: vettore
   name: Vettore Biosciences, San Francisco, CA
+- id: utah_gen
+  name: Department of Internal Medicine, University of Utah, Salt Lake City, UT
+- id: utah_biochem
+  name: Department of Biochemistry, University of Utah, Salt Lake City, UT
+- id: umd
+  name: Department of Medicine, University of Maryland School of Medicine, Baltimore, MD
+- id: ihc
+  name: University of Maryland Institute for Health Computing, Bethesda, MD
 - id: tj
   name: Department of Pathology and Genomic Medicine, Thomas Jefferson University, Philadelphia, PA
 - id: mgh_path
   name: Department of Pathology, Massachusetts General Hospital, Boston, MA
-- id: utah_biochem
-  name: Department of Biochemistry, University of Utah, Salt Lake City, UT
+- id: pitt
+  name: Aging Institute, University of Pittsburgh, Pittsburgh, PA
+- id: upmc
+  name: UPMC Heart and Vascular Institute, UPMC Presbyterian, Pittsburgh, PA
 - id: utah_hhmi
   name: Howard Hughes Medical Institute, University of Utah School of Medicine, Salt Lake City, UT 
   
@@ -136,7 +161,7 @@ flextable::flextable_to_rmd(resources_table)
 
 ## Chemicals
 
-Recombinant human TGF-β1 was purchased commercially , dissolved in 10 mM citric acid, pH 3.0, filtered, and diluted to 10 μg/mL in PBS with 0.1% BSA prior to aliquoting and storing at -80 °C. AZD3965 (100 nM; Medkoo) and AR-C155858 (200 nM; Tocris) were purchased from commercial vendors. VB124 (10 μM) was a gift from Vettore, LLC. The drugs were prepared in DMSO and used at the indicated doses unless otherwise indicated. These doses were chosen based on prior reports and their target affinities. 
+Recombinant human TGFβ was purchased commercially , dissolved in 10 mM citric acid, pH 3.0, filtered, and diluted to 10 μg/mL in PBS with 0.1% BSA prior to aliquoting and storing at -80 °C. AZD3965 (100 nM; Medkoo) and AR-C155858 (200 nM; Tocris) were purchased from commercial vendors. VB124 (10 μM) was a gift from Vettore, LLC. The drugs were prepared in DMSO and used at the indicated doses unless otherwise indicated. These doses were chosen based on prior reports and their target affinities. 
 
 ## Human lung tissue and fibroblasts
 
@@ -154,11 +179,11 @@ Lung hydroxyproline content was determined as described previously [@tager2008].
 
 ## Myofibroblast differentiation *in vitro*
 
-Normal lung fibroblasts were purchased commercially (Lonza). All fibroblasts were cultured in FGM-2 medium (Lonza). Passages 3-8 were used for experiments. Myofibroblast differentiation was induced *in vitro* using recombinant human TGF-β1 (2 ng/mL) (Peprotech) for 48 h following 24 h serum starvation unless otherwise indicated. 
+Normal lung fibroblasts were purchased commercially (Lonza). All fibroblasts were cultured in FGM-2 medium (Lonza). Passages 3-8 were used for experiments. Myofibroblast differentiation was induced *in vitro* using recombinant human TGFβ (2 ng/mL) (Peprotech) for 48 h following 24 h serum starvation unless otherwise indicated. 
 
 ## Isotope labeling
 
-Cells were seeded and serum starved in MCDB131 medium lacking glucose, glutamine, and phenol red (genDEPOT) which was supplemented with naturally labeled glucose (8 mM), glutamine (1 mM), and lactate (2 mM) ("light" labeling medium). The concentrations of glucose and glutamine match the concentrations of these substrates determined in standard (FGM-2) growth medium. After 24 h, cells were washed with PBS and the medium was changed to "heavy" labeling medium containing [1,2-^13^C~2~]-glucose, [U-^13^C~6~]-glucose, [U-^13^C~5~]-glutamine, or [U-^13^C~2~]-lactate (Cambridge Isotope Labs) along with TGFβ and MCT inhibitors for 48 h. Cell lysates were prepared for metabolomics as described below.  
+Cells were seeded and serum starved in MCDB131 medium lacking glucose, glutamine, and phenol red (genDEPOT) which was supplemented with naturally labeled glucose (8 mM), glutamine (1 mM), and lactate (2 mM) ("light" labeling medium). The concentrations of glucose and glutamine match the concentrations of these substrates determined in standard (FGM-2) growth medium. After 24 h, cells were washed with PBS and the medium was changed to "heavy" labeling medium containing [1,2-^13^C~2~]-glucose, [U-^13^C~6~]-glucose, [U-^13^C~5~]-glutamine, or [U-^13^C~2~]-lactate (Cambridge Isotope Labs) along with TGFβ and MCT inhibitors for 48 h. Cell lysates were prepared for metabolomics as described below. 
 
 ## Immunoblotting
 
@@ -182,7 +207,7 @@ Lactate was determined using an enzymatic cycling assay resulting in the reducti
 
 ## Glucose assay
 
-Medium samples were diluted 10-fold in PBS. Glucose concentration was determined using the Glucose Colorimetric Assay Kit (Cayman) according to the manufacturer's protocol. Standards were prepared in PBS.  
+Medium samples were diluted 10-fold in PBS. Glucose concentration was determined using the Glucose Colorimetric Assay Kit (Cayman) according to the manufacturer's protocol. Standards were prepared in PBS. 
 
 ## Seahorse assays
 
@@ -222,14 +247,19 @@ Intracellular and mitochondrial ROS were measured using the fluorescent probes C
 
 ## Multi-isotope imaging mass spectrometry
 
-For multi-isotope imaging mass spectrometry, mice received five intraperitoneal doses of 250 μL of [^2^H~7~]-glucose or [U-^13^C~6~]-glucose (200 mg/mL) and [^15^N]-proline (20 mg/mL) every 12 h prior to euthanasia on day 21 after bleomycin. Perfused and inflated lungs were fixed with formaldehyde/glutaraldehyde 2.5% in sodium cacodylate buffer, pH 7.4, embedded in EPON, section to 0.5 μm, mounted on silicon wafers, and gold coated. Sections were analyzed with the NanoSIMS 50L (CAMECA) housed in the Brigham and Women’s Hospital Center for NanoImaging, using previously developed analytical protocols [@wertheim2023; @guillermier2017a]. The instrument was tuned to simultaneously acquire images of ^12^C~2~^1^H, ^12^C^14^N, ^12^C~2~^2^H, and ^12^C^15^N secondary ions. Spatial distribution visualization and quantification of ^15^N-proline and ^2^H-glucose labeling was derived from ^12^C^15^N/^12^C^14^N and ^12^C~2~^2^H/^12^C~2~^1^H ratios, respectively, using an open source plugin to ImageJ, OpenMIMS 3.0 (github.com/BWHCNI/OpenMIMS).
-Ratio images are presented visually as hue saturation intensity images, with the blue lower bound of the scale set to the natural background ratio and the red upper bound of the scale set such that within tissue labeling differences are visually apparent. Changes to the scaling modify the visual appearance but not affect the quantitative data. Quantification of isotopic enrichment was based on a pixel ratio analysis of several MIMS images acquired per animal. Specifically, image masks were generated by Otsu thresholding the ^12^C^14^N to exclude background regions. The ratio of "heavy" to "light" ion intensities in tissue regions was calculated. Pixel ratios equal to zero were excluded. The average of the remaining pixel ratios was then averaged to provide a mean tissue isotope enrichment value for the image. 
+For multi-isotope imaging mass spectrometry, mice received five intraperitoneal doses of 250 μL of [^2^H~7~]-glucose or [U-^13^C~6~]-glucose (200 mg/mL) and [^15^N]-proline (20 mg/mL) every 12 h prior to euthanasia on day 21 after bleomycin. Perfused and inflated lungs were fixed with formaldehyde/glutaraldehyde 2.5% in sodium cacodylate buffer, pH 7.4, embedded in EPON, section to 0.5 μm, mounted on silicon wafers, and gold coated. Sections were analyzed with the NanoSIMS 50L (CAMECA) housed in the Brigham and Women’s Hospital Center for NanoImaging, using previously developed analytical protocols [@wertheim2023; @guillermier2017a]. The instrument was tuned to simultaneously acquire images of ^12^C~2~^1^H, ^12^C^14^N, ^12^C~2~^2^H, and ^12^C^15^N secondary ions. Spatial distribution visualization and quantification of ^15^N-proline and ^2^H-glucose labeling was derived from ^12^C^15^N/^12^C^14^N and ^12^C~2~^2^H/^12^C~2~^1^H ratios, respectively, using an open source plugin to ImageJ, OpenMIMS 3.0 (github.com/BWHCNI/OpenMIMS). Ratio images are presented visually as hue saturation intensity images, with the blue lower bound of the scale set to the natural background ratio and the red upper bound of the scale set such that within tissue labeling differences are visually apparent. Changes to the scaling modify the visual appearance but not affect the quantitative data. Quantification of isotopic enrichment was based on a pixel ratio analysis of several MIMS images acquired per animal. Specifically, image masks were generated by Otsu thresholding the ^12^C^14^N to exclude background regions. The ratio of "heavy" to "light" ion intensities in tissue regions was calculated. Pixel ratios equal to zero were excluded. The average of the remaining pixel ratios was then averaged to provide a mean tissue isotope enrichment value for the image. 
 
 ## VB253
 
-VB253 was developed by Vettore, LLC as a more potent small molecule inhibitor of MCT4. Experiments involving VB253 were conducted by several contract research organizations under the supervision of Vettore, LLC. These experiments were completed independently of the other studies presented in the manuscript and offer independent validation of the antifibrotic effects of MCT4 inhibition in cells and mice. 
+VB253 was developed by Vettore, LLC as a more potent small molecule inhibitor of MCT4. Experiments involving VB253 were conducted by several contract research organizations under the supervision of Vettore, LLC, as described in detail below. These experiments were completed independently of the other studies presented in the manuscript and offer independent validation of the antifibrotic effects of MCT4 inhibition in cells and mice. 
 
-*Nathan, Mark, and Jared. Add the names of the CROs that did the experiments? I think the aSMA/Smad3/nuclei experiments will need a description. The others are pretty similar to what is described above.*
+All cell culture experiments were conducted by Charles River Laboratories (Wilmington, MA, USA). Lung fibroblasts from three independent IPF donors were seeded at a density of 750 cells/well in 384-well plates. Fibroblasts were subsequently treated with medium with 0.1% DMSO (vehicle control), 1.25 ng/ml TGFβ alone, 1.25 ng/ml TGFβ in the presence of 1 μM SB525334 (positive control), or 1.25 ng/ml TGFβ with 8-point concentration response curves (CRC) in biologic duplicate with semi-log dilutions of nintedanib or VB253. The top concentration tested was 10 μM. Cells were fixed with 4% paraformaldehyde 72 h post treatment with TGFβ. The principal readout was immunofluorescence staining to for α-SMA and DAPI to quantify the proportion of α-SMA-positive cells. 
+
+SMAD3 nuclear translocation was evaluated in lung fibroblasts from one IPF donor. Cells were plated on Purecol-coated 96-well plates. Unstimulated (medium only) and stimulated cells (0.5 ng/ml TGFβ) were treated with 0.1% DMSO (vehicle control), 1 μM SB525334 (positive control), nintedanib in 8-point CRC, ALK5 inhibitor (SB525334) in 8-point CRC, and VB253 in a 16-point CRC, with a maximum concentration of 30 μM. All cells were fixed 2 h after treatment. The readout was immunofluorescence staining for pSMAD3 and DAPI.
+
+The *in vivo* therapeutic evaluation of VB253 in bleomycin-induced pulmonary fibrosis in both young and aged mice was conducted by Aragen Biosciences (Morgan Hill, CA, USA). In two separate experiments, C57Bl/6 mice, aged either 6-7 weeks or 68-70 weeks, were obtained from Jackson Labs (Bar Harbor, ME, USA). Under anesthesia, mice were administered either PBS vehicle (N = 10 per experiment) or 1.5 U/kg bleomycin in PBS intratracheally. After 7 days, mice treated with bleomycin were randomized to receive either vehicle (0.5% methylcellulose in saline) (N = 10), VB253 dissolved in 0.5% methylcellulose (3 mg/kg BID), Pirfenidone (Glentham Life Sciences Lid. Cat #GP4948, 100 mg/kg BID), or Nintedinib (Axon MedChem Cat#2648, 50 mg/kg, daily) (N = 10 per group). Mice injected with saline, rather than bleomycin, were administered vehicle. Treatments were administered daily until the experiment was terminated 21 days after bleomycin instillation, approximately 2-4 h after the final treatment dose. Whole-body plethysmography was performed on day 20 using Buxco WBP instrument system measuring Enhanced Pause (Penh) and respiratory rate on unrestrained animals. Upon experiment termination, lungs were inflated with 10% neutral buffered formalin (NBF) and fixed in 10% NBF for histology. 
+
+Histology, imaging, and pathologic analyses were performed by HistoTox Labs (Boulder, CO, USA). Multiple slides per block were sectioned at 5 μm and stained with hematoxylin and eosin (H&E) or by routine immunohistochemistry (IHC) methods for α-SMA. H&E-stained glass slides were evaluated using light microscopy by an ACVP board-certified veterinary pathologist. Lung sections were scored according to the modified Ashcroft scale. Briefly, scores for five representative 200× microscopic fields per sample were averaged to obtain a mean score for each animal. α-SMA-stained glass slides were scanned using an Aperio AT2 whole slide scanner. Whole slide images were annotated to delineate regions of interest (ROI). Exclusions were applied to remove tissue artifacts (folds, tears, non-specific staining), large airways, and blood vessels. Visiopharm (VIS) image analysis software, using imaging filters to separate positive staining from counterstaining and background were applied to quantify α-SMA signal within each sample. Differences in expression levels between samples and treatments were evaluated by calculating the percent positive detection of cells or area within the viable lung tissue.
 
 \newpage
 
