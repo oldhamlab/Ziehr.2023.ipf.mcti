@@ -634,6 +634,34 @@ list(
     NULL
   ),
 
+  # bcecf -------------------------------------------------------------------
+
+  tar_target(
+    bcecf_file,
+    raw_data_path("bcecf.csv"),
+    format = "file_fast"
+  ),
+  tar_target(
+    bcecf_data,
+    readr::read_csv(bcecf_file, show_col_types = FALSE)
+  ),
+  tar_target(
+    bcecf_raw,
+    format_bcecf(bcecf_data)
+  ),
+  tar_target(
+    bcecf_clean,
+    clean_bcecf(bcecf_raw)
+  ),
+  tar_target(
+    bcecf_stats,
+    twofactor(bcecf_clean, "ratio", comps = comps_azd_2)
+  ),
+  tar_target(
+    bcecf_plot,
+    plot_bcecf(bcecf_clean, bcecf_stats)
+  ),
+
   # seahorse ----------------------------------------------------------------
 
   tar_target(
@@ -1893,6 +1921,10 @@ list(
   tar_quarto(
     mims_analysis,
     path = "analysis/mims.qmd"
+  ),
+  tar_quarto(
+    bcecf_analysis,
+    path = "analysis/bcecf.qmd"
   ),
 
   # figure images -----------------------------------------------------------

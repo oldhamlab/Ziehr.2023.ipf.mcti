@@ -22,5 +22,7 @@ data-raw/lactate
 data-raw/mims/.tmp
 manuscript/comments
 manuscript/stm
+grant/
+slides/
 
 /.quarto/

@@ -1,11 +1,18 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-.Random.seed|object|847a926ff2612de3|||||||||||||||
+.Random.seed|object|4f3bfbde6442eabe|||||||||||||||
 %nin%|function|b1eefa0a0b2c9c81|||||||||||||||
 analyze_blot|function|f48740cbab75cedd|||||||||||||||
 annot_metabs|function|13e70fae89fa3165|||||||||||||||
 annot_p|function|852160e13df526b9|||||||||||||||
 annot_stats|function|f806d56d22fe19b4|||||||||||||||
 average_mims|function|a5711118953c2003|||||||||||||||
+bcecf_analysis|stem|bde00857fcd6c2ec|f7149395805379c2|a537957dfaae1bdc|-1777070508|analysis/bcecf.html*analysis/bcecf.qmd|t19844.7832306522s|3813158c17275bd6|2052438|file|local|vector|||10.845||
+bcecf_clean|stem|78174bade05cf156|07f8523f7285e5fb|fbf72516f3e3c379|1712712398||t19844.7572035534s|8585b45427938c14|481|qs|local|vector|||4.883||
+bcecf_data|stem|b40dd7c6bdaf8089|1b83994092f4f569|e6cec2631d16c4b6|-1965726077||t19844.753978045s|c6423718bcc02cd2|3247|qs|local|vector|||0.152||
+bcecf_file|stem|bb7c9c68c66a70ae|0fa60646f29baa69|c184935d19a91dfc|-2095821197|data-raw/bcecf.csv|t19844.7396827476s|19b296971c5a2dbc|7794|file_fast|local|vector|||5.231||
+bcecf_plot|stem|a97b6813ef2e7fd0|bb86dffd61b99e36|d05b2089b0505c72|-248245236||t19844.7780366384s|7d26ddd6ded533ee|295278|qs|local|vector|||5.04||
+bcecf_raw|stem|a427e81d856e6c16|978be8926b3ad1e0|fa83c19f52738d7f|1770057806||t19844.7539806733s|8722a95aa413b206|3499|qs|local|vector|||0.044||
+bcecf_stats|stem|a4a46803e24b421e|7db68f8c42b62f8d|e343af2909572b8d|117368144||t19844.7605064957s|ee143e4c8ea21b7d|350|qs|local|vector|||6.164||
 bin_wt|function|b96e328cf5c1726a|||||||||||||||
 bleo_mid_analysis|stem|7569a4293bb0799c|f0c6fda5757d9553|4304452ae8283b54|-1595316315|analysis/bleo-mid.html*analysis/bleo-mid.qmd|t19829.7512324558s|579ceaa546c62100|2652467|file|local|vector|||15.62||
 blot_norm_ar_sma|stem|451cee0840baad4b|04e106df313c8287|e4afe33ac67f8da9|1713734552||t19829.7519360276s|b17419a7fc6280b4|1049|qs|local|vector|||0.036||
@@ -200,6 +207,7 @@ blots_raw|stem|bdb7a7d9bf5ea4d4|729fe59296e24a70|51cc9d2a19641374|-341856584||t1
 calc_mid_ratio|function|3151600ee8889f1e|||||||||||||||
 calculate_correction_factors|function|75cbbd9283a75a1b|||||||||||||||
 calculate_predicted_ratios|function|0341d02ab2e0b1f9|||||||||||||||
+clean_bcecf|function|4b09b2784234aec8|||||||||||||||
 clean_blots|function|d243a489f87121c5|||||||||||||||
 clean_contraction|function|c7ed61d8dc1b3e0e|||||||||||||||
 clean_mims|function|bb82b8a48f86cec6|||||||||||||||
@@ -309,6 +317,7 @@ filter_mids|function|9acb17eda3411a30|||||||||||||||
 filter_plates|function|c33fbdd00ad9c744|||||||||||||||
 fit_limma_metab|function|96b90df46f2bc296|||||||||||||||
 fit_tfea|function|f5cb93684dd3a6a6|||||||||||||||
+format_bcecf|function|e3a441f82dca6f71|||||||||||||||
 format_bleo_mids|function|99a9e19549380836|||||||||||||||
 format_metab_bleo_tar|function|5758fb0e229bf4a9|||||||||||||||
 format_metab_mcti_tar|function|46fed7005d1fad63|||||||||||||||
@@ -892,6 +901,7 @@ plates_std_plots_nad_protein|stem|3bbcf9d728bfd6ee|a305fe9788ec0a89|119ea4b95e4b
 plates_std_plots_nadp_dna|stem|915ce72da5d4e2ed|4f6ce046eb239067|1ff1c0b6d0a9830e|-398651129|analysis/figures/nadp_dna_std_curves|t19829.7514447009s|dd56a5971d025bfa|192|file_fast|local|vector|||3.167||
 plates_std_plots_nadp_nadp|stem|c141be88e1c1d15a|33427687a9d19e02|047f9192738d5557|208876966|analysis/figures/nadp_nadp_std_curves|t19829.7513996319s|dd56a5971d025bfa|192|file_fast|local|vector|||3.837||
 plates_std_plots_picogreen|stem|d9cb665021e06a37|62f2c86ee20eb41f|2bad52aee1db545c|607092588|analysis/figures/picogreen_std_curves|t19829.7514680355s|4e7818a2d57934b5|736|file_fast|local|vector|||16.019||
+plot_bcecf|function|2764a3ef3c5bf258|||||||||||||||
 plot_bleo_lactate|function|f09a5d27e39ff896|||||||||||||||
 plot_blot|function|1d02e914f32915c9|||||||||||||||
 plot_edge|function|5548384f17d2c28e|||||||||||||||

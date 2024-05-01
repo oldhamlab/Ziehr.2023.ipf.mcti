@@ -1,0 +1,38 @@
+---
+title: "BCECF"
+format: 
+  html:
+    embed-resources: true 
+    echo: false
+    warning: false
+    toc: true
+    toc-depth: 3
+    toc-location: left
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(here)
+library(targets)
+library(tidyverse)
+devtools::load_all()
+
+i_am("analysis/blots.qmd")
+
+tar_config_set(store = here("_targets"))
+```
+
+## Experiment
+
+Monocarboxylate transporters co-transport lactate and H^+^. We measured the effects of lactate transport inhibition on intracellular pH by loading cells with the pH-sensitive dye BCECF-AM. For these experiments, 8,000 LFs were seeded in 96-well plates. They were serum starved for 24 h prior to treatment with TGFβ and lactate transport inhibitors for 48 h. After 48 h, cells were loaded with 400 μM BCECF-AM in HBSS for 30 min in the presence of lactate transport inhibitors. Medium was then replaced with basal medium containing MCT inhibitors. Fluorescence was measured using excitation 440 and 490 nm with emission wavelength 535 nm. 
+
+## Results
+
+```{r}
+#| label: plot
+
+tar_read(bcecf_plot)
+```
+
