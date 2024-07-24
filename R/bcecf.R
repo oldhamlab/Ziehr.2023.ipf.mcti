@@ -66,6 +66,15 @@ plot_bcecf <- function(df, stats) {
       color = condition,
       fill = condition
     ) +
+    ggbeeswarm::geom_quasirandom(
+      pch = 1,
+      color = "black",
+      width = 0.05,
+      size = 0.5,
+      stroke = 0.25,
+      dodge.width = 0.8,
+      show.legend = FALSE
+    ) +
     ggplot2::geom_errorbar(
       ggplot2::aes(color = .data$condition),
       stat = "summary",
@@ -83,15 +92,6 @@ plot_bcecf <- function(df, stats) {
       size = 1.5,
       color = "white",
       position = ggplot2::position_dodge(width = 0.8),
-      show.legend = FALSE
-    ) +
-    ggbeeswarm::geom_quasirandom(
-      pch = 1,
-      color = "black",
-      width = 0.05,
-      size = 0.5,
-      stroke = 0.25,
-      dodge.width = 0.8,
       show.legend = FALSE
     ) +
     ggplot2::geom_text(

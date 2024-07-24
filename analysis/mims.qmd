@@ -1,9 +1,19 @@
 ---
 title: "MIMS Analysis"
 date-modified: today
-format: html
-excecute:
-  message: false
+format: 
+  html:
+    embed-resources: true
+    html-math-method: katex
+    theme: lumen
+    df-print: kable
+    toc: true
+    toc-depth: 3
+    toc-location: left
+execute:
+  echo: false
+  warning: false
+  error: false
 ---
 
 ```{r}

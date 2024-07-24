@@ -182,9 +182,9 @@ list(
         NULL
       ),
       comp = list(
-        FALSE,
-        FALSE,
-        FALSE,
+        NULL,
+        NULL,
+        NULL,
         rlang::sym("comps_sirna"),
         rlang::sym("comps_azd_2"),
         rlang::sym("comps_ar_2"),

@@ -97,7 +97,7 @@ analyze_blot <- function(df, paired, comp = NULL) {
   }
 
   if (length(unique(df$treatment)) == 1) {
-    out <- ratio_ttest(df, "norm", paired)
+    out <- ratio_ttest(df, "norm")
   } else {
     out <- twofactor(df, "norm", mixed = paired, comp)
   }

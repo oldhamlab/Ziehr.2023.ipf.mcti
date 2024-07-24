@@ -19,10 +19,10 @@ annot_stats <- function(stats) {
 }
 
 
-ratio_ttest <- function(df, y, paired){
+ratio_ttest <- function(df, y){
   fo <- stats::formula(paste("log(", y, ") ~ condition"))
 
-  stats::t.test(fo, data = df, paired = paired) |>
+  stats::t.test(fo, data = df) |>
     broom::tidy() |>
     dplyr::select("p.value") |>
     dplyr::mutate(
@@ -32,13 +32,14 @@ ratio_ttest <- function(df, y, paired){
     annot_stats()
 }
 
+
 group_ratio_ttest <- function(df, y, ...) {
   cols <- c("protein", "name", "rate", "stage", "stats")
 
   df |>
     tidyr::nest() |>
     dplyr::mutate(
-      stats = purrr::map(.data$data, ratio_ttest, y = y, ...)
+      stats = purrr::map(.data$data, ratio_ttest, y = y)
     ) |>
     dplyr::select(tidyselect::any_of(cols)) |>
     tidyr::unnest(c("stats"))
