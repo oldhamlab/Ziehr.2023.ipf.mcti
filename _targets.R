@@ -133,6 +133,48 @@ list(
   ),
   tar_map(
     values = list(
+      protein = c("α-SMA", "Col1a1", "FN1", "Col1a2", "MCT4"),
+      names = c("sma", "col1a1", "fn1", "col1a2", "mct4")
+    ),
+    names = names,
+    tar_target(
+      blot_norm_pcls,
+      norm_blot(blots_all, "pcls", protein) |>
+        dplyr::mutate(
+          grp = stringr::str_c(condition, treatment, sep = "\n"),
+          grp = factor(grp, levels = c("Ctl\nVeh", "TGFβ\nVeh", "TGFβ\nAZD/VB"))
+        )
+    ),
+    tar_target(
+      blot_stats_pcls,
+      onefactor(
+        blot_norm_pcls,
+        mixed = FALSE,
+        comps = comps_azd_4,
+        fo = stats::formula("norm ~ grp"),
+        emm = stats::formula("~ grp")
+      ) |>
+        dplyr::mutate(
+          x = stringr::str_c(condition, treatment, sep = "\n"),
+          x = factor(x, levels = c("Ctl\nVeh", "TGFβ\nVeh", "TGFβ\nAZD/VB"))
+        )
+    ),
+    tar_target(
+      blot_plot_pcls,
+      plot_one_factor(
+        df = blot_norm_pcls,
+        stats = blot_stats_pcls,
+        x = "grp",
+        y = "norm",
+        title = protein,
+        ytitle = "Fold Change"
+      ),
+      format = "rds"
+    ),
+    NULL
+  ),
+  tar_map(
+    values = list(
       experiment = list(
         "ipf",
         "bleo",

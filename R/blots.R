@@ -14,6 +14,7 @@ clean_blots <- function(df) {
       "mct1" = "MCT1",
       "mct4" = "MCT4",
       "col1a1" = "Col1a1",
+      "col1a2" = "Col1a2",
       "fn1" = "FN1",
       "col3a1" = "Col3a1",
       "cnn1" = "CNN1",

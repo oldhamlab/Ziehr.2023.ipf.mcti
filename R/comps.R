@@ -109,6 +109,11 @@ comps_azd_3 <- list(
   "AZD/VB.TGFβ" =          c(0, -1, 0, 0, 1)
 )
 
+comps_azd_4 <- list(
+  "Veh.Ctl" =              c(1, -1, 0),
+  "AZD/VB.TGFβ" =          c(0, -1, 1)
+)
+
 comps_sirna <-
   list(
     "siMCT1.TGFβ" =       c(0, -1, 0, 1, 0, 0, 0, 0),
