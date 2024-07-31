@@ -165,7 +165,7 @@ Recombinant human TGFβ was purchased commercially , dissolved in 10 mM citric a
 
 ## Human lung tissue and fibroblasts
 
-Human IPF lung samples were obtained at the time of lung transplant. Control samples were prepared from non-fibrotic and unaffected border regions of lung nodule biopsy specimens or from failed donor controls. To isolate human lung fibroblasts, lung tissue was minced, digested with liberase and DNase, and passed through a sterile 70 μm filter. The filtrate was centrifuged at 300 ×*g* and washed once with RPMI medium (Lonza). Cells were plated in DMEM (Lonza) supplemented with 10% FBS, penicillin, and streptomycin. After two passages, medium was changed to FGM-2 (Lonza).
+Human IPF lung samples were obtained at the time of lung transplant. Control samples were prepared from non-fibrotic and unaffected border regions of lung nodule biopsy specimens or from failed donor controls. To isolate human lung fibroblasts, lung tissue was minced, digested with liberase and DNase, and passed through a sterile 70 μm filter. The filtrate was centrifuged at 300 ×*g* and washed once with RPMI medium (Lonza). Cells were plated in DMEM (Lonza) supplemented with 10% FBS, penicillin, and streptomycin. After two passages, medium was changed to FGM-2 (Lonza). 
 
 ## Bleomycin model
 
@@ -176,6 +176,10 @@ Lung physiology measurements were performed as previously described [@lee2021]. 
 Histologic fibrosis severity was assessed by Ashcroft scoring of trichrome-stained lung sections in a blinded fashion by an experienced lung pathologist [@hubner2008]. The average of twenty 10× fields is reported for each animal.
 
 Lung hydroxyproline content was determined as described previously [@tager2008]. The four lobes of the R lung were homogenized in PBS with Halt protease inhibitors (Thermo) and hydrolyzed in 6 N HCl at 120 °C for 12 h, with an aliquot added to 1.4% chloramine-T, 10% 1-propanol, and 0.5 M sodium acetate, pH 6.0. After incubating 20 min at room temperature, 1 ml of Ehrlich's solution (1 M p-value-dimethylaminobenzaldehyde in 70% 1-propanol and 20% perchloric acid) was added. Samples were incubated at 65 °C for 15 minutes. Absorbance was measured at 550 nm and hydroxyproline content was interpolated from a standard curve.
+
+## Precision-cut lung slices
+
+Human precision-cut lung slices (PCLS) were purchased from Anabios (240326LuHA, 26 y.o. female without lung disease). The slices were incubated for 48 h in DMEM/F12 with 10% serum and then treated with TGFβ (5 ng/mL) and AZD3965 (100 nM) plus VB124 (10 μM) for 6 d, exchanging the medium every 48 h with fresh TGFβ and inhibitors. PCLS were lysed in RIPA buffer containing protease inhibitors, homogenized by bead-beating, and analyzed for extracellular matrix production by immunoblot. 
 
 ## Myofibroblast differentiation *in vitro*
 

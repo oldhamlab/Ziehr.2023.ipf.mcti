@@ -143,3 +143,26 @@ blot_ratios <- function(df) {
     dplyr::mutate(ratio = .data$density / .data$background) |>
     dplyr::filter(!is.na(.data$ratio))
 }
+
+
+combine_blots <- function(nms, df, stats) {
+  x <-
+    dplyr::bind_rows(df, .id = "protein") |>
+    dplyr::mutate(protein = factor(protein, levels = nms))
+  y <-
+    dplyr::bind_rows(stats, .id = "protein") |>
+    dplyr::mutate(protein = factor(protein, levels = nms))
+  plot_one_factor(
+    df = x,
+    stats = y,
+    x = "grp",
+    y = "norm",
+    ytitle = "Fold Change"
+  ) +
+    ggplot2::facet_wrap(
+      ggplot2::vars(.data[["protein"]]),
+      scales = "free_y",
+      nrow = 1,
+      strip.position = "top"
+    )
+}

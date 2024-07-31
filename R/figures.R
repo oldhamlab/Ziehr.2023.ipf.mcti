@@ -209,13 +209,33 @@ make_fig05 <- function(p1, p2, p3, p4) {
     ggplot2::theme(legend.position = "bottom")
 }
 
-make_fig06 <- function(p1, p2, p3, p4, p5, p6) {
-  design <- "abc \n def"
-  p1 + p2 + p3 + p4 + p5 + p6 +
+make_fig06 <- function(p1, p2, p3, p4, p5, p6, p7, p8) {
+  design <- "abc \n def \n gg#"
+
+  g <-
+    p7 + p8 +
+    patchwork::plot_annotation(
+      title = "Human PCLS",
+      theme = ggplot2::theme(
+        plot.title = ggplot2::element_text(
+          hjust = 0.5,
+          face = "bold",
+          size = ggplot2::rel(0.8)
+        )
+      )
+    ) +
+    theme_patchwork(
+      tags = list(c("G", "")),
+      widths = c(1, 2)
+    )
+
+
+  p1 + p2 + p3 + p4 + p5 + p6 + patchwork::wrap_elements(full = g) +
     theme_patchwork(
       design = design,
       widths = ggplot2::unit(c(2, 1.5, 1.5), "in"),
-      heights = ggplot2::unit(1.5, "in")
+      heights = ggplot2::unit(c(1.5, 1.5, 2), "in"),
+      tags = list(c(LETTERS[1:6], ""))
     )
 }
 

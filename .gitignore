@@ -20,6 +20,7 @@ analysis/carnival
 data-raw/glucose
 data-raw/lactate
 data-raw/mims/.tmp
+data-raw/pcls
 manuscript/comments
 manuscript/stm
 grant/

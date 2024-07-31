@@ -173,6 +173,15 @@ list(
     ),
     NULL
   ),
+  tar_target(
+    blot_fig_pcls,
+    combine_blots(
+      nms = c("FN1", "Col1a2"),
+      df = list(FN1 = blot_norm_pcls_fn1, Col1a2 = blot_norm_pcls_col1a2),
+      stats = list(FN1 = blot_stats_pcls_fn1, Col1a2 = blot_stats_pcls_col1a2)
+    ),
+    format = "rds"
+  ),
   tar_map(
     values = list(
       experiment = list(
@@ -1973,27 +1982,28 @@ list(
 
   tar_map(
     values = tibble::tribble(
-      ~path,                        ~scale, ~hjust, ~vjust, ~names,
-      "ipf-mct-blots.png",          1.1,    0,      -0.05,  "mct_ipf",
-      "bleo-mct-blots.png",         1.1,    0,      -0.05,  "mct_bleo",
-      "tgfb-mct-blots.png",         1.1,    0,      -0.05,  "mct_tgfb",
-      "sirna-mct-blots.png",        1,      0,      0,      "sma_sirna",
-      "dual-azd-ipf-lf-blot-2.png", 0.9,    0,      0,      "ipf_lf_azd",
-      "dual-azd-sma-blot.png",      1,      0,      -0.05,  "sma_azd",
-      "dual-ar-sma-blot.png",       1.2,    0.1,    -0.05,  "sma_ar",
-      "dual-azd-contract.png",      1,      0,      -0.05,  "contraction",
-      "bleo-trichrome.png",         1.1,    0,      0,      "trichrome",
-      "mct-bleo-timeline.png",          1,      0,      0,  "timeline",
-      "dual-azd-smad3-blot.png",    1,      0,      -0.05,  "smad3_azd",
-      "dual-azd-erk-blot.png",      1,      0,      -0.05,  "erk_azd",
-      "dual-azd-hif1a-blot.png",    1,      0,      -0.05,  "hif_azd",
-      "lactate-sma-blot.png",       1.2,    0,      -0.05,  "sma_lac",
-      "dual-azd-kla-h3.png",        1,      0,      0,      "azd_kla",
-      "mims-panel.png",             1.05,   0.05,   0,      "mims",
-      "vb-bleo-timeline.png",       1,      0,      0,      "vb_timeline",
-      "bleo-vb-young-sma.png",      1,      0,      0,      "vb_young_sma",
-      "bleo-vb-aged-sma.png",       1,      0,      0,      "vb_aged_sma",
-      "glucose-tracer.png",         1,      0,      0,      "tracer"
+      ~path,                        ~names,
+      "ipf-mct-blots.png",          "mct_ipf",
+      "bleo-mct-blots.png",         "mct_bleo",
+      "tgfb-mct-blots.png",         "mct_tgfb",
+      "sirna-mct-blots.png",        "sma_sirna",
+      "dual-azd-ipf-lf-blot-2.png", "ipf_lf_azd",
+      "dual-azd-sma-blot.png",      "sma_azd",
+      "dual-ar-sma-blot.png",       "sma_ar",
+      "dual-azd-contract.png",      "contraction",
+      "bleo-trichrome.png",         "trichrome",
+      "mct-bleo-timeline.png",      "timeline",
+      "dual-azd-smad3-blot.png",    "smad3_azd",
+      "dual-azd-erk-blot.png",      "erk_azd",
+      "dual-azd-hif1a-blot.png",    "hif_azd",
+      "lactate-sma-blot.png",       "sma_lac",
+      "dual-azd-kla-h3.png",        "azd_kla",
+      "mims-panel.png",             "mims",
+      "vb-bleo-timeline.png",       "vb_timeline",
+      "bleo-vb-young-sma.png",      "vb_young_sma",
+      "bleo-vb-aged-sma.png",       "vb_aged_sma",
+      "glucose-tracer.png",         "tracer",
+      "pcls-blot.png",              "pcls"
     ),
     names = names,
     tar_target(
@@ -2115,7 +2125,9 @@ list(
       mice_vent_mcti_plot_prime8,
       fig_img_trichrome,
       mice_mcti_plot_ashcroft,
-      mice_mcti_plot_ohp
+      mice_mcti_plot_ohp,
+      fig_img_pcls,
+      blot_fig_pcls
     ) |>
       write_figures("F_06"),
     format = "file"
