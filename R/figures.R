@@ -249,7 +249,7 @@ make_fig07 <- function(p1, p2, p3) {
     )
 }
 
-make_fig08 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11) {
+make_fig08 <- function(p12, p13, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11) {
   # design <- "abcc \n defg \n hijk"
   # p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8 + p9 + p10 + p11 +
   #   theme_patchwork(
@@ -257,6 +257,14 @@ make_fig08 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11) {
   #     widths = ggplot2::unit(1.5, "in"),
   #     heights = ggplot2::unit(1.5, "in")
   #   )
+
+  very_top <-
+    p12 + p13 + patchwork::plot_spacer() +
+    theme_patchwork(
+      design = "abc",
+      widths = c(1, 1, 2),
+      tags = list(c("A", "B", ""))
+    )
 
   top <-
     ((p1 + p2) +
@@ -269,7 +277,7 @@ make_fig08 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11) {
     theme_patchwork(
       # design = "abc",
       widths = c(2, 2),
-      tags = list(c("A", "B", "C")),
+      tags = list(c("C", "D", "E")),
       guides = "collect"
     ) &
     ggplot2::theme(legend.position = "bottom")
@@ -288,7 +296,7 @@ make_fig08 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11) {
     ) +
     theme_patchwork(
       design = "abcd",
-      tags = list(c("D", "E", "F", ""))
+      tags = list(c("F", "G", "H", ""))
     )
 
   bot <-
@@ -305,14 +313,15 @@ make_fig08 <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11) {
     ) +
     theme_patchwork(
       design = "abcd",
-      tags = list(c("G", "H", "", "I"))
+      tags = list(c("I", "J", "", "K"))
     )
 
+  patchwork::wrap_elements(full = very_top) +
   patchwork::wrap_elements(full = top) +
     patchwork::wrap_elements(full = mid) +
     patchwork::wrap_elements(full = bot) +
     theme_patchwork(
-      design = "a \n b \n c",
+      design = "a \n b \n c \n d",
       widths = ggplot2::unit(7.5, "in"),
       heights = ggplot2::unit(2, "in"),
       tags = NULL
@@ -528,14 +537,14 @@ make_fig09s <- function(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12) {
 #     )
 # }
 
-make_fig10s <- function(p1) {
-  design <- "a"
-  p1 +
+make_fig10s <- function(p1, p2) {
+  design <- "ab"
+  p1 + p2 +
     theme_patchwork(
       design = design,
-      widths = ggplot2::unit(1.5, "in"),
+      widths = ggplot2::unit(c(3, 1.5), "in"),
       heights = ggplot2::unit(1.5, "in"),
-      tags = NULL
+      tags = "A"
     )
 }
 

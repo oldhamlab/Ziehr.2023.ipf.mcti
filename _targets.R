@@ -1864,6 +1864,32 @@ list(
   # VB253 -------------------------------------------------------------------
 
   tar_target(
+    vb_rates_files,
+    raw_data_path("vb_mct\\d{1}.csv"),
+    format = "file"
+  ),
+  tar_target(
+    vb_rates_data,
+    read_vb_pharm(vb_rates_files)
+  ),
+  tar_target(
+    vb_rates_plot,
+    plot_vb_rates(vb_rates_data)
+  ),
+  tar_target(
+    vb_drc_files,
+    raw_data_path("vb_mct\\d{1}_drc.csv"),
+    format = "file"
+  ),
+  tar_target(
+    vb_drc_data,
+    read_vb_drc(vb_drc_files)
+  ),
+  tar_target(
+    vb_drc_plot,
+    plot_vb_drc(vb_drc_data)
+  ),
+  tar_target(
     vb_invitro_sma_file,
     raw_data_path("invitro_sma.csv"),
     format = "file"
@@ -2003,7 +2029,8 @@ list(
       "bleo-vb-young-sma.png",      "vb_young_sma",
       "bleo-vb-aged-sma.png",       "vb_aged_sma",
       "glucose-tracer.png",         "tracer",
-      "pcls-blot.png",              "pcls"
+      "pcls-blot.png",              "pcls",
+      "VB253.png",                  "vb253"
     ),
     names = names,
     tar_target(
@@ -2151,6 +2178,8 @@ list(
   tar_target(
     fig08,
     make_fig08(
+      fig_img_vb253,
+      vb_drc_plot,
       vb_invitro_plot_sma_ipf,
       vb_invitro_plot_nuclei_ipf,
       fig_img_vb_timeline,
@@ -2322,6 +2351,7 @@ list(
   tar_target(
     fig10s,
     make_fig10s(
+      vb_rates_plot,
       vb_invitro_smad_plot
     ) |>
       write_figures("SF_10"),
