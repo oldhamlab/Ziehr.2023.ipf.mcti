@@ -51,14 +51,15 @@ plot_vb_rates <- function(z) {
       oob = scales::oob_squish_infinite
     ) +
     ggplot2::labs(
-      x = "Time (min)",
+      x = "Time (s)",
       y = "Fluorescence ratio",
       color = "VB253 (nM)"
     ) +
     ggplot2::coord_cartesian(clip = "off") +
     theme_plot() +
     ggplot2::theme(
-      legend.position = "bottom"
+      legend.position = "bottom",
+      legend.key.width = ggplot2::unit(0.25, "in"),
     ) +
     NULL
 }
